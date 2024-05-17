@@ -1,0 +1,17 @@
+.bg-red {
+    background-image: linear-gradient(to right, #9B3636, #451919);
+}
+
+body {
+    background-color: #DDD6D5;
+}
+
+.btn-primary {
+    background-color: #1E232C;
+    border-color: #212529;
+}
+
+.btn-primary:hover {
+    background-color: #343A40;
+    border-color: #343A40;
+}
