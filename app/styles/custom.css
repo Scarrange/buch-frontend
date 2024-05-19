@@ -13,5 +13,11 @@ body {
 
 .btn-primary:hover {
     background-color: #343A40;
-    border-color: #343A40;
+    border-color: gold;
+    /* border-color: #343A40; */
+}
+
+.btn-primary:active {
+    background-color: black !important;
+    border-color: gold !important;
 }
