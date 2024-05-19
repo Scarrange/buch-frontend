@@ -14,7 +14,6 @@
     "@fortawesome/fontawesome-svg-core": "6.5.2",
     "@fortawesome/free-solid-svg-icons": "6.5.2",
     "@fortawesome/react-fontawesome": "0.2.1",
-    "@remix-run/node": "^2.9.2",
     "@remix-run/react": "^2.9.2",
     "@remix-run/serve": "^2.9.2",
     "@types/react-datepicker": "6.2.0",
@@ -23,12 +22,14 @@
     "prettier": "3.2.5",
     "react": "^18.2.0",
     "react-datepicker": "6.9.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "remix-utils": "7.6.0"
   },
   "devDependencies": {
     "@remix-run/dev": "^2.9.2",
-    "@types/react": "^18.2.20",
-    "@types/react-dom": "^18.2.7",
+    "@remix-run/node": "2.9.2",
+    "@types/react": "18.3.2",
+    "@types/react-dom": "18.3.0",
     "@typescript-eslint/eslint-plugin": "^6.7.4",
     "@typescript-eslint/parser": "^6.7.4",
     "eslint": "^8.38.0",
