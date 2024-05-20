@@ -15,8 +15,8 @@ export default function Login() {
           <small id="passwordHelp" className="form-text text-muted">Wir werden Sie niemals nach ihrem Passwort fragen</small>
         </div>
         <div style={{ height: '20px' }}></div>
-        <div className="form-group mt-4 d-grid gap-2 col-6 mx-auto">
-          <button type="submit" className="btn btn-primary">Login</button>
+        <div className="d-grid gap-2 col-6 mx-auto">
+          <button type="submit" className="btn custom-btn">Anmelden</button>
         </div>
       </Form>
     </div>
