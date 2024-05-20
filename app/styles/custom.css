@@ -25,6 +25,16 @@ body {
   border-color: red !important;
 }
 
+.custom-btn {
+  background-image: linear-gradient(to right, #9B3636,#351212) !important;
+  color: white;
+  padding: 14px 20px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 18px;
+}
+
 .navbar-container {
   display: flex;
   justify-content: space-between;
