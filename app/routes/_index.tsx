@@ -1,7 +1,12 @@
 export default function Index() {
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
-      <h1>Ich hasse CSS</h1>
+    <div className="container d-flex flex-column align-items-center mt-5 form-control start-logo">
+      <h1>Startseite</h1>
+      <img
+        src="images/book.png"
+        className="img-fluid mx-auto d-block"
+        alt="book"
+      />
     </div>
   );
 }

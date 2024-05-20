@@ -20,13 +20,15 @@ body {
 }
 
 .btn-primary:active {
-  background-color: black !important;
-  border-color: gold !important;
+  color: white !important;
+  background-color: lightgray !important;
+  border-color: red !important;
 }
 
 .navbar-container {
   display: flex;
-  justify-content: space-between; /* Verteile den Platz zwischen den Elementen */
+  justify-content: space-between;
+  /* Verteile den Platz zwischen den Elementen */
   align-items: center;
 }
 
@@ -41,3 +43,9 @@ body {
   gap: 7px;
 }
 
+.start-logo {
+  max-width: 600px;
+  border-radius: 10%;
+  box-shadow: lightblue 0px 0px 50px;
+  padding: 30px 100px;
+}
