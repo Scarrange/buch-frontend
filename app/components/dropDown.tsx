@@ -5,8 +5,8 @@ const Dropdown = () => {
         Buchart
       </label>
       <select className="form-select" id="inputGroupSelect01">
-        <option selected>Druckausgabe</option>
-        <option value="1">Kindle</option>
+        <option value="1">Druckausgabe</option>
+        <option value="2">Kindle</option>
       </select>
     </div>
   );

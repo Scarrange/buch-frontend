@@ -1,19 +1,21 @@
-.bg-red {
-    background-image: linear-gradient(to right, #9B3636, #451919);
-}
-
 body {
     background-color: #DDD6D5;
 }
 
 .btn-primary {
-    background-color: #1E232C;
-    border-color: #212529;
+    background-color: white;
+    color: red;
+    cursor: pointer;
+    font-size: 18px;
+    border: 2px solid red;
+    padding: 10px 20px;
 }
 
 .btn-primary:hover {
-    background-color: #343A40;
-    border-color: gold;
+    background-color: white;
+    color: red;
+    border-color: red;
+    box-shadow: black 0px 0px 6px;
     /* border-color: #343A40; */
 }
 
