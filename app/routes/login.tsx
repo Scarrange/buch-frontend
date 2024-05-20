@@ -1,22 +1,30 @@
 import { Form } from "@remix-run/react";
 
+
 export default function Login() {
   return (
     <div className="container mt-5">
-      <h2>Login</h2>
+      <h2 className="text-center">Login</h2>
       <Form method="post" action="/login">
-        <div className="form-group">
-          <label htmlFor="benutzername">Benutzername</label>
-          <input type="text" className="form-control" id="benutzername" name="benutzernam" placeholder="Benutzernamen eingeben" required />
+        <div className="row justify-content-center"> 
+          <div className="col-md-6"> 
+            <div className="form-group">
+              <label htmlFor="username" className="form-label">Username</label>
+              <input type="text" className="form-control" id="username" name="username" placeholder="Enter your Username here" required style={{ width: "632.26px"}} />
+            </div>
+          </div>
         </div>
-        <div className="form-group">
-          <label htmlFor="passwort">Passwort</label>
-          <input type="passwort" className="form-control" id="passwort" name="passwort" placeholder="Passwort eingeben" required />
-          <small id="passwordHelp" className="form-text text-muted">Wir werden Sie niemals nach ihrem Passwort fragen</small>
+        <div className="row justify-content-center"> 
+          <div className="col-md-6"> 
+            <div className="form-group"> 
+              <label htmlFor="password" className="form-label">Password</label>
+              <input type="password" className="form-control" id="password" name="password" placeholder="Enter your Password here" required style={{ width: "632.26px"}}/>
+              <small id="passwordHelp" className="form-text text-muted">Please do not share your Password with anyone else.</small>
+            </div>
+          </div>
         </div>
-        <div style={{ height: '20px' }}></div>
-        <div className="d-grid gap-2 col-6 mx-auto">
-          <button type="submit" className="btn custom-btn">Anmelden</button>
+        <div className="form-group mt-4 text-center">
+          <button type="submit" className="btn custom-btn" style={{ width: "359.28px" }} >Anmelden</button>
         </div>
       </Form>
     </div>
