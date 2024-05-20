@@ -1,25 +1,43 @@
 body {
-    background-color: #DDD6D5;
+  background-color: #ddd6d5;
 }
 
 .btn-primary {
-    background-color: white;
-    color: red;
-    cursor: pointer;
-    font-size: 18px;
-    border: 2px solid red;
-    padding: 10px 20px;
+  background-color: white;
+  color: red;
+  cursor: pointer;
+  font-size: 18px;
+  border: 2px solid red;
+  padding: 10px 20px;
 }
 
 .btn-primary:hover {
-    background-color: white;
-    color: red;
-    border-color: red;
-    box-shadow: black 0px 0px 6px;
-    /* border-color: #343A40; */
+  background-color: white;
+  color: red;
+  border-color: red;
+  box-shadow: black 0px 0px 6px;
+  /* border-color: #343A40; */
 }
 
 .btn-primary:active {
-    background-color: black !important;
-    border-color: gold !important;
+  background-color: black !important;
+  border-color: gold !important;
 }
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between; /* Verteile den Platz zwischen den Elementen */
+  align-items: center;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-buttons {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
