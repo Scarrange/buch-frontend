@@ -1,16 +1,15 @@
 import { Link } from "@remix-run/react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHouse } from "@fortawesome/free-solid-svg-icons";
+//import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+//import { faHouse } from "@fortawesome/free-solid-svg-icons";
 import Login from "./login";
-import Logout from "./logout";
-
+//import Logout from "./logout";
+//<FontAwesomeIcon icon={faHouse} style={{ color: "white" }} />
 const Navbar = () => {
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-red">
+    <nav className="navbar navbar-expand-lg navbar-light bg-white">
       <div className="container-fluid">
         <Link to="/" className="navbar-brand">
-          <FontAwesomeIcon icon={faHouse} style={{ color: "white" }} />
-        </Link>
+           <img src="../public/images/hochschule.png" alt="Hochschule" className="navbar-image" />        </Link>
         <div className="d-flex ms-5">
           <Link to="/search" style={{ color: "white", textDecoration: "none" }}>
             <button type="button" className="btn btn-primary me-2">
