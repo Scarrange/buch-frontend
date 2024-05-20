@@ -7,7 +7,7 @@ import {
 } from "@remix-run/react";
 import Navbar from "./components/navbar";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "react-datepicker/dist/react-datepicker.css"
+import "react-datepicker/dist/react-datepicker.css";
 import "./styles/custom.css";
 
 export function Layout({ children }: { children: React.ReactNode }) {
