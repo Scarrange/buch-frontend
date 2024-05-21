@@ -59,3 +59,8 @@ body {
   box-shadow: lightblue 0px 0px 50px;
   padding: 30px 100px;
 }
+
+.smaller-text {
+    font-size: 14px; 
+  }
+
