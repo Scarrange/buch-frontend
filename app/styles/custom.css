@@ -26,7 +26,7 @@ body {
 }
 
 .custom-btn {
-  background-image: linear-gradient(to right, #9B3636,#351212) !important;
+  background-image: linear-gradient(to right, #9B3636, #351212) !important;
   color: white;
   padding: 14px 20px;
   border: none;
@@ -38,7 +38,6 @@ body {
 .navbar-container {
   display: flex;
   justify-content: space-between;
-  /* Verteile den Platz zwischen den Elementen */
   align-items: center;
 }
 
@@ -53,7 +52,7 @@ body {
   gap: 7px;
 }
 
-.start-logo {
+.div-bg {
   max-width: 600px;
   border-radius: 10%;
   box-shadow: lightblue 0px 0px 50px;
@@ -61,6 +60,46 @@ body {
 }
 
 .smaller-text {
-    font-size: 14px; 
-  }
+  font-size: 14px;
+}
 
+/* datepicker styling */
+.react-datepicker {
+  border: 2px;
+  border-radius: 4px;
+  border: 1px solid black;
+  box-shadow: black 0px 0px 20px;
+}
+
+.react-datepicker__header {
+  background-color: #007bff;
+}
+
+.react-datepicker__current-month,
+.react-datepicker__day-name,
+.react-datepicker__day {
+  color: #000;
+}
+
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected {
+  background-color: #007bff;
+}
+
+.react-datepicker__year-option {
+  padding: 5px;
+  cursor: pointer;
+}
+
+.react-datepicker__year-option:hover {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.react-datepicker__navigation--years-upcoming {
+  color: #007bff;
+}
+
+.react-datepicker__navigation--years-previous {
+  color: #007bff;
+}

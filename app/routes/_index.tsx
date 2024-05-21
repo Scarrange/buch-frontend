@@ -1,6 +1,6 @@
 export default function Index() {
   return (
-    <div className="container d-flex flex-column align-items-center mt-5 form-control start-logo">
+    <div className="container d-flex flex-column align-items-center mt-5 form-control div-bg">
       <h1>Startseite</h1>
       <img
         src="images/book.png"
