@@ -58,8 +58,8 @@ export default function Login() {
         <button className="btn btn-outline-secondary" type="button">
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="22"
-          height="22"
+          width="28"
+          height="28"
           fill="black"
           className="bi bi-github me-2"
           viewBox="0 0 16 16"
