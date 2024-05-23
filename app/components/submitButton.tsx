@@ -22,3 +22,6 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({ text, style, className, ...
 };
 
 export default SubmitButton;
+// Dies ist ein Commit Test.
+const number = 8;
+number + 8;
