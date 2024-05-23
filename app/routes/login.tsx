@@ -28,13 +28,13 @@ export default function Login() {
   const error = useActionData<typeof action>();
 
   return (
-    <div className="container mt-5">
+    <div className="container login-container">
       {error ? <ClientOnly>{() => <ErrorModal />}</ClientOnly> : null}
       <h2 className="text-center">Login</h2>
       <Form method="post" action="/login">
         <div className="row justify-content-center">
           <div className="col-md-6">
-            <div className="form-group">
+            <div className="form-group mt-5">
               <label htmlFor="username" className="form-label">
                 Username
               </label>
@@ -52,7 +52,7 @@ export default function Login() {
         </div>
         <div className="row justify-content-center">
           <div className="col-md-6">
-            <div className="form-group">
+            <div className="form-group mt-4">
               <label htmlFor="password" className="form-label">
                 Password
               </label>
@@ -71,7 +71,7 @@ export default function Login() {
             </div>
           </div>
         </div>
-        <div className="form-group mt-4 text-center">
+        <div className="form-group mt-5 text-center">
           <button
             type="submit"
             className="btn custom-btn"
