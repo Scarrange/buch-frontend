@@ -10,8 +10,13 @@ import Navbar from "./components/navbar";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-datepicker/dist/react-datepicker.css";
 import "./styles/custom.css";
+import "@fortawesome/fontawesome-svg-core/styles.css";
+import { config } from "@fortawesome/fontawesome-svg-core";
 import { json, LoaderFunctionArgs } from "@remix-run/node";
 import { authenticator } from "./services/auth.server";
+
+// Icons werden nicht mehr gerendered bevor css geladen wird//
+config.autoAddCss = false;
 
 export async function loader({ request }: LoaderFunctionArgs) {
   console.log("\nloader\n");
