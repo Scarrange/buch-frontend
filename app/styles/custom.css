@@ -103,3 +103,15 @@ body {
 .react-datepicker__navigation--years-previous {
   color: #007bff;
 }
+
+.navbar {
+  position: fixed;
+  top: -200px; /* Versteckt die Navbar außerhalb des sichtbaren Bereichs */
+  width: 100%;
+  transition: top 0.3s; /* Glatter Übergang */
+  z-index: 1000; /* Stellt sicher, dass die Navbar über anderen Elementen liegt */
+}
+
+.navbar.show {
+  top: 0; /* Zeigt die Navbar an, wenn die Klasse .show hinzugefügt wird */
+}

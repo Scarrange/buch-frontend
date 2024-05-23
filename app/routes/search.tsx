@@ -2,7 +2,8 @@ import Input from "../components/input";
 import CheckBox from "../components/checkBox";
 import DropDown from "~/components/dropDown";
 
-export default function searchPage() {
+export default function SearchPage() {
+  // Rename the function to start with an uppercase letter
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
       <div className="container d-flex flex-column align-items-center mt-5">
