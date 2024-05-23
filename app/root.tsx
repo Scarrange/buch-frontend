@@ -9,6 +9,12 @@ import Navbar from "./components/navbar";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-datepicker/dist/react-datepicker.css";
 import "./styles/custom.css";
+import '@fortawesome/fontawesome-svg-core/styles.css';
+import { config } from '@fortawesome/fontawesome-svg-core';
+
+// Icons werden nicht mehr gerendered bevor css geladen wird//
+config.autoAddCss = false; /* eslint-disable import/first */
+
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
