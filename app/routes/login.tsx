@@ -3,6 +3,8 @@ import { Form, useActionData } from "@remix-run/react";
 import { ClientOnly } from "remix-utils/client-only";
 import ErrorModal from "~/components/errorModal.client";
 
+let accessToken: string | undefined;
+
 export async function action({ request }: ActionFunctionArgs) {
   const body = await request.formData();
   const payload = {
@@ -18,11 +20,16 @@ export async function action({ request }: ActionFunctionArgs) {
     body: JSON.stringify(payload),
   });
 
-  if (response.status !== 200) {
+  if (response?.status !== 200) {
     return json({ status: response.status });
   }
+  accessToken = (await response.formData()).get("access_token")?.toString();
   return redirect("/");
 }
+
+export const isLoggedIn = () => !!accessToken;
+
+export const token = () => accessToken;
 
 export default function Login() {
   const error = useActionData<typeof action>();
