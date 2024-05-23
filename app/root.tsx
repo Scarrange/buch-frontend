@@ -4,13 +4,23 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
 } from "@remix-run/react";
 import Navbar from "./components/navbar";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-datepicker/dist/react-datepicker.css";
 import "./styles/custom.css";
+import { json, LoaderFunctionArgs } from "@remix-run/node";
+import { authenticator } from "./services/auth.server";
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  console.log("\nloader\n");
+  const user = await authenticator.isAuthenticated(request);
+  return json(user);
+}
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const user = useLoaderData<typeof loader>();
   return (
     <html lang="en">
       <head>
@@ -21,7 +31,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <Navbar />
+        <Navbar isLoggedIn={!!user} />
         {children}
         <ScrollRestoration />
         <Scripts />

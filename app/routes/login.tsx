@@ -1,45 +1,29 @@
-import { ActionFunctionArgs, redirect, json } from "@remix-run/node";
+import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
-import { ClientOnly } from "remix-utils/client-only";
-import ErrorModal from "~/components/errorModal.client";
 import GithubLoginButton from "~/components/gitHubButton";
 import InputLogin from "~/components/inputLogin";
 import SubmitButton from "~/components/submitButton";
+import { authenticator } from "~/services/auth.server";
 
-let accessToken: string | undefined;
-
-export async function action({ request }: ActionFunctionArgs) {
-  const body = await request.formData();
-  const payload = {
-    username: body.get("username"),
-    password: body.get("password"),
-  };
-
-  const response = await fetch("https://localhost:3000/auth/login", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload),
+export async function action({ request }: LoaderFunctionArgs) {
+  return authenticator.authenticate("user-pass", request, {
+    successRedirect: "/",
+    failureRedirect: "/login",
   });
-
-  if (response?.status !== 200) {
-    return json({ status: response.status });
-  }
-  accessToken = (await response.formData()).get("access_token")?.toString();
-  return redirect("/");
 }
 
-export const isLoggedIn = () => !!accessToken;
-
-export const token = () => accessToken;
+export async function loader({ request }: ActionFunctionArgs) {
+  await authenticator.isAuthenticated(request, {
+    successRedirect: "/",
+  });
+  return null;
+}
 
 export default function Login() {
-  const error = useActionData<typeof action>();
+  const actionData = useActionData<typeof action>();
 
   return (
     <div className="container login-container">
-      {error ? <ClientOnly>{() => <ErrorModal />}</ClientOnly> : null}
       <h2 className="text-center">Login</h2>
       <Form method="post" action="/login">
         <div className="row justify-content-center">
@@ -48,7 +32,9 @@ export default function Login() {
               <label htmlFor="username" className="form-label">
                 Username
               </label>
-              <InputLogin placeholder = "Enter your Username here"
+              <InputLogin
+                name="username"
+                placeholder="Enter your Username here"
               />
             </div>
           </div>
@@ -59,7 +45,10 @@ export default function Login() {
               <label htmlFor="password" className="form-label">
                 Password
               </label>
-              <InputLogin placeholder = "Enter your Password here" />
+              <InputLogin
+                name="password"
+                placeholder="Enter your Password here"
+              />
               <small id="passwordHelp" className="form-text text-muted">
                 Please do not share your Password with anyone else.
               </small>
@@ -68,11 +57,14 @@ export default function Login() {
         </div>
         <SubmitButton
           text="Anmelden"
-          style={{ width: '359.28px' }}
+          style={{ width: "359.28px" }}
           className="mt-2"
-          />
+        />
       </Form>
-      <GithubLoginButton/>
+      <GithubLoginButton />
+      {actionData ? (
+        <div className="alert alert-danger mt-3">{actionData}</div>
+      ) : null}
     </div>
   );
 }

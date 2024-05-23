@@ -2,8 +2,9 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "@remix-run/react";
 import Login from "./login";
+import Logout from "./logout";
 
-const Navbar = () => {
+const Navbar = (props : { isLoggedIn: boolean }) => {
   const [showNavbar, setShowNavbar] = useState(false);
 
   useEffect(() => {
@@ -45,15 +46,12 @@ const Navbar = () => {
                 Buch suchen
               </button>
             </Link>
-            <Link
-              to="/new"
-              style={{ color: "white", textDecoration: "none" }}
-            >
+            <Link to="/new" style={{ color: "white", textDecoration: "none" }}>
               <button type="button" className="btn btn-primary btn-lg me-2">
                 Buch anlegen
               </button>
             </Link>
-            <Login />
+            {props.isLoggedIn ? <Logout /> : <Login />}
           </div>
         </div>
         <div className="navbar-brand">

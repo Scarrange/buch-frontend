@@ -1,13 +1,12 @@
-import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from "@remix-run/react";
 
 const Logout = () => {
   return (
-    <FontAwesomeIcon
-      icon={faRightFromBracket}
-      style={{ color: "white" }}
-      size="2x"
-    />
+    <Link to="/logout">
+      <button type="button" className="btn btn-primary btn-lg">
+        Logout
+      </button>
+    </Link>
   );
 };
 
