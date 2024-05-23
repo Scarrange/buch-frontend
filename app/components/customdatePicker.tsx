@@ -1,5 +1,4 @@
 import { useState } from "react";
-import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 import { ClientOnly } from "remix-utils/client-only";
 

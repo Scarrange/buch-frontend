@@ -7,7 +7,7 @@ import DropDown from "~/components/dropDown";
 
 export default function newBookPage() {
   return (
-    <div className="container d-flex flex-column align-items-center mt-5 form-control div-bg">
+    <div className="container d-flex flex-column align-items-center mt-5 form-control div-bg mb-5">
       <h1>Neues Buch anlegen</h1>
       <Input placeholder="ISBN" />
       <Input placeholder="Titel" />

@@ -14,7 +14,6 @@ const Navbar = () => {
             />
           </Link>
         </div>
-
         <div className="navbar-buttons">
           <div className="d-flex ms-5">
             <Link
@@ -26,12 +25,10 @@ const Navbar = () => {
               </button>
             </Link>
             <Link to="/new" style={{ color: "white", textDecoration: "none" }}>
-              <button type="button" className="btn btn-primary btn-lg">
+              <button type="button" className="btn btn-primary btn-lg me-2">
                 Buch anlegen
               </button>
             </Link>
-          </div>
-          <div className="login-container">
             <Login />
             {/* TODO loggedIn ? Login : Logout */}
           </div>
