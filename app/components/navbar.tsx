@@ -4,10 +4,13 @@ import { Link } from "@remix-run/react";
 import Login from "./login";
 import Logout from "./logout";
 
-const Navbar = (props : { isLoggedIn: boolean }) => {
+const Navbar = (props: { isLoggedIn: boolean }) => {
   const [showNavbar, setShowNavbar] = useState(false);
+  const [isFixed, setIsFixed] = useState(false);
 
   useEffect(() => {
+    if (isFixed) return; // Wenn Navbar fixiert ist, keinen Event-Listener hinzufügen
+
     const handleMouseMove = (event: MouseEvent) => {
       if (event.clientY < 125) {
         setShowNavbar(true);
@@ -20,7 +23,11 @@ const Navbar = (props : { isLoggedIn: boolean }) => {
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
     };
-  }, []);
+  }, [isFixed]);
+
+  const toggleFixed = () => {
+    setIsFixed(!isFixed);
+  };
 
   return (
     <nav
@@ -53,6 +60,11 @@ const Navbar = (props : { isLoggedIn: boolean }) => {
             </Link>
             {props.isLoggedIn ? <Logout /> : <Login />}
           </div>
+        </div>
+        <div className="ms-auto">
+          <button onClick={toggleFixed} className="btn btn-secondary">
+            {isFixed ? "Unfix Navbar" : "Fix Navbar"}
+          </button>
         </div>
         <div className="navbar-brand">
           <Link to="/" className="navbar-brand">

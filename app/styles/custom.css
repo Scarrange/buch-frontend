@@ -123,3 +123,7 @@ body {
   top: 0;
   /* Zeigt die Navbar an, wenn die Klasse .show hinzugefügt wird */
 }
+
+.navbar.fixed {
+  top: 0; /* Fixiert die Navbar oben, wenn die Klasse .fixed hinzugefügt wird */
+}
