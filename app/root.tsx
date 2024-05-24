@@ -19,7 +19,6 @@ import { authenticator } from "./services/auth.server";
 config.autoAddCss = false;
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  console.log("\nloader\n");
   const user = await authenticator.isAuthenticated(request);
   return json(user);
 }
@@ -52,7 +51,7 @@ export default function App() {
 export function errorBoundary({ error }: { error: Error }) {
   return (
     <Layout>
-      <h1>Application Error</h1>
+      <h1>Application Error du bist Dumm</h1>
       <pre>{error.message}</pre>
     </Layout>
   );

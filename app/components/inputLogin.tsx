@@ -1,14 +1,20 @@
 const InputLogin = (props: {
   name: string | undefined;
   placeholder: string | undefined;
+  value: string | undefined;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
   return (
     <input
       name={props.name}
       type="text"
-      className="form-control mt-3"
+      className="form-control mt-3 "
       placeholder={props.placeholder}
-      style={{ width: "632.26px", height: "40px" }}
+      value={props.value}
+      onChange={props.onChange}
+      // style={{ width: "632.26px", height: "40px" }}
+      style={{ width: "630px", height: "40px" }}
+      required
     />
   );
 };

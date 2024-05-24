@@ -34,8 +34,9 @@ body {
   cursor: pointer;
   font-size: 18px;
 }
-.login-container{
-    margin-top: 150px; 
+
+.login-container {
+  margin-top: 150px;
 }
 
 .navbar-container {
@@ -109,12 +110,16 @@ body {
 
 .navbar {
   position: fixed;
-  top: -200px; /* Versteckt die Navbar außerhalb des sichtbaren Bereichs */
+  top: -200px;
+  /* Versteckt die Navbar außerhalb des sichtbaren Bereichs */
   width: 100%;
-  transition: top 0.3s; /* Glatter Übergang */
-  z-index: 1000; /* Stellt sicher, dass die Navbar über anderen Elementen liegt */
+  transition: top 0.3s;
+  /* Glatter Übergang */
+  z-index: 1000;
+  /* Stellt sicher, dass die Navbar über anderen Elementen liegt */
 }
 
 .navbar.show {
-  top: 0; /* Zeigt die Navbar an, wenn die Klasse .show hinzugefügt wird */
+  top: 0;
+  /* Zeigt die Navbar an, wenn die Klasse .show hinzugefügt wird */
 }
