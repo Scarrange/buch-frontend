@@ -9,10 +9,16 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
   const [isFixed, setIsFixed] = useState(false);
 
   useEffect(() => {
+    if (isFixed) {
+      document.body.classList.add("navbar-fixed-padding");
+    } else {
+      document.body.classList.remove("navbar-fixed-padding");
+    }
+
     if (isFixed) return; // Wenn Navbar fixiert ist, keinen Event-Listener hinzufügen
 
     const handleMouseMove = (event: MouseEvent) => {
-      if (event.clientY < 125) {
+      if (event.clientY < 50) {
         setShowNavbar(true);
       } else {
         setShowNavbar(false);
@@ -62,7 +68,7 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
           </div>
         </div>
         <div className="ms-auto">
-          <button onClick={toggleFixed} className="btn btn-secondary">
+          <button onClick={toggleFixed} className="btn btn-primary btn-lg me-2">
             {isFixed ? "Unfix Navbar" : "Fix Navbar"}
           </button>
         </div>

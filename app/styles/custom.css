@@ -127,3 +127,12 @@ body {
 .navbar.fixed {
   top: 0; /* Fixiert die Navbar oben, wenn die Klasse .fixed hinzugefügt wird */
 }
+
+body {
+  padding-top: 0;
+  transition: padding-top 0.3s;
+}
+
+body.navbar-fixed-padding {
+  padding-top: 120px; /* Höhe der Navbar anpassen */
+}
