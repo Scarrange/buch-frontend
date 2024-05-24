@@ -18,7 +18,7 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
     if (isFixed) return; // Wenn Navbar fixiert ist, keinen Event-Listener hinzufügen
 
     const handleMouseMove = (event: MouseEvent) => {
-      if (event.clientY < 50) {
+      if (event.clientY < 125) {
         setShowNavbar(true);
       } else {
         setShowNavbar(false);
