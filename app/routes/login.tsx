@@ -59,12 +59,12 @@ export default function Login() {
   }, [actionData]);
 
   return (
-    <div className="d-flex flex-column align-items-center login-container">
+    <div className="d-flex flex-column align-items-center mt-5">
       {actionData ? (
         <div
           className="container alert alert-danger d-flex flex-column align-items-center"
           role="alert"
-          style={{ maxWidth: "600px"}} 
+          style={{ maxWidth: "600px" }}
         >
           {actionData.error}
         </div>

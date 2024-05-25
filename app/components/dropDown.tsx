@@ -1,12 +1,15 @@
-const Dropdown = () => {
+const Dropdown = (props: { name: string; items: string[] }) => {
   return (
     <div className="input-group mt-3" style={{ maxWidth: "400px" }}>
       <label className="input-group-text" htmlFor="inputGroupSelect01">
-        Buchart
+        {props.name}
       </label>
       <select className="form-select" id="inputGroupSelect01">
-        <option value="1">Druckausgabe</option>
-        <option value="2">Kindle</option>
+        {props.items.map((item: string, index: number) => (
+          <option key={index} value={item}>
+            {item}
+          </option>
+        ))}
       </select>
     </div>
   );

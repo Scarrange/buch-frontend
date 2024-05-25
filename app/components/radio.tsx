@@ -5,11 +5,15 @@ const Radio = (props: { name: string }) => {
         className="form-check-input"
         type="radio"
         name="flexRadioDefault"
-        id="flexRadioDefault1"
-        style={{ cursor: "pointer"}}
+        id={props.name}
+        style={{ cursor: "pointer" }}
         defaultChecked
       />
-      <label className="form-check-label" htmlFor="flexRadioDefault1">
+      <label
+        className="form-check-label"
+        htmlFor={props.name}
+        style={{ cursor: "pointer" }}
+      >
         {props.name}
       </label>
     </div>
