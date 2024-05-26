@@ -6,6 +6,7 @@ const CheckBox = (props: { text: string; name: string }) => {
         type="checkbox"
         value=""
         id={props.name}
+        name={props.name}
         style={{ cursor: "pointer" }}
       />
       <label
