@@ -3,6 +3,7 @@ import CheckBox from "../components/checkBox";
 import DropDown from "~/components/dropDown";
 import { Form, useActionData } from "@remix-run/react";
 import { ActionFunctionArgs, json } from "@remix-run/node";
+import BuchItem, { Buch } from "~/components/buch";
 
 export async function action({ request }: ActionFunctionArgs) {
   console.log("action");
@@ -18,10 +19,10 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export default function SearchPage() {
   const data = useActionData<typeof action>();
-  const buecher = data?.buecher?._embedded?.buecher;
+  const buecher: [] = data?.buecher?._embedded?.buecher;
 
   return (
-    <div className="container-fluid">
+    <div className="container-fluid d-flex">
       <Form
         action="/search"
         method="POST"
@@ -44,7 +45,11 @@ export default function SearchPage() {
           Suchen
         </button>
       </Form>
-      <h1>{JSON.stringify(buecher)}</h1>
+      <div className="d-flex flex-column align-items-center">
+        {buecher?.map((buch: Buch, index: number) => (
+          <BuchItem key={index} {...buch} />
+        ))}
+      </div>
     </div>
   );
 }
