@@ -4,7 +4,7 @@ const CheckBox = (props: { text: string; name: string }) => {
       <input
         className="form-check-input"
         type="checkbox"
-        value=""
+        value="true"
         id={props.name}
         name={props.name}
         style={{ cursor: "pointer" }}
