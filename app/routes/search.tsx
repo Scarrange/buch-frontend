@@ -1,20 +1,27 @@
 import Input from "../components/input";
 import CheckBox from "../components/checkBox";
 import DropDown from "~/components/dropDown";
-import { Form, useActionData } from "@remix-run/react";
-import { ActionFunctionArgs, json } from "@remix-run/node";
+import { Form, useLoaderData } from "@remix-run/react";
+import { json, LoaderFunctionArgs } from "@remix-run/node";
 import BuchItem, { Buch } from "~/components/buchItem";
 
-export async function action({ request }: ActionFunctionArgs) {
-  const data = await request.formData();
-  const queryParams = getQueryUrl(Array.from(data.entries()));
-  const response = await fetch(`https://localhost:3000/rest?${queryParams}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  return json({ buecher: await response.json() });
+export async function loader({ request }: LoaderFunctionArgs) {
+  const url = new URL(request.url);
+  const queryParams = url.searchParams;
+
+  if (queryParams.size) {
+    const paramString = getQueryUrl(Array.from(queryParams.entries()));
+    const response = await fetch(`https://localhost:3000/rest?${paramString}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await response.json();
+    return json({ buecher: data?._embedded?.buecher });
+  }
+  return json({ buecher: null });
 }
 
 function getQueryUrl(entries: [string, FormDataEntryValue][]) {
@@ -33,15 +40,13 @@ function getQueryUrl(entries: [string, FormDataEntryValue][]) {
 }
 
 export default function SearchPage() {
-  const data = useActionData<typeof action>();
-  const buecher: [] = data?.buecher?._embedded?.buecher;
+  const { buecher } = useLoaderData<typeof loader>();
 
-  //TODO: entscheiden, ob Ergebnis auf anderer Route angezeigt werden soll
   return (
     <div className="container d-flex">
       <Form
         action="/search"
-        method="POST"
+        method="GET"
         className="container d-flex flex-column align-items-center mt-5 form-control div-bg mb-5"
         style={{ overflow: "auto", maxHeight: "500px" }}
       >
