@@ -1,5 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "@remix-run/react";
 import Login from "./login";
 import Logout from "./logout";
