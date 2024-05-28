@@ -12,7 +12,7 @@ export default function NewBookPage() {
       <Input placeholder="ISBN" />
       <Input placeholder="Titel" />
       <Input placeholder="Homepage" />
-      <DropDown name="Buchart" items={["Druckausgabe", "Kindle"]} />
+      <DropDown name="Buchart" items={["Druckausgabe", "Kindle"]} placeholder="Select Buchart" />
       <CustomDatePicker />
       <Input placeholder="Preis" />
       <Input placeholder="Rabatt" />
