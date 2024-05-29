@@ -7,7 +7,7 @@ const InputLogin = (props: {
   return (
     <input
       name={props.name}
-      type="text"
+      type={props.name === "password" ? "password" : "text"}
       className="form-control mt-3 "
       placeholder={props.placeholder}
       value={props.value}

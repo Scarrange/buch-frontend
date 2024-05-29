@@ -58,11 +58,16 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
                 Buch suchen
               </button>
             </Link>
-            <Link to="/new" style={{ color: "white", textDecoration: "none" }}>
-              <button type="button" className="btn btn-primary btn-lg me-2">
-                Buch anlegen
-              </button>
-            </Link>
+            {props.isLoggedIn ? (
+              <Link
+                to="/new"
+                style={{ color: "white", textDecoration: "none" }}
+              >
+                <button type="button" className="btn btn-primary btn-lg me-2">
+                  Buch anlegen
+                </button>
+              </Link>
+            ) : null}
             {props.isLoggedIn ? <Logout /> : <Login />}
           </div>
         </div>
