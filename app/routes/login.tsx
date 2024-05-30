@@ -1,4 +1,4 @@
-import { ActionFunctionArgs, json, LoaderFunctionArgs } from "@remix-run/node";
+import { json, LoaderFunctionArgs } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import GithubLoginButton from "~/components/gitHubButton";
@@ -28,7 +28,7 @@ export async function action({ request }: LoaderFunctionArgs) {
   }
 }
 
-export async function loader({ request }: ActionFunctionArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   await authenticator.isAuthenticated(request, {
     successRedirect: "/",
   });
