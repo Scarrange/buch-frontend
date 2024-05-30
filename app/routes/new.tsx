@@ -76,7 +76,8 @@ export async function action({ request }: ActionFunctionArgs) {
 export default function NewBookPage() {
   return (
     <Form
-      action="http://localhost:3000/"
+    //Problem mit der URL
+      action="/new"
       method="POST"
       className="container d-flex flex-column align-items-center mt-5 form-control div-bg mb-5"
     >
