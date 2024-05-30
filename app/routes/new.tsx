@@ -6,8 +6,10 @@ import CustomDatePicker from "~/components/customdatePicker";
 import DropDown from "~/components/dropDown";
 import { Form } from "@remix-run/react";
 import { authenticator } from "~/services/auth.server";
-import { json, LoaderFunctionArgs } from "@remix-run/node";
+import { json, LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node";
 import { commitSession, sessionStorage } from "~/services/session.server";
+import { Buch } from "~/components/buchItem";
+
 
 export async function loader({ request }: LoaderFunctionArgs) {
   await authenticator.isAuthenticated(request, {
@@ -25,6 +27,50 @@ export async function loader({ request }: LoaderFunctionArgs) {
       },
     },
   );
+}
+ 
+async function forwardBookData(bookData: Buch) {
+  const response = await fetch("http://localhost:3000/books", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(bookData),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to forward book data");
+  }
+
+  return await response.json();
+}
+
+export async function action({ request }: ActionFunctionArgs) {
+  const formData = await request.formData();
+  
+  const bookData: Buch = {
+    isbn: formData.get("isbn") as string,
+    titel: {
+      titel: formData.get("titel") as string,
+      untertitel: formData.get("untertitel") as string,
+    },
+    homepage: formData.get("homepage") as string,
+    art: formData.get("art") as string,
+    datum: formData.get("datum") as string,
+    preis: parseFloat(formData.get("preis") as string),
+    rabatt: parseFloat(formData.get("rabatt") as string),
+    lieferbar: formData.get("lieferbar") === "true",
+    rating: parseFloat(formData.get("rating") as string),
+    schlagwoerter: formData.getAll("schlagwoerter") as string[],
+    _links: { self: { href: "" } } 
+  };
+  try {
+    const result = await forwardBookData(bookData);
+    return json({ message: "Buch erfolgreich angelegt", result });
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    return json({ message: "Fehler beim Anlegen des Buches", error: errorMessage }, { status: 500 });
+  }
 }
 
 export default function NewBookPage() {
