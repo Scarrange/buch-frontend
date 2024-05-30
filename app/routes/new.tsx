@@ -30,7 +30,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
  
 async function forwardBookData(bookData: Buch) {
-  const response = await fetch("http://localhost:3000/books", {
+  const response = await fetch("http://localhost:3000/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -76,7 +76,7 @@ export async function action({ request }: ActionFunctionArgs) {
 export default function NewBookPage() {
   return (
     <Form
-      action="/new"
+      action="http://localhost:3000/"
       method="POST"
       className="container d-flex flex-column align-items-center mt-5 form-control div-bg mb-5"
     >
