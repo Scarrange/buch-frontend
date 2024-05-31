@@ -1,6 +1,6 @@
 const Input = (props: {
   placeholder: string | undefined;
-  name?: string | undefined;
+  name: string | undefined;
 }) => {
   return (
     <input

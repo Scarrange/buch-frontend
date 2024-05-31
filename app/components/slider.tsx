@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 
-const SliderWithValue = (props: { min: number; max: number; text: string }) => {
+const SliderWithValue = (props: {
+  name: string;
+  min: number;
+  max: number;
+  text: string;
+}) => {
   const [value, setValue] = useState(
     Math.floor((props.max - props.min) / 2 + 1),
   );
@@ -17,8 +22,8 @@ const SliderWithValue = (props: { min: number; max: number; text: string }) => {
       <label htmlFor="customRange3" className="form-label me-4">
         {props.text}: {value}
       </label>
-      {/* <div className="d-flex justify-content-center"> */}
       <input
+        name={props.name}
         type="range"
         className="form-range"
         min={props.min}
@@ -30,7 +35,6 @@ const SliderWithValue = (props: { min: number; max: number; text: string }) => {
         list="tickmarks"
         style={{ flex: 1 }}
       />
-      {/* </div> */}
     </div>
   );
 };
