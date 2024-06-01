@@ -32,10 +32,7 @@ const BuchItem = (buch: Buch) => {
       <p>ISBN: {buch.isbn}</p>
       <p>Art: {buch.art}</p>
       <p>Rating: {buch.rating}</p>
-      <p>Preis: {buch.preis}</p>
-      <p>Rabatt: {buch.rabatt}</p>
       <p>Lieferbar: {buch.lieferbar ? "true" : "false"}</p>
-      <p>Datum: {buch.datum?.toString()}</p>
       <p>Homepage: {buch.homepage}</p>
       <p>
         Schlagwörter:{" "}
