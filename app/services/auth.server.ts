@@ -40,6 +40,6 @@ authenticator.use(
     "user-pass",
 );
 
-type Token = {
+export type Token = {
     accessToken: string;
 };

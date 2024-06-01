@@ -1,5 +1,5 @@
-import { Link } from "@remix-run/react";
-
+//ist provisorisch, da der Code nur eine Copy von buchItem.tsx ist, und vllt Dubletten verhindert werden können.
+// Hauptgrund für die Datei ist das Entfernen des Detials-Buttons
 export interface Buch {
   isbn: string;
   rating: number | undefined;
@@ -16,10 +16,6 @@ export interface Buch {
   _links: { self: { href: string } };
 }
 
-const getId = (link: string) => {
-  return link.substring(link.lastIndexOf("/") + 1);
-};
-
 const BuchItem = (buch: Buch) => {
   return (
     <div
@@ -31,18 +27,15 @@ const BuchItem = (buch: Buch) => {
       <p>ISBN: {buch.isbn}</p>
       <p>Art: {buch.art}</p>
       <p>Rating: {buch.rating}</p>
+      <p>Preis: {buch.preis}</p>
+      <p>Rabatt: {buch.rabatt}</p>
       <p>Lieferbar: {buch.lieferbar ? "true" : "false"}</p>
+      <p>Datum: {buch.datum?.toString()}</p>
       <p>Homepage: {buch.homepage}</p>
       <p>
         Schlagwörter:{" "}
         {buch.schlagwoerter?.map((wort) => wort.toLowerCase()).join(", ")}
       </p>
-      <Link
-        to={`/search/${getId(buch._links.self.href)}`}
-        className="btn btn-primary"
-      >
-        Details
-      </Link>
     </div>
   );
 };

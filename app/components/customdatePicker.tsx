@@ -9,10 +9,11 @@ const CustomDatePicker = () => {
       {() => (
         <div className="form-control mt-3" style={{ maxWidth: "400px" }}>
           <DatePicker
+            name="datum"
             selected={startDate}
             onChange={(date: Date | null) => setStartDate(date)}
             className="form-control"
-            dateFormat="dd/MM/yyyy"
+            dateFormat="yyyy-MM-dd"
             placeholderText="Datum"
             showYearDropdown
           />

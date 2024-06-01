@@ -7,7 +7,7 @@ import SubmitButton from "~/components/submitButton";
 import { authenticator } from "~/services/auth.server";
 import { commitSession, sessionStorage } from "~/services/session.server";
 
-export async function action({ request }: LoaderFunctionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
   const session = await sessionStorage.getSession(
     request.headers.get("cookie"),
   );
@@ -28,7 +28,7 @@ export async function action({ request }: LoaderFunctionArgs) {
   }
 }
 
-export async function loader({ request }: ActionFunctionArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   await authenticator.isAuthenticated(request, {
     successRedirect: "/",
   });
@@ -110,55 +110,5 @@ export default function Login() {
         <GithubLoginButton />
       </Form>
     </div>
-
-    // <div className="container login-container">
-    //   {actionData ? (
-    //     <div
-    //       className="alert alert-danger d-flex flex-column align-items-center"
-    //       style={{ maxWidth: "600px" }}
-    //     >
-    //       {actionData.error}
-    //     </div>
-    //   ) : null}
-
-    //   <h2 className="text-center">Login</h2>
-    //   <Form method="post" action="/login">
-    //     <div className="row justify-content-center">
-    //       <div className="col-md-6">
-    //         <div className="form-group mt-5">
-    //           <label htmlFor="username" className="form-label">
-    //             Username
-    //           </label>
-    //           <InputLogin
-    //             name="username"
-    //             placeholder="Enter your Username here"
-    //           />
-    //         </div>
-    //       </div>
-    //     </div>
-    //     <div className="row justify-content-center">
-    //       <div className="col-md-6">
-    //         <div className="form-group mt-4">
-    //           <label htmlFor="password" className="form-label">
-    //             Password
-    //           </label>
-    //           <InputLogin
-    //             name="password"
-    //             placeholder="Enter your Password here"
-    //           />
-    //           <small id="passwordHelp" className="form-text text-muted">
-    //             Please do not share your Password with anyone else.
-    //           </small>
-    //         </div>
-    //       </div>
-    //     </div>
-    //     <SubmitButton
-    //       text="Anmelden"
-    //       style={{ width: "359.28px" }}
-    //       className="mt-2"
-    //     />
-    //   </Form>
-    //   <GithubLoginButton />
-    // </div>
   );
 }
