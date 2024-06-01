@@ -137,7 +137,6 @@ export async function action({ request }: ActionFunctionArgs) {
     return json({ created: false, id: undefined, message: undefined, errors });
   }
 
-  console.log(bookData);
   const accessToken: Token = (
     await sessionStorage.getSession(request.headers.get("cookie"))
   ).get(authenticator.sessionKey);
