@@ -7,7 +7,7 @@
   display: none;
   flex-direction: column;
   position: absolute;
-  top: 60px; /* Adjust based on your navbar height */
+  top: 60px;
   left: 0;
   width: 100%;
   background-color: white;
