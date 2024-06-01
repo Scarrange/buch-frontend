@@ -7,7 +7,7 @@ export interface Buch {
   preis: number | undefined;
   rabatt: number | undefined;
   lieferbar: boolean | undefined;
-  datum: string | Date | undefined;
+  datum: string | undefined;
   homepage: string | undefined;
   schlagwoerter: string[] | undefined;
   titel:

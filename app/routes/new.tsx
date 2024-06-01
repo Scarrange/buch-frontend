@@ -9,10 +9,14 @@ import { authenticator, Token } from "~/services/auth.server";
 import { json, LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node";
 import { commitSession, sessionStorage } from "~/services/session.server";
 import { Buch } from "~/components/buchItem";
+import errorInfo from "../components/errorInfo";
+import ErrorInfo from "../components/errorInfo";
 
 export interface ErrorResponse {
   statusCode: number;
+  message: string;
 }
+type BookInput = Omit<Buch, "_links">;
 
 export async function loader({ request }: LoaderFunctionArgs) {
   await authenticator.isAuthenticated(request, {
@@ -41,46 +45,97 @@ async function forwardBookData(bookData: Omit<Buch, "_links">, token: Token) {
     },
     body: JSON.stringify(bookData),
   });
-  if (response.status !== 201) {
-    const res: ErrorResponse = await response.json();
-    if (res.statusCode === 401) {
-      return {
-        statusCode: 401,
-      };
-    }
+
+  if (response.status === 201) {
     return {
-      statusCode: res.statusCode,
+      statusCode: 201,
+      location: response.headers.get("Location"),
     };
   }
 
+  const res: ErrorResponse = await response.json();
   return {
-    statusCode: 201,
-    location: response.headers.get("Location"),
+    statusCode: res.statusCode,
+    message: res.message,
   };
+}
+
+function validateBookData(bookData: BookInput) {
+  const errors = {};
+
+  if (!bookData.isbn) {
+    errors.isbn = "ISBN muss 13 Zeichen lang sein";
+  }
+
+  if (
+    !bookData.titel?.titel ||
+    !bookData.titel.titel?.match("^\\w.*") ||
+    bookData.titel.titel?.length > 40
+  ) {
+    errors.titel = "Der Titel muss zwischen 1 und 40 Zeichen lang sein";
+  }
+
+  if (bookData.titel?.untertitel && bookData.titel?.untertitel?.length > 40) {
+    errors.untertitel = "Der Untertitel darf maximal 40 Zeichen lang sein";
+  }
+
+  if (!bookData.rating || bookData.rating < 0 || bookData.rating > 5) {
+    errors.rating = "Rating muss zwischen 0 und 5 liegen";
+  }
+
+  if (!["", "KINDLE", "DRUCKAUSGABE"].includes(bookData.art ?? "")) {
+    errors.art = "Buchart ist ungültig";
+  }
+
+  if (!bookData.preis || bookData.preis <= 0) {
+    errors.preis = "Preis muss größer 0 sein";
+  }
+
+  if (bookData.rabatt && (bookData.rabatt < 0 || bookData.rabatt > 1)) {
+    errors.rabatt = "Rabatt muss zwischen 0 und 1 liegen";
+  }
+
+  if (!bookData.lieferbar) {
+    errors.lieferbar = "Lieferbarkeit muss angegeben werden";
+  }
+
+  if (bookData.datum && !bookData.datum.match("^[0-9]{4}-[0-9]{2}-[0-9]{2}$")) {
+    errors.datum = "Datum muss ISO8601 Format haben";
+  }
+
+  if (bookData.homepage && !bookData.homepage.includes(".")) {
+    errors.homepage = "Homepage muss eine URL sein";
+  }
+
+  return errors;
 }
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
-  type BookInput = Omit<Buch, "_links">;
   const js = formData.get("javascript") ? "JAVASCRIPT" : null;
   const ts = formData.get("typescript") ? "TYPESCRIPT" : null;
 
   //https://remix.run/docs/en/main/guides/form-validation Zum Validieren
   const bookData: BookInput = {
-    isbn: formData.get("isbn") as string,
+    isbn: String(formData.get("isbn")),
     titel: {
-      titel: formData.get("titel") as string,
-      untertitel: formData.get("untertitel") as string,
+      titel: String(formData.get("titel")),
+      untertitel: String(formData.get("untertitel")),
     },
-    homepage: formData.get("homepage") as string,
-    art: formData.get("art") as string,
-    datum: formData.get("datum") as string,
-    preis: parseFloat(formData.get("preis") as string),
-    rabatt: parseFloat(formData.get("rabatt") as string),
+    homepage: String(formData.get("homepage")),
+    art: String(formData.get("art")),
+    datum: String(formData.get("datum")),
+    preis: parseFloat(String(formData.get("preis"))),
+    rabatt: parseFloat(String(formData.get("rabatt"))),
     lieferbar: formData.get("lieferbar") === "true",
-    rating: parseFloat(formData.get("rating") as string),
+    rating: parseFloat(String(formData.get("rating"))),
     schlagwoerter: [js, ts].filter((e) => e != null),
   };
+  console.log(bookData);
+  const errors = validateBookData(bookData);
+  if (Object.keys(errors).length > 0) {
+    return json({ created: false, id: undefined, message: undefined, errors });
+  }
 
   console.log(bookData);
   const accessToken: Token = (
@@ -88,23 +143,24 @@ export async function action({ request }: ActionFunctionArgs) {
   ).get(authenticator.sessionKey);
 
   const result = await forwardBookData(bookData, accessToken);
-  if (result.statusCode === 201) {
-    const id = result.location?.substring(result.location.lastIndexOf("/") + 1);
-    return json({ created: true, id });
-  }
   if (result.statusCode === 401) {
     return await authenticator.logout(request, { redirectTo: "/login" });
   }
 
   return json({
     created: result.statusCode === 201,
+    id: result.location?.substring(result.location.lastIndexOf("/") + 1),
+    message: result.message,
+    errors: {},
   });
 }
 
 export default function NewBookPage() {
   const actionData = useActionData<typeof action>();
+  const errors = actionData?.errors;
   const created = actionData?.created;
   const id = actionData?.id;
+  const message = actionData?.message;
 
   return (
     <div className="d-flex flex-column align-items-center mt-5">
@@ -114,9 +170,14 @@ export default function NewBookPage() {
           role="alert"
           style={{ maxWidth: "600px" }}
         >
-          {created
-            ? "Buch wurde erfolgreich angelegt"
-            : "Fehler beim Anlegen des Buches!"}
+          {created ? (
+            "Buch wurde erfolgreich angelegt"
+          ) : (
+            <div>
+              <p>Fehler beim Anlegen des Buches!</p>
+              {message}
+            </div>
+          )}
           {created ? (
             <Link to={`/search/${id}`}>
               <button type="button" className="btn btn-success   mt-4">
@@ -133,17 +194,25 @@ export default function NewBookPage() {
       >
         <h1>Neues Buch anlegen</h1>
         <Input name="isbn" placeholder="ISBN" />
+        <ErrorInfo error={errors?.isbn} />
         <Input name="titel" placeholder="Titel" />
+        <ErrorInfo error={errors?.titel} />
         <Input name="untertitel" placeholder="Untertitel" />
+        <ErrorInfo error={errors?.untertitel} />
         <Input name="homepage" placeholder="Homepage" />
+        <ErrorInfo error={errors?.homepage} />
         <DropDown
           name="art"
-          items={["Druckausgabe", "Kindle"]}
+          items={["", "Druckausgabe", "Kindle"]}
           placeholder="Select Buchart"
         />
+        <ErrorInfo error={errors?.art} />
         <CustomDatePicker />
+        <ErrorInfo error={errors?.datum} />
         <Input name="preis" placeholder="Preis" />
+        <ErrorInfo error={errors?.preis} />
         <Input name="rabatt" placeholder="Rabatt" />
+        <ErrorInfo error={errors?.rabatt} />
         <div
           className="container d-flex justify-content-around mt-3"
           style={{ maxWidth: "400px" }}
@@ -151,7 +220,9 @@ export default function NewBookPage() {
           <Radio name="lieferbar" />
           <Radio name="nicht lieferbar" />
         </div>
-        <SliderWithValue name="rating" min={1} max={5} text="Rating" />
+        <ErrorInfo error={errors?.lieferbar} />
+        <SliderWithValue name="rating" min={0} max={5} text="Rating" />
+        <ErrorInfo error={errors?.rating} />
         <div
           className="container d-flex justify-content-around mt-3"
           style={{ maxWidth: "400px" }}

@@ -62,7 +62,7 @@ export default function SearchPage() {
         <DropDown
           name="rating"
           placeholder="Rating"
-          items={["", "1", "2", "3", "4", "5"]}
+          items={["", "0", "1", "2", "3", "4", "5"]}
         />
         <div
           className="container d-flex justify-content-around mt-3"

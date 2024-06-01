@@ -67,6 +67,10 @@ body {
   font-size: 14px;
 }
 
+.errorInfo {
+  color: red;
+}
+
 /* datepicker styling */
 .react-datepicker {
   border: 2px;
@@ -125,7 +129,8 @@ body {
 }
 
 .navbar.fixed {
-  top: 0; /* Fixiert die Navbar oben, wenn die Klasse .fixed hinzugefügt wird */
+  top: 0;
+  /* Fixiert die Navbar oben, wenn die Klasse .fixed hinzugefügt wird */
 }
 
 body {
@@ -134,5 +139,6 @@ body {
 }
 
 body.navbar-fixed-padding {
-  padding-top: 120px; /* Höhe der Navbar anpassen */
+  padding-top: 120px;
+  /* Höhe der Navbar anpassen */
 }
