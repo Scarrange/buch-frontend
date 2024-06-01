@@ -21,7 +21,6 @@ const getId = (link: string) => {
 };
 
 const BuchItem = (buch: Buch) => {
-  //TODO: Paar Infos rausschmeißen und nur in Detailansicht anzeigen
   return (
     <div
       className="container d-flex flex-column align-items-start mt-5 form-control div-bg mb-5"

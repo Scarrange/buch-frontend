@@ -1,3 +1,5 @@
+//ist provisorisch, da der Code nur eine Copy von buchItem.tsx ist, und vllt Dubletten verhindert werden können.
+// Hauptgrund für die Datei ist das Entfernen des Detials-Buttons
 export interface Buch {
   isbn: string;
   rating: number | undefined;
@@ -15,7 +17,6 @@ export interface Buch {
 }
 
 const BuchItem = (buch: Buch) => {
-  //TODO: Paar Infos rausschmeißen und nur in Detailansicht anzeigen
   return (
     <div
       className="container d-flex flex-column align-items-start mt-5 form-control div-bg mb-5"

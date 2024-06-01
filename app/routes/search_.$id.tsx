@@ -5,7 +5,6 @@ import BuchItem from "~/components/buchItemDetail";
 export async function loader({ params }: LoaderFunctionArgs) {
   const { id } = params;
 
-  // Anfrage an den Buchserver mit der übergebenen ID
   const response = await fetch(`https://localhost:3000/rest/${id}`, {
     method: "GET",
     headers: {
