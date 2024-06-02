@@ -182,3 +182,22 @@ body.navbar-fixed-padding {
 .nav-link:hover {
   background-color: #f8f9fa;
 }
+
+.center-message {
+  margin-top: 100px;
+  padding: 15px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  box-shadow: lightblue 0px 0px 50px;
+  border-radius: 4px;
+  background-color: white;
+  color: black;
+  text-align: center;
+}
+
+.sticky-form {
+  position: -webkit-sticky; /* Für Safari Mongos */
+  position: sticky;
+  top: 0;
+  z-index: 1000; 
+}
