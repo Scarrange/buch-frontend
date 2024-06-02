@@ -1,20 +1,20 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "@remix-run/react";
 import Login from "./login";
 import Logout from "./logout";
-import "./styles.css"; // Import the CSS with styles
 
 const Navbar = (props: { isLoggedIn: boolean }) => {
   const [showNavbar, setShowNavbar] = useState(false);
   const [isFixed, setIsFixed] = useState(false);
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 950);
+  const [isMobile, setIsMobile] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 950);
     };
+    // handleResize(); Kein Ahnung ob man das braucht
 
     window.addEventListener("resize", handleResize);
     return () => {
@@ -33,6 +33,7 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
     } else {
       document.body.classList.remove("navbar-fixed-padding");
     }
+    if (isFixed) return;
 
     const handleMouseMove = (event: MouseEvent) => {
       if (event.clientY < 125) {
@@ -70,7 +71,7 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
             />
           </Link>
         </div>
-        
+
         {isMobile ? (
           <>
             <button
@@ -81,23 +82,46 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
               <span className="navbar-toggler-icon"></span>
             </button>
             {showMobileMenu && (
-              <div className="hamburger-menu show">
+              <div className="hamburger-menu show mb-5">
                 <ul className="navbar-nav">
                   <li className="nav-item">
-                    <Link to="/search" className="nav-link" onClick={toggleMobileMenu}>
+                    <Link
+                      to="/"
+                      className="nav-link"
+                      onClick={toggleMobileMenu}
+                    >
+                      Home
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link
+                      to="/search"
+                      className="nav-link"
+                      onClick={toggleMobileMenu}
+                    >
                       Buch suchen
                     </Link>
                   </li>
-                  <li className="nav-item">
-                    <Link to="/new" className="nav-link" onClick={toggleMobileMenu}>
-                      Buch anlegen
-                    </Link>
-                  </li>
+                  {props.isLoggedIn && (
+                    <li className="nav-item">
+                      <Link
+                        to="/new"
+                        className="nav-link"
+                        onClick={toggleMobileMenu}
+                      >
+                        Buch anlegen
+                      </Link>
+                    </li>
+                  )}
                   <li className="nav-item">
                     {props.isLoggedIn ? (
-                      <Logout />
+                      <Logout onClick={toggleMobileMenu} />
                     ) : (
-                      <Link to="/login" className="nav-link" onClick={toggleMobileMenu}>
+                      <Link
+                        to="/login"
+                        className="nav-link"
+                        onClick={toggleMobileMenu}
+                      >
                         Login
                       </Link>
                     )}
@@ -117,22 +141,27 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
                   Buch suchen
                 </button>
               </Link>
-              <Link
-                to="/new"
-                style={{ color: "white", textDecoration: "none" }}
-              >
-                <button type="button" className="btn btn-primary btn-lg me-2">
-                  Buch anlegen
-                </button>
-              </Link>
+              {props.isLoggedIn && (
+                <Link
+                  to="/new"
+                  style={{ color: "white", textDecoration: "none" }}
+                >
+                  <button type="button" className="btn btn-primary btn-lg me-2">
+                    Buch anlegen
+                  </button>
+                </Link>
+              )}
               {props.isLoggedIn ? <Logout /> : <Login />}
             </div>
           </div>
         )}
-        
+
         <div className="ms-auto">
           {!isMobile && (
-            <button onClick={toggleFixed} className="btn btn-primary btn-lg me-2">
+            <button
+              onClick={toggleFixed}
+              className="btn btn-primary btn-lg me-2"
+            >
               {isFixed ? "Unfix Navbar" : "Fix Navbar"}
             </button>
           )}
