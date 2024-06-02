@@ -9,14 +9,25 @@ import { authenticator, Token } from "~/services/auth.server";
 import { json, LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node";
 import { commitSession, sessionStorage } from "~/services/session.server";
 import { Buch } from "~/components/buchItem";
-import errorInfo from "../components/errorInfo";
 import ErrorInfo from "../components/errorInfo";
 
 export interface ErrorResponse {
   statusCode: number;
   message: string;
 }
-type BookInput = Omit<Buch, "_links">;
+type BuchError = {
+  isbn?: string;
+  titel?: string;
+  untertitel?: string;
+  rating?: string;
+  art?: string;
+  preis?: string;
+  rabatt?: string;
+  lieferbar?: string;
+  datum?: string;
+  homepage?: string;
+};
+type BuchInput = Omit<Buch, "_links">;
 
 export async function loader({ request }: LoaderFunctionArgs) {
   await authenticator.isAuthenticated(request, {
@@ -36,7 +47,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   );
 }
 
-async function forwardBookData(bookData: Omit<Buch, "_links">, token: Token) {
+async function forwardBookData(bookData: BuchInput, token: Token) {
   const response = await fetch("https://localhost:3000/rest", {
     method: "POST",
     headers: {
@@ -60,11 +71,11 @@ async function forwardBookData(bookData: Omit<Buch, "_links">, token: Token) {
   };
 }
 
-function validateBookData(bookData: BookInput) {
-  const errors = {};
+function validateBookData(bookData: BuchInput) {
+  const errors: BuchError = {};
 
-  if (!bookData.isbn) {
-    errors.isbn = "ISBN muss 13 Zeichen lang sein";
+  if (bookData.isbn.length !== 17) {
+    errors.isbn = "ISBN muss 13 Ziffern beinhalten";
   }
 
   if (
@@ -79,7 +90,11 @@ function validateBookData(bookData: BookInput) {
     errors.untertitel = "Der Untertitel darf maximal 40 Zeichen lang sein";
   }
 
-  if (!bookData.rating || bookData.rating < 0 || bookData.rating > 5) {
+  if (
+    bookData.rating === undefined ||
+    bookData.rating < 0 ||
+    bookData.rating > 5
+  ) {
     errors.rating = "Rating muss zwischen 0 und 5 liegen";
   }
 
@@ -91,16 +106,20 @@ function validateBookData(bookData: BookInput) {
     errors.preis = "Preis muss größer 0 sein";
   }
 
-  if (bookData.rabatt && (bookData.rabatt < 0 || bookData.rabatt > 1)) {
+  if (
+    bookData.rabatt === undefined ||
+    bookData.rabatt < 0 ||
+    bookData.rabatt > 1
+  ) {
     errors.rabatt = "Rabatt muss zwischen 0 und 1 liegen";
   }
 
-  if (!bookData.lieferbar) {
+  if (bookData.lieferbar === undefined) {
     errors.lieferbar = "Lieferbarkeit muss angegeben werden";
   }
 
   if (bookData.datum && !bookData.datum.match("^[0-9]{4}-[0-9]{2}-[0-9]{2}$")) {
-    errors.datum = "Datum muss ISO8601 Format haben";
+    errors.datum = "Datum muss dem Format yyyy/mm/dd entsprechen";
   }
 
   if (bookData.homepage && !bookData.homepage.includes(".")) {
@@ -115,24 +134,24 @@ export async function action({ request }: ActionFunctionArgs) {
   const js = formData.get("javascript") ? "JAVASCRIPT" : null;
   const ts = formData.get("typescript") ? "TYPESCRIPT" : null;
 
-  //https://remix.run/docs/en/main/guides/form-validation Zum Validieren
-  const bookData: BookInput = {
+  const buchDataInput: BuchInput = {
     isbn: String(formData.get("isbn")),
     titel: {
       titel: String(formData.get("titel")),
-      untertitel: String(formData.get("untertitel")),
+      untertitel: String(formData.get("untertitel")) || undefined,
     },
-    homepage: String(formData.get("homepage")),
-    art: String(formData.get("art")),
-    datum: String(formData.get("datum")),
+    homepage: String(formData.get("homepage")) || undefined,
+    art: String(formData.get("art")) || undefined,
+    datum: String(formData.get("datum")) || undefined,
     preis: parseFloat(String(formData.get("preis"))),
     rabatt: parseFloat(String(formData.get("rabatt"))),
     lieferbar: formData.get("lieferbar") === "true",
     rating: parseFloat(String(formData.get("rating"))),
     schlagwoerter: [js, ts].filter((e) => e != null),
   };
-  console.log(bookData);
-  const errors = validateBookData(bookData);
+
+  console.log(buchDataInput);
+  const errors = validateBookData(buchDataInput);
   if (Object.keys(errors).length > 0) {
     return json({ created: false, id: undefined, message: undefined, errors });
   }
@@ -141,7 +160,7 @@ export async function action({ request }: ActionFunctionArgs) {
     await sessionStorage.getSession(request.headers.get("cookie"))
   ).get(authenticator.sessionKey);
 
-  const result = await forwardBookData(bookData, accessToken);
+  const result = await forwardBookData(buchDataInput, accessToken);
   if (result.statusCode === 401) {
     return await authenticator.logout(request, { redirectTo: "/login" });
   }
@@ -150,7 +169,7 @@ export async function action({ request }: ActionFunctionArgs) {
     created: result.statusCode === 201,
     id: result.location?.substring(result.location.lastIndexOf("/") + 1),
     message: result.message,
-    errors: {},
+    errors,
   });
 }
 
@@ -192,9 +211,9 @@ export default function NewBookPage() {
         className="container d-flex flex-column align-items-center form-control div-bg mb-5"
       >
         <h1>Neues Buch anlegen</h1>
-        <Input name="isbn" placeholder="ISBN" />
+        <Input name="isbn" placeholder="ISBN" required />
         <ErrorInfo error={errors?.isbn} />
-        <Input name="titel" placeholder="Titel" />
+        <Input name="titel" placeholder="Titel" required />
         <ErrorInfo error={errors?.titel} />
         <Input name="untertitel" placeholder="Untertitel" />
         <ErrorInfo error={errors?.untertitel} />
@@ -208,9 +227,9 @@ export default function NewBookPage() {
         <ErrorInfo error={errors?.art} />
         <CustomDatePicker />
         <ErrorInfo error={errors?.datum} />
-        <Input name="preis" placeholder="Preis" />
+        <Input name="preis" placeholder="Preis" required />
         <ErrorInfo error={errors?.preis} />
-        <Input name="rabatt" placeholder="Rabatt" />
+        <Input name="rabatt" placeholder="Rabatt" required />
         <ErrorInfo error={errors?.rabatt} />
         <div
           className="container d-flex justify-content-around mt-3"
