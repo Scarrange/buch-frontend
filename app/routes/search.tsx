@@ -19,9 +19,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
     });
 
     const data = await response.json();
-    return json({ buecher: data?._embedded?.buecher });
+    if (!data?._embedded?.buecher || data._embedded.buecher.length === 0) {
+      return json({ buecher: [], message: `Keine Bücher mit den gewünschten Suchkriterien gefunden.` });
+    }
+    return json({ buecher: data?._embedded?.buecher , message: null});
   }
-  return json({ buecher: null });
+  return json({ buecher: null, message: null });
 }
 
 function getQueryUrl(entries: [string, FormDataEntryValue][]) {
@@ -40,14 +43,14 @@ function getQueryUrl(entries: [string, FormDataEntryValue][]) {
 }
 
 export default function SearchPage() {
-  const { buecher } = useLoaderData<typeof loader>();
+  const { buecher, message } = useLoaderData<typeof loader>();
 
   return (
     <div className="container d-flex">
       <Form
         action="/search"
         method="GET"
-        className="container d-flex flex-column align-items-center mt-5 form-control div-bg mb-5"
+        className="sticky-form container d-flex flex-column align-items-center mt-5 form-control div-bg mb-5"
         style={{ overflow: "auto", maxHeight: "500px" }}
       >
         <h1>Suchformular</h1>
@@ -76,6 +79,7 @@ export default function SearchPage() {
         </button>
       </Form>
       <div className="d-flex flex-column align-items-center">
+        {message && <p className= "center-message">{message}</p>}
         {buecher?.map((buch: Buch, index: number) => (
           <BuchItem key={index} {...buch} />
         ))}
