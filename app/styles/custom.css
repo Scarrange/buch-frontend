@@ -1,5 +1,7 @@
 body {
   background-color: #ddd6d5;
+  padding-top: 0;
+  transition: padding-top 0.3s;
 }
 
 .btn-primary {
@@ -112,6 +114,7 @@ body {
   color: #007bff;
 }
 
+/* Navbar toggle*/
 .navbar {
   position: fixed;
   top: -200px;
@@ -133,12 +136,49 @@ body {
   /* Fixiert die Navbar oben, wenn die Klasse .fixed hinzugefügt wird */
 }
 
-body {
-  padding-top: 0;
-  transition: padding-top 0.3s;
-}
-
 body.navbar-fixed-padding {
   padding-top: 120px;
   /* Höhe der Navbar anpassen */
+}
+
+/* Mobile */
+.hamburger-icon {
+  display: flex;
+  align-items: center;
+}
+
+.hamburger-menu {
+  display: none;
+  flex-direction: column;
+  position: absolute;
+  top: 60px;
+  left: 0;
+  width: 100%;
+  background-color: white;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+}
+
+.hamburger-menu.show {
+  display: flex;
+}
+
+.navbar-nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-item {
+  padding: 10px 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #333;
+}
+
+.nav-link:hover {
+  background-color: #f8f9fa;
 }
