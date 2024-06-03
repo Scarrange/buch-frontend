@@ -13,7 +13,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
   });
 
   if (!response.ok) {
-    throw new Response("Buch nicht gefunden", { status: 404 });
+    return json({ buch: null });
   }
 
   const buch = await response.json();
