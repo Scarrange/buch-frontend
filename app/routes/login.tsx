@@ -20,7 +20,7 @@ export async function action({ request }: ActionFunctionArgs) {
     if (error instanceof Error) {
       session.flash(authenticator.sessionErrorKey, error.message);
       return json(
-        { error: error.message },
+        { error: "Es besteht keine Verbindung zum Server." },
         { headers: { "Set-Cookie": await commitSession(session) } },
       );
     }
@@ -61,7 +61,7 @@ export default function Login() {
   return (
     <div className="d-flex flex-column align-items-center mt-5">
       {actionData ? (
-        <div
+        <div 
           className="container alert alert-danger d-flex flex-column align-items-center"
           role="alert"
           style={{ maxWidth: "600px" }}
