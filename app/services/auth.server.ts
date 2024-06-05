@@ -29,9 +29,7 @@ authenticator.use(
         const data = await response.json();
         const accessToken = data?.access_token.toString();
         if (!accessToken) {
-            throw new AuthorizationError(
-                "Login fehlgeschlagen, kein Access Token erhalten",
-            );
+            throw new AuthorizationError("Login fehlgeschlagen");
         }
 
         console.log("Login erfolgreich");

@@ -20,7 +20,7 @@ export async function action({ request }: ActionFunctionArgs) {
     if (error instanceof Error) {
       session.flash(authenticator.sessionErrorKey, error.message);
       return json(
-        { error: "Es besteht keine Verbindung zum Server." },
+        { error: error.message },
         { headers: { "Set-Cookie": await commitSession(session) } },
       );
     }
