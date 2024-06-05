@@ -11,6 +11,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   if (queryParams.size) {
     const paramString = getQueryUrl(Array.from(queryParams.entries()));
+    try{
     const response = await fetch(`https://localhost:3000/rest?${paramString}`, {
       method: "GET",
       headers: {
@@ -20,11 +21,18 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
     const data = await response.json();
     if (!data?._embedded?.buecher || data._embedded.buecher.length === 0) {
-      return json({ buecher: [], message: `Keine Bücher mit den gewünschten Suchkriterien gefunden.` });
+      return json({ buecher: [], message: `Keine Bücher mit den gewünschten Suchkriterien gefunden.`, error: null });
     }
-    return json({ buecher: data?._embedded?.buecher , message: null});
+    return json({ buecher: data?._embedded?.buecher , message: null, error: null});
   }
-  return json({ buecher: null, message: null });
+  catch (error) {
+    if (error instanceof Error) {
+    return json({ buecher: null, message: null, error: 'Es besteht keine Verbindung zum Server. Bitte versuchen Sie es später nochmal.' });
+  }
+
+  throw error;
+}}
+  return json({ buecher: null, message: null, error: null });
 }
 
 function getQueryUrl(entries: [string, FormDataEntryValue][]) {
@@ -43,7 +51,10 @@ function getQueryUrl(entries: [string, FormDataEntryValue][]) {
 }
 
 export default function SearchPage() {
-  const { buecher, message } = useLoaderData<typeof loader>();
+  const { buecher, message, error } = useLoaderData<typeof loader>();
+
+  
+
 
   return (
     <div className="container d-flex">
@@ -79,7 +90,12 @@ export default function SearchPage() {
         </button>
       </Form>
       <div className="d-flex flex-column align-items-center">
-        {message && <p className= "center-message">{message}</p>}
+        {(message || error) && (
+          <div className="alert alert-danger center-message mt-5">
+            {error && <p>{error}</p>}
+            {message && <p>{message}</p>}
+          </div>
+        )}
         {buecher?.map((buch: Buch, index: number) => (
           <BuchItem key={index} {...buch} />
         ))}
