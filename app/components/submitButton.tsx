@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface SubmitButtonProps {
   text: string;
@@ -6,16 +6,24 @@ interface SubmitButtonProps {
   className?: string;
 }
 
-const SubmitButton: React.FC<SubmitButtonProps> = ({ text, style, className, ...props }) => {
+const handleButtonClick = () => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
+const SubmitButton: React.FC<SubmitButtonProps> = ({
+  text,
+  style,
+  className,
+}) => {
   return (
     <div className="form-group mt-5 text-center">
       <button
         type="submit"
         className={`btn custom-btn ${className}`}
         style={style}
-        {...props}
+        onClick={handleButtonClick}
       >
-        {text} 
+        {text}
       </button>
     </div>
   );
