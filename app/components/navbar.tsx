@@ -38,8 +38,10 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
     const handleMouseMove = (event: MouseEvent) => {
       if (event.clientY < 125) {
         setShowNavbar(true);
+        document.body.classList.add('navbar-hovered-padding');
       } else {
         setShowNavbar(false);
+        document.body.classList.remove('navbar-hovered-padding');
       }
     };
 
