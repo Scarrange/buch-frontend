@@ -4,7 +4,7 @@ import CheckBox from "../components/checkBox";
 import Radio from "~/components/radio";
 import CustomDatePicker from "~/components/customdatePicker";
 import DropDown from "~/components/dropDown";
-import { Form, Link, useActionData } from "@remix-run/react";
+import { Link, useFetcher } from "@remix-run/react";
 import { authenticator, Token } from "~/services/auth.server";
 import { json, LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node";
 import { commitSession, sessionStorage } from "~/services/session.server";
@@ -48,14 +48,19 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 async function forwardBookData(bookData: BuchInput, token: Token) {
-  const response = await fetch("https://localhost:3000/rest", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token.accessToken}`,
-    },
-    body: JSON.stringify(bookData),
-  });
+  let response;
+  try {
+    response = await fetch("https://localhost:3000/rest", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token.accessToken}`,
+      },
+      body: JSON.stringify(bookData),
+    });
+  } catch (e) {
+    return { statusCode: 500, message: "Keine Verbindung zum Backend möglich" };
+  }
 
   if (response.status === 201) {
     return {
@@ -174,18 +179,21 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function NewBookPage() {
-  const actionData = useActionData<typeof action>();
+  const fetcher = useFetcher<typeof action>();
+  const actionData = fetcher.data;
   const errors = actionData?.errors;
   const created = actionData?.created;
   const id = actionData?.id;
   const message = actionData?.message;
+  const isLoading = fetcher.state === "loading";
 
-  const handleBUttonClick = () => {
+  const handleButtonClick = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
     <div className="d-flex flex-column align-items-center mt-5">
+      {isLoading ? <p>Loading...</p> : <p>Not Loading</p>}
       {actionData ? (
         <div
           className={`container alert alert-${created ? "success" : "danger"} d-flex flex-column align-items-center`}
@@ -209,7 +217,7 @@ export default function NewBookPage() {
           ) : null}
         </div>
       ) : null}
-      <Form
+      <fetcher.Form
         method="POST"
         className="container d-flex flex-column align-items-center form-control div-bg mb-5"
       >
@@ -254,11 +262,11 @@ export default function NewBookPage() {
         <button
           type="submit"
           className="btn btn-success btn-lg mt-4"
-          onClick={handleBUttonClick}
+          onClick={handleButtonClick}
         >
           Buch anlegen
         </button>
-      </Form>
+      </fetcher.Form>
     </div>
   );
 }
