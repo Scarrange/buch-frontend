@@ -5,8 +5,8 @@ import Login from "./login";
 import Logout from "./logout";
 
 const Navbar = (props: { isLoggedIn: boolean }) => {
-  const [showNavbar, setShowNavbar] = useState(false);
-  const [isFixed, setIsFixed] = useState(false);
+  const [showNavbar, setShowNavbar] = useState(true);
+  const [isFixed, setIsFixed] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
 
