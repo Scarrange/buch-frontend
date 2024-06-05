@@ -50,23 +50,31 @@ export default function Login() {
   const actionData = useActionData<typeof action>();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (actionData) {
       setUsername("");
       setPassword("");
+      setError(actionData.error || "");
     }
   }, [actionData]);
 
+  useEffect(() => {
+    if (username || password) {
+      setError("");
+    }
+  }, [username, password]);
+
   return (
     <div className="d-flex flex-column align-items-center mt-5">
-      {actionData ? (
+      {error ? (
         <div
           className="container alert alert-danger d-flex flex-column align-items-center"
           role="alert"
           style={{ maxWidth: "600px" }}
         >
-          {actionData.error}
+          {error}
         </div>
       ) : null}
 
