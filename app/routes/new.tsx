@@ -107,7 +107,7 @@ function validateBookData(bookData: BuchInput) {
   }
 
   if (
-    bookData.rabatt === undefined ||
+    (!bookData.rabatt && bookData.rabatt !== 0) ||
     bookData.rabatt < 0 ||
     bookData.rabatt > 1
   ) {
@@ -180,6 +180,10 @@ export default function NewBookPage() {
   const id = actionData?.id;
   const message = actionData?.message;
 
+  const handleBUttonClick = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <div className="d-flex flex-column align-items-center mt-5">
       {actionData ? (
@@ -206,7 +210,6 @@ export default function NewBookPage() {
         </div>
       ) : null}
       <Form
-        action="/new"
         method="POST"
         className="container d-flex flex-column align-items-center form-control div-bg mb-5"
       >
@@ -248,7 +251,11 @@ export default function NewBookPage() {
           <CheckBox text="JavaScript" name="javascript" />
           <CheckBox text="TypeScript" name="typescript" />
         </div>
-        <button type="submit" className="btn btn-success btn-lg mt-4">
+        <button
+          type="submit"
+          className="btn btn-success btn-lg mt-4"
+          onClick={handleBUttonClick}
+        >
           Buch anlegen
         </button>
       </Form>
