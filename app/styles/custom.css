@@ -141,6 +141,10 @@ body.navbar-fixed-padding {
   /* Höhe der Navbar anpassen */
 }
 
+body.navbar-hovered-padding {
+  padding-top: 125px; /* Adjust based on the height of your navbar */
+}
+
 /* Mobile */
 .hamburger-icon {
   display: flex;
@@ -190,14 +194,28 @@ body.navbar-fixed-padding {
   border-radius: 10px;
   box-shadow: lightblue 0px 0px 50px;
   border-radius: 4px;
-  background-color: white;
+  background-color: rgb(233, 76, 76);
   color: black;
   text-align: center;
 }
 
+
 .sticky-form {
   position: -webkit-sticky; /* Für Safari Mongos */
   position: sticky;
-  top: 0;
+  top: 150px;
   z-index: 1000; 
 }
+
+.alert {
+  padding: 15px;
+  margin-top: 15px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  box-shadow: lightblue 0px 0px 50px;
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+
+
