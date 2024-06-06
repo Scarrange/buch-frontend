@@ -60,7 +60,6 @@ export default function SearchPage() {
   return (
     <div className="container d-flex">
       <Form
-        action="/search"
         method="GET"
         className="sticky-form container d-flex flex-column align-items-center mt-5 form-control div-bg mb-5"
         style={{ overflow: "auto", maxHeight: "500px" }}

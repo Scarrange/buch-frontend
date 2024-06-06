@@ -29,7 +29,7 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
     }
 
     if (isFixed) {
-      document.body.classList.add("navbar-fixed-padding");
+      document.body.classList.add("navbar-fixed-padding", "navbar-hovered-padding");
     } else {
       document.body.classList.remove("navbar-fixed-padding");
     }
@@ -38,10 +38,10 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
     const handleMouseMove = (event: MouseEvent) => {
       if (event.clientY < 125) {
         setShowNavbar(true);
-        document.body.classList.add('navbar-hovered-padding');
+        document.body.classList.add("navbar-hovered-padding");
       } else {
         setShowNavbar(false);
-        document.body.classList.remove('navbar-hovered-padding');
+        document.body.classList.remove("navbar-hovered-padding");
       }
     };
 

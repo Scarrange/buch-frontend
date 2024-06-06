@@ -137,7 +137,7 @@ body {
 }
 
 body.navbar-fixed-padding {
-  padding-top: 120px;
+  padding-top: 125px;
   /* Höhe der Navbar anpassen */
 }
 
@@ -203,7 +203,7 @@ body.navbar-hovered-padding {
 .sticky-form {
   position: -webkit-sticky; /* Für Safari Mongos */
   position: sticky;
-  top: 150px;
+  top: 175px;
   z-index: 1000; 
 }
 
@@ -213,8 +213,8 @@ body.navbar-hovered-padding {
   border: 1px solid transparent;
   border-radius: 10px;
   box-shadow: lightblue 0px 0px 50px;
-  background-color: #f8d7da;
-  color: #721c24;
+  /* background-color: #f8d7da; */
+  /* color: #721c24; */
 }
 
 

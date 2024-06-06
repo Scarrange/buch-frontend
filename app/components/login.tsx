@@ -7,7 +7,7 @@ const login = () => {
         Login
       </button>
     </Link>
-  );  
+  );
 };
 
 export default login;
