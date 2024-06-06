@@ -1,6 +1,7 @@
 import { ActionFunctionArgs, json, LoaderFunctionArgs } from "@remix-run/node";
-import { Form, useActionData } from "@remix-run/react";
+import { useFetcher } from "@remix-run/react";
 import { useEffect, useState } from "react";
+import Alert from "~/components/alert";
 import GithubLoginButton from "~/components/gitHubButton";
 import InputLogin from "~/components/inputLogin";
 import SubmitButton from "~/components/submitButton";
@@ -47,10 +48,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function Login() {
-  const actionData = useActionData<typeof action>();
+  const fetcher = useFetcher<typeof action>();
+  const actionData = fetcher.data;
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const isLoading = fetcher.state !== "idle";
 
   useEffect(() => {
     if (actionData) {
@@ -68,17 +71,8 @@ export default function Login() {
 
   return (
     <div className="d-flex flex-column align-items-center mt-5">
-      {error ? (
-        <div
-          className="container alert alert-danger d-flex flex-column align-items-center"
-          role="alert"
-          style={{ maxWidth: "600px" }}
-        >
-          {error}
-        </div>
-      ) : null}
-
-      <Form
+      {(error || isLoading) && <Alert message={error} isLoading={isLoading} />}
+      <fetcher.Form
         method="POST"
         action="/login"
         className="container d-flex flex-column align-items-center form-control mb-5 pb-5 div-bg"
@@ -116,7 +110,7 @@ export default function Login() {
           className="mt-2"
         />
         <GithubLoginButton />
-      </Form>
+      </fetcher.Form>
     </div>
   );
 }

@@ -10,6 +10,7 @@ import { json, LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node";
 import { commitSession, sessionStorage } from "~/services/session.server";
 import { Buch } from "~/components/buchItem";
 import ErrorInfo from "../components/errorInfo";
+import Alert from "~/components/alert";
 
 export interface ErrorResponse {
   statusCode: number;
@@ -185,7 +186,7 @@ export default function NewBookPage() {
   const created = actionData?.created;
   const id = actionData?.id;
   const message = actionData?.message;
-  const isLoading = fetcher.state === "loading";
+  const isLoading = fetcher.state !== "idle";
 
   const handleButtonClick = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -193,30 +194,22 @@ export default function NewBookPage() {
 
   return (
     <div className="d-flex flex-column align-items-center mt-5">
-      {isLoading ? <p>Loading...</p> : <p>Not Loading</p>}
-      {actionData ? (
-        <div
-          className={`container alert alert-${created ? "success" : "danger"} d-flex flex-column align-items-center`}
-          role="alert"
-          style={{ maxWidth: "600px" }}
+      {(actionData || isLoading) && (
+        <Alert
+          isLoading={isLoading}
+          success={created}
+          title="Fehler beim Anlegen des Buches"
+          message={message}
         >
-          {created ? (
-            "Buch wurde erfolgreich angelegt"
-          ) : (
-            <div>
-              <p>Fehler beim Anlegen des Buches!</p>
-              {message}
-            </div>
-          )}
-          {created ? (
+          {
             <Link to={`/search/${id}`}>
               <button type="button" className="btn btn-success   mt-4">
                 Zum Buch
               </button>
             </Link>
-          ) : null}
-        </div>
-      ) : null}
+          }
+        </Alert>
+      )}
       <fetcher.Form
         method="POST"
         className="container d-flex flex-column align-items-center form-control div-bg mb-5"
