@@ -1,4 +1,3 @@
-//TODO CheckLogin Funktionalität verschieben
 export interface ErrorResponse {
   statusCode: number;
   message: string;
@@ -7,14 +6,14 @@ export interface ErrorResponse {
 export interface Buch {
   isbn: string;
   rating: number;
-  art?: string | undefined;
+  art?: string;
   preis: number;
   rabatt: number;
   lieferbar: boolean;
-  datum?: string | undefined;
-  homepage?: string | undefined;
-  schlagwoerter?: string[] | undefined;
-  titel: { titel: string; untertitel?: string | undefined } | undefined;
+  datum?: string;
+  homepage?: string;
+  schlagwoerter?: string[];
+  titel: { titel: string; untertitel?: string };
   _links: { self: { href: string } };
 }
 

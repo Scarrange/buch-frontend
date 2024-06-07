@@ -67,22 +67,17 @@ function validateBookData(bookData: BuchInput) {
   }
 
   if (
-    !bookData.titel?.titel ||
     !bookData.titel.titel?.match("^\\w.*") ||
     bookData.titel.titel?.length > 40
   ) {
     errors.titel = "Der Titel muss zwischen 1 und 40 Zeichen lang sein";
   }
 
-  if (bookData.titel?.untertitel && bookData.titel?.untertitel?.length > 40) {
+  if (bookData.titel.untertitel && bookData.titel.untertitel.length > 40) {
     errors.untertitel = "Der Untertitel darf maximal 40 Zeichen lang sein";
   }
 
-  if (
-    bookData.rating === undefined ||
-    bookData.rating < 0 ||
-    bookData.rating > 5
-  ) {
+  if (bookData.rating < 0 || bookData.rating > 5) {
     errors.rating = "Rating muss zwischen 0 und 5 liegen";
   }
 
@@ -90,20 +85,16 @@ function validateBookData(bookData: BuchInput) {
     errors.art = "Buchart ist ungültig";
   }
 
-  if (!bookData.preis || bookData.preis <= 0) {
+  if (bookData.preis <= 0) {
     errors.preis = "Preis muss größer 0 sein";
   }
 
-  if (
-    (!bookData.rabatt && bookData.rabatt !== 0) ||
-    bookData.rabatt < 0 ||
-    bookData.rabatt > 1
-  ) {
-    errors.rabatt = "Rabatt muss zwischen 0 und 1 liegen";
+  if (bookData.preis.toString().length > 6) {
+    errors.preis = "Preis darf maximal 7 Stellen haben";
   }
 
-  if (bookData.lieferbar === undefined) {
-    errors.lieferbar = "Lieferbarkeit muss angegeben werden";
+  if (bookData.rabatt < 0 || bookData.rabatt > 1) {
+    errors.rabatt = "Rabatt muss zwischen 0 und 1 liegen";
   }
 
   if (bookData.datum && !bookData.datum.match("^[0-9]{4}-[0-9]{2}-[0-9]{2}$")) {

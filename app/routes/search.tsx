@@ -1,10 +1,11 @@
 import Input from "../components/input";
 import CheckBox from "../components/checkBox";
 import DropDown from "~/components/dropDown";
-import { Form, useLoaderData, useNavigation } from "@remix-run/react";
+import { Form, useLoaderData } from "@remix-run/react";
 import { json, LoaderFunctionArgs } from "@remix-run/node";
-import BuchItem, { Buch } from "~/components/buchItem";
+import BuchItem from "~/components/buchItem";
 import Alert from "~/components/alert";
+import { Buch } from "~/util/types";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
@@ -95,7 +96,7 @@ export default function SearchPage() {
       <div className="d-flex flex-column align-items-center">
         {message && (
           <Alert
-          //TODO Problem mit isloading ist, dass das div ganz klein wird und das Formular dadurch kurz verschoben wird
+            //TODO Problem mit isloading ist, dass das div ganz klein wird und das Formular dadurch kurz verschoben wird
             // isLoading={isLoading}
             message={message}
             style={"center-message mt-5"}

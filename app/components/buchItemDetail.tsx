@@ -8,8 +8,8 @@ import { Buch } from "~/util/types";
 const BuchItem = (buch: Buch) => {
   return (
     <div className="container mt-5 mb-5" style={{ borderRadius: "12%" }}>
-      <h1>{buch.titel?.titel}</h1>
-      <p>{buch.titel?.untertitel}</p>
+      <h1>{buch.titel.titel}</h1>
+      <p>{buch.titel.untertitel}</p>
       <p>ISBN: {buch.isbn}</p>
       <p>Art: {buch.art}</p>
       <p>
@@ -17,14 +17,14 @@ const BuchItem = (buch: Buch) => {
         {Array.from({ length: 5 }).map((_, index) => (
           <FontAwesomeIcon
             key={index}
-            icon={index < (buch.rating || 0) ? faStar : faStarRegular}
-            style={{ color: index < (buch.rating || 0) ? "gold" : "black" }}
+            icon={index < buch.rating ? faStar : faStarRegular}
+            style={{ color: index < buch.rating ? "gold" : "black" }}
           />
         ))}
       </p>
       <p>Preis: {buch.preis}</p>
       <p>Rabatt: {buch.rabatt}</p>
-      <p>Lieferbar: {buch.lieferbar ? "true" : "false"}</p>
+      <p>Lieferbar: {buch.lieferbar}</p>
       <p>Datum: {buch.datum?.toString()}</p>
       <p>Homepage: {buch.homepage}</p>
       <p>

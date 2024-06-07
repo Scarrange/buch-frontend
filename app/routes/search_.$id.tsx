@@ -1,6 +1,7 @@
 import { json, LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import BuchItem from "~/components/buchItemDetail";
+import { Buch } from "~/util/types";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const { id } = params;
@@ -16,7 +17,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
     return json({ buch: null });
   }
 
-  const buch = await response.json();
+  const buch: Buch = await response.json();
   return json({ buch });
 }
 
