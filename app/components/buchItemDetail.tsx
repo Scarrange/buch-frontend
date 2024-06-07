@@ -1,25 +1,10 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as faStarRegular } from "@fortawesome/free-regular-svg-icons";
+import { Buch } from "~/util/types";
 
 //ist provisorisch, da der Code nur eine Copy von buchItem.tsx ist, und vllt Dubletten verhindert werden können.
-// Hauptgrund für die Datei ist das Entfernen des Detials-Buttons
-export interface Buch {
-  isbn: string;
-  rating: number | undefined;
-  art: string | undefined;
-  preis: number | undefined;
-  rabatt: number | undefined;
-  lieferbar: boolean | undefined;
-  datum: string | undefined;
-  homepage: string | undefined;
-  schlagwoerter: string[] | undefined;
-  titel:
-    | { titel: string | undefined; untertitel: string | undefined }
-    | undefined;
-  _links: { self: { href: string } };
-}
-
+// Hauptgrund für die Datei ist das Entfernen des Detials-Buttonss
 const BuchItem = (buch: Buch) => {
   return (
     <div className="container mt-5 mb-5" style={{ borderRadius: "12%" }}>

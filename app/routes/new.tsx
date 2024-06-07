@@ -8,27 +8,9 @@ import { Link, useFetcher } from "@remix-run/react";
 import { authenticator, Token } from "~/services/auth.server";
 import { json, LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node";
 import { commitSession, sessionStorage } from "~/services/session.server";
-import { Buch } from "~/components/buchItem";
 import ErrorInfo from "../components/errorInfo";
 import Alert from "~/components/alert";
-
-export interface ErrorResponse {
-  statusCode: number;
-  message: string;
-}
-type BuchError = {
-  isbn?: string;
-  titel?: string;
-  untertitel?: string;
-  rating?: string;
-  art?: string;
-  preis?: string;
-  rabatt?: string;
-  lieferbar?: string;
-  datum?: string;
-  homepage?: string;
-};
-type BuchInput = Omit<Buch, "_links">;
+import { BuchError, BuchInput, ErrorResponse } from "~/util/types";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   await authenticator.isAuthenticated(request, {

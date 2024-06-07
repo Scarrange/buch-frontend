@@ -1,20 +1,5 @@
 import { Link } from "@remix-run/react";
-
-export interface Buch {
-  isbn: string;
-  rating: number | undefined;
-  art?: string | undefined;
-  preis: number | undefined;
-  rabatt: number | undefined;
-  lieferbar: boolean | undefined;
-  datum?: string | undefined;
-  homepage?: string | undefined;
-  schlagwoerter?: string[] | undefined;
-  titel:
-    | { titel: string | undefined; untertitel?: string | undefined }
-    | undefined;
-  _links: { self: { href: string } };
-}
+import { Buch } from "~/util/types";
 
 const getId = (link: string) => {
   return link.substring(link.lastIndexOf("/") + 1);
