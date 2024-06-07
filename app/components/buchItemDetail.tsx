@@ -7,7 +7,7 @@ import { Buch } from "~/util/types";
 // Hauptgrund für die Datei ist das Entfernen des Detials-Buttonss
 const BuchItem = (buch: Buch) => {
   return (
-    <div className="container mt-5 mb-5" style={{ borderRadius: "12%" }}>
+    <div className="container mt-5" style={{ borderRadius: "12%" }}>
       <h1>{buch.titel.titel}</h1>
       <p>{buch.titel.untertitel}</p>
       <p>ISBN: {buch.isbn}</p>
