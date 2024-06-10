@@ -20,20 +20,26 @@ import { authenticator } from "./services/auth.server";
 config.autoAddCss = false;
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const user = await authenticator.isAuthenticated(request);
-  return json(user);
+  const sessionInfo = await authenticator.isAuthenticated(request);
+  return json(sessionInfo);
 }
 
 export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: bootstrap },
-    {rel: "stylesheet", href: datepicker},
-    {rel: "stylesheet", href: customStyles},
-    {rel: "stylesheet", href: fontawseome},
+  return [
+    { rel: "stylesheet", href: bootstrap },
+    { rel: "stylesheet", href: datepicker },
+    { rel: "stylesheet", href: customStyles },
+    { rel: "stylesheet", href: fontawseome },
   ];
 };
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const user = useLoaderData<typeof loader>();
+  const sessionInfo = useLoaderData<typeof loader>();
+  const isLoggedIn =
+    sessionInfo?.roles?.includes("admin") ||
+    sessionInfo?.roles?.includes("user") ||
+    false;
+
   return (
     <html lang="en">
       <head>
@@ -44,7 +50,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <Navbar isLoggedIn={!!user} />
+        <Navbar isLoggedIn={isLoggedIn} />
         {children}
         <ScrollRestoration />
         <Scripts />

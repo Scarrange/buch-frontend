@@ -5,12 +5,12 @@ import Radio from "~/components/radio";
 import CustomDatePicker from "~/components/customdatePicker";
 import DropDown from "~/components/dropDown";
 import { Link, useFetcher } from "@remix-run/react";
-import { authenticator, Token } from "~/services/auth.server";
+import { authenticator } from "~/services/auth.server";
 import { json, LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node";
 import { commitSession, sessionStorage } from "~/services/session.server";
 import ErrorInfo from "../components/errorInfo";
 import Alert from "~/components/alert";
-import { BuchError, BuchInput, ErrorResponse } from "~/util/types";
+import { BuchError, BuchInput, ErrorResponse, SessionInfo } from "~/util/types";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   await authenticator.isAuthenticated(request, {
@@ -30,14 +30,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
   );
 }
 
-async function forwardBookData(bookData: BuchInput, token: Token) {
+async function forwardBookData(bookData: BuchInput, token: string) {
   let response;
   try {
     response = await fetch("https://localhost:3000/rest", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token.accessToken}`,
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(bookData),
     });
@@ -135,11 +135,11 @@ export async function action({ request }: ActionFunctionArgs) {
     return json({ created: false, id: undefined, message: undefined, errors });
   }
 
-  const accessToken: Token = (
+  const sessionInfo: SessionInfo = (
     await sessionStorage.getSession(request.headers.get("cookie"))
   ).get(authenticator.sessionKey);
 
-  const result = await forwardBookData(buchDataInput, accessToken);
+  const result = await forwardBookData(buchDataInput, sessionInfo.accessToken);
   if (result.statusCode === 401) {
     return await authenticator.logout(request, { redirectTo: "/login" });
   }
