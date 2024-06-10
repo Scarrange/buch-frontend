@@ -9,9 +9,7 @@ import {
 } from "@remix-run/react";
 import Navbar from "./components/navbar";
 import bootstrap from "bootstrap/dist/css/bootstrap.min.css?url";
-import datepicker from "react-datepicker/dist/react-datepicker.css?url";
 import customStyles from "./styles/custom.css?url";
-import fontawseome from "@fortawesome/fontawesome-svg-core/styles.css?url";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import { json, LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 import { authenticator } from "./services/auth.server";
@@ -27,17 +25,15 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export const links: LinksFunction = () => {
   return [
     { rel: "stylesheet", href: bootstrap },
-    { rel: "stylesheet", href: datepicker },
     { rel: "stylesheet", href: customStyles },
-    { rel: "stylesheet", href: fontawseome },
   ];
 };
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const sessionInfo = useLoaderData<typeof loader>();
   const isLoggedIn =
-    sessionInfo?.roles?.includes("admin") ||
-    sessionInfo?.roles?.includes("user") ||
+    sessionInfo?.roles.includes("admin") ||
+    sessionInfo?.roles.includes("user") ||
     false;
 
   return (

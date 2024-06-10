@@ -6,11 +6,21 @@ import CustomDatePicker from "~/components/customdatePicker";
 import DropDown from "~/components/dropDown";
 import { Link, useFetcher } from "@remix-run/react";
 import { authenticator } from "~/services/auth.server";
-import { json, LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node";
+import {
+  json,
+  LoaderFunctionArgs,
+  ActionFunctionArgs,
+  LinksFunction,
+} from "@remix-run/node";
 import { commitSession, sessionStorage } from "~/services/session.server";
 import ErrorInfo from "../components/errorInfo";
 import Alert from "~/components/alert";
 import { BuchError, BuchInput, ErrorResponse, SessionInfo } from "~/util/types";
+import datepickerStyles from "react-datepicker/dist/react-datepicker.css?url";
+
+export const links: LinksFunction = () => {
+  return [{ rel: "stylesheet", href: datepickerStyles }];
+};
 
 export async function loader({ request }: LoaderFunctionArgs) {
   await authenticator.isAuthenticated(request, {

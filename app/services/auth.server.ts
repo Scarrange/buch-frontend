@@ -37,6 +37,9 @@ authenticator.use(
     const roles = (tokenDecoded as DecodedJwtToken).resource_access[
       "buch-client"
     ].roles;
+    if (!roles.length) {
+      throw new AuthorizationError("Login fehlgeschlagen"); 
+    }
 
     console.log("Login erfolgreich");
     return {
