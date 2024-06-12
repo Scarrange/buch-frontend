@@ -21,12 +21,10 @@ export async function action({ request }: ActionFunctionArgs) {
     schlagwoerter: [String(formData.get("schlagwort1")), String(formData.get("schlagwort2"))].filter(e => e),
   };
 
-  // Logik zum Speichern oder Verarbeiten der Buchdaten hier hinzufügen
-  // Beispiel: Speichern der Daten in einer Datenbank
-
   return json({ success: true, buchData: buchDataInput });
 }
 
+//Validierung fehlt und die richtige Art von Feld für die Eingaben
 export default function Update() {
   const actionData = useActionData<typeof action>();
   const navigate = useNavigate();
