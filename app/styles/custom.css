@@ -52,6 +52,11 @@ body {
   align-items: center;
 }
 
+.navbar-image {
+  transition: width 0.3s, height 0.3s;
+  height: auto;
+}
+
 .navbar-buttons {
   display: flex;
   align-items: center;
@@ -142,7 +147,8 @@ body.navbar-fixed-padding {
 }
 
 body.navbar-hovered-padding {
-  padding-top: 125px; /* Adjust based on the height of your navbar */
+  padding-top: 125px;
+  /* Adjust based on the height of your navbar */
 }
 
 /* Mobile */
@@ -201,7 +207,8 @@ body.navbar-hovered-padding {
 
 
 .sticky-form {
-  position: -webkit-sticky; /* Für Safari Mongos */
+  position: -webkit-sticky;
+  /* Für Safari Mongos */
   position: sticky;
   top: 175px;
   z-index: 1000; 
@@ -216,6 +223,3 @@ body.navbar-hovered-padding {
   /* background-color: #f8d7da; */
   /* color: #721c24; */
 }
-
-
-
