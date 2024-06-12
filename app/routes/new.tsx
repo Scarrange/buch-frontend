@@ -71,7 +71,7 @@ async function forwardBookData(bookData: BuchInput, token: string) {
 
 function validateBookData(bookData: BuchInput) {
   const errors: BuchError = {};
-
+  //TODO ISBN
   if (bookData.isbn.length !== 17) {
     errors.isbn = "ISBN muss 13 Ziffern beinhalten";
   }

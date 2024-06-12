@@ -26,5 +26,5 @@ const Alert = (props: {
     </div>
   );
 };
-
+//TODO default exports in named ändern
 export default Alert;
