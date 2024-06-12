@@ -6,11 +6,12 @@ import Logout from "./logout";
 const Navbar = (props: { isLoggedIn: boolean }) => {
   const [showNavbar, setShowNavbar] = useState(true);
   const [isFixed, setIsFixed] = useState(true);
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 950);
+  const [isMobile, setIsMobile] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
+      //TODO Machen vielleicht Media Queries hier Sinn?
       setIsMobile(window.innerWidth < 950);
     };
     handleResize(); // Initiales Setup
@@ -47,36 +48,8 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
     setShowMobileMenu(!showMobileMenu);
   };
 
-  const navbarStyle = {
-    backgroundColor: "white",
-    position: isFixed ? "fixed" : "relative",
-    top: 0,
-    width: "100%",
-    zIndex: 1000,
-    transition: "top 0.3s",
-    top: showNavbar ? 0 : "-60px",
-  };
-
   const logoStyle = {
-    width: isMobile ? "100px" : "150px",
-    height: "auto",
-    transition: "width 0.3s, height 0.3s",
-  };
-
-  const buttonStyle = {
-    fontSize: isMobile ? "0.875rem" : "1rem",
-    padding: isMobile ? "0.5rem 0.75rem" : "0.75rem 1.25rem",
-  };
-
-  const hamburgerMenuStyle = {
-    display: showMobileMenu ? "block" : "none",
-    width: "100%",
-    position: "fixed",
-    top: 0,
-    left: 0,
-    backgroundColor: "white",
-    zIndex: 2000,
-    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+    width: isMobile ? "100px" : "auto",
   };
 
   useEffect(() => {
@@ -99,7 +72,6 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
   return (
     <nav
       className={`navbar navbar-expand-lg navbar-light bg-white ${showNavbar || isMobile ? "show" : ""}`}
-      style={navbarStyle}
     >
       <div className="container-fluid navbar-container">
         <div className="navbar-brand">
@@ -122,14 +94,15 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
             >
               <span className="navbar-toggler-icon"></span>
             </button>
-            <div style={hamburgerMenuStyle} className="hamburger-menu mb-5">
+            <div
+              style={{
+                display: showMobileMenu ? "block" : "none",
+              }}
+              className="hamburger-menu mb-5"
+            >
               <ul className="navbar-nav">
                 <li className="nav-item">
-                  <Link
-                    to="/"
-                    className="nav-link"
-                    onClick={toggleMobileMenu}
-                  >
+                  <Link to="/" className="nav-link" onClick={toggleMobileMenu}>
                     Home
                   </Link>
                 </li>
@@ -176,11 +149,7 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
                 to="/search"
                 style={{ color: "white", textDecoration: "none" }}
               >
-                <button
-                  type="button"
-                  className="btn btn-primary btn-lg me-2"
-                  style={buttonStyle}
-                >
+                <button type="button" className="btn btn-primary btn-lg me-2">
                   Buch suchen
                 </button>
               </Link>
@@ -189,11 +158,7 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
                   to="/new"
                   style={{ color: "white", textDecoration: "none" }}
                 >
-                  <button
-                    type="button"
-                    className="btn btn-primary btn-lg me-2"
-                    style={buttonStyle}
-                  >
+                  <button type="button" className="btn btn-primary btn-lg me-2">
                     Buch anlegen
                   </button>
                 </Link>
@@ -208,7 +173,6 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
             <button
               onClick={toggleFixed}
               className="btn btn-primary btn-lg me-2"
-              style={buttonStyle}
             >
               {isFixed ? "Unfix Navbar" : "Fix Navbar"}
             </button>
