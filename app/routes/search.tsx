@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Link, Form, useLoaderData } from "@remix-run/react";
+import { useState, useEffect } from "react";
+import { Form, useLoaderData } from "@remix-run/react";
 import { json, LoaderFunctionArgs } from "@remix-run/node";
 import Input from "../components/input";
 import CheckBox from "../components/checkBox";
@@ -61,7 +61,7 @@ function getQueryUrl(entries: [string, FormDataEntryValue][]) {
 
 export default function SearchPage() {
   const { buecher, message } = useLoaderData<typeof loader>();
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 950);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -75,23 +75,14 @@ export default function SearchPage() {
   }, []);
 
   return (
-    <div
-      className={`container d-flex flex-column ${buecher && buecher.length > 0 ? "flex-lg-row" : "justify-content-center align-items-center"}`}
-      style={{
-        marginTop: "20px",
-        marginBottom: "20px",
-        padding: "20px",
-        border: "1px solid #ccc",
-        borderRadius: "8px",
-      }}
-    >
+    <div className={`container d-flex ${isMobile && "flex-column"}`}>
       <Form
         method="GET"
-        className={`container d-flex flex-column align-items-center mt-5 form-control div-bg mb-5 ${buecher && buecher.length > 0 ? "" : "d-lg-block mx-auto"}`}
+        className={
+          "container d-flex flex-column align-items-center mt-5 form-control div-bg mb-5"
+        }
         style={{
-          overflow: "auto",
           maxHeight: "500px",
-          flex: "1",
           position: isMobile ? "relative" : "sticky",
           top: isMobile ? "auto" : "20px",
         }}
@@ -123,11 +114,9 @@ export default function SearchPage() {
       </Form>
       {buecher && buecher.length > 0 && (
         <div
-          className="d-flex flex-column align-items-center"
+          className={`d-flex flex-column ${isMobile || "ms-3"}`}
           style={{
             flex: "2",
-            marginTop: isMobile ? "20px" : "0",
-            marginLeft: isMobile ? "0" : "20px",
           }}
         >
           {message && (
