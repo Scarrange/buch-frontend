@@ -1,0 +1,100 @@
+import { ActionFunctionArgs, json } from "@remix-run/node";
+import { useActionData, useNavigate, Form } from "@remix-run/react";
+import { BuchInput } from "~/util/types";
+
+export async function action({ request }: ActionFunctionArgs) {
+  const formData = await request.formData();
+
+  const buchDataInput: BuchInput = {
+    isbn: String(formData.get("isbn")),
+    titel: {
+      titel: String(formData.get("titel")),
+      untertitel: String(formData.get("untertitel")) || undefined,
+    },
+    homepage: String(formData.get("homepage")) || undefined,
+    art: String(formData.get("art")) || undefined,
+    datum: String(formData.get("datum")) || undefined,
+    preis: parseFloat(String(formData.get("preis"))),
+    rabatt: parseFloat(String(formData.get("rabatt"))),
+    lieferbar: formData.get("lieferbar") === "true",
+    rating: parseFloat(String(formData.get("rating"))),
+    schlagwoerter: [String(formData.get("schlagwort1")), String(formData.get("schlagwort2"))].filter(e => e),
+  };
+
+  return json({ success: true, buchData: buchDataInput });
+}
+
+//Validierung fehlt und die richtige Art von Feld für die Eingaben
+export default function Update() {
+  const actionData = useActionData<typeof action>();
+  const navigate = useNavigate();
+
+  if (!actionData) {
+    return <p>Keine Buchdaten empfangen</p>;
+  }
+
+  const { buchData } = actionData;
+
+  return (
+    <div className="container d-flex flex-column align-items-center mt-5 form-control div-bg mb-5">
+      <h1>Buch aktualisieren</h1>
+
+      <Form method="post" className="w-100">
+        <div className="mb-3">
+          <label htmlFor="isbn" className="form-label">ISBN</label>
+          <input type="text" className="form-control" id="isbn" name="isbn" defaultValue={buchData.isbn} required />
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="titel" className="form-label">Titel</label>
+          <input type="text" className="form-control" id="titel" name="titel" defaultValue={buchData.titel.titel} required />
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="untertitel" className="form-label">Untertitel</label>
+          <input type="text" className="form-control" id="untertitel" name="untertitel" defaultValue={buchData.titel.untertitel} />
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="homepage" className="form-label">Homepage</label>
+          <input type="url" className="form-control" id="homepage" name="homepage" defaultValue={buchData.homepage} />
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="art" className="form-label">Art</label>
+          <input type="text" className="form-control" id="art" name="art" defaultValue={buchData.art} />
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="datum" className="form-label">Datum</label>
+          <input type="date" className="form-control" id="datum" name="datum" defaultValue={buchData.datum} />
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="preis" className="form-label">Preis</label>
+          <input type="number" className="form-control" id="preis" name="preis" defaultValue={buchData.preis} step="0.01" />
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="rabatt" className="form-label">Rabatt</label>
+          <input type="number" className="form-control" id="rabatt" name="rabatt" defaultValue={buchData.rabatt} step="0.01" />
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="rating" className="form-label">Rating</label>
+          <input type="number" className="form-control" id="rating" name="rating" defaultValue={buchData.rating} step="0.1" max="5" />
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="lieferbar" className="form-label">Lieferbar</label>
+          <select className="form-control" id="lieferbar" name="lieferbar" defaultValue={buchData.lieferbar.toString()}>
+            <option value="true">Ja</option>
+            <option value="false">Nein</option>
+          </select>
+        </div>
+        <button type="submit" className="btn btn-primary btn-lg me-2">Speichern</button>
+        <button type="button" className="btn btn-secondary btn-lg" onClick={() => navigate(-1)}>Abbrechen</button>
+      </Form>
+    </div>
+  );
+}

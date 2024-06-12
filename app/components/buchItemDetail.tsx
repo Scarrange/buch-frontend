@@ -18,7 +18,10 @@ const BuchItem = (buch: Buch) => {
           <FontAwesomeIcon
             key={index}
             icon={index < buch.rating ? faStar : faStarRegular}
-            style={{ color: index < buch.rating ? "gold" : "black" }}
+            style={{ 
+              color: index < buch.rating ? "gold" : "black",
+              fontSize: "0em", 
+            }}
           />
         ))}
       </p>
