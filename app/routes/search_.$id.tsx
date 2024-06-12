@@ -1,5 +1,5 @@
 import { json, LoaderFunctionArgs } from "@remix-run/node";
-import { Link, useLoaderData, useNavigate } from "@remix-run/react";
+import { Form, Link, useLoaderData, useNavigate } from "@remix-run/react";
 import BuchItem from "~/components/buchItemDetail";
 import { Buch } from "~/util/types";
 
@@ -32,9 +32,20 @@ export default function BookDetailPage() {
       {buch ? <BuchItem {...buch} /> : <p>Buch nicht gefunden</p>}
       <div className="container-fluid d-flex mt-3 mb-3">
         <div>
-          <Link to="/test">
-            <button className="btn btn-primary btn-lg me-2">Ändern</button>
-          </Link>
+          {/* Form, das die Buchdaten an die Update-Route sendet */}
+          <Form method="post" action="/update">
+            <input type="hidden" name="titel" value={buch?.titel.titel} />
+            <input type="hidden" name="untertitel" value={buch?.titel.untertitel} />
+            <input type="hidden" name="isbn" value={buch?.isbn} />
+            <input type="hidden" name="art" value={buch?.art} />
+            <input type="hidden" name="rating" value={buch?.rating} />
+            <input type="hidden" name="lieferbar" value={buch?.lieferbar.toString()} />
+            <input type="hidden" name="homepage" value={buch?.homepage} />
+
+            <input type="hidden" name="link" value={buch?._links.self.href} />
+
+            <button type="submit" className="btn btn-primary btn-lg me-2">Ändern</button>
+          </Form>
           <Link to="/test">
             <button className="btn btn-primary btn-lg">Löschen</button>
           </Link>
