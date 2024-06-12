@@ -1,3 +1,6 @@
+import { useState, useEffect } from "react";
+import { Form, useLoaderData } from "@remix-run/react";
+import { json, LoaderFunctionArgs } from "@remix-run/node";
 import Input from "../components/input";
 import CheckBox from "../components/checkBox";
 import DropDown from "~/components/dropDown";
@@ -58,15 +61,31 @@ function getQueryUrl(entries: [string, FormDataEntryValue][]) {
 
 export default function SearchPage() {
   const { buecher, message } = useLoaderData<typeof loader>();
-  // const navigation = useNavigation();
-  // const isLoading = navigation.state !== "idle";
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 950);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
-    <div className="container d-flex">
+    <div className={`container d-flex ${isMobile && "flex-column"}`}>
       <Form
         method="GET"
-        className="sticky-form container d-flex flex-column align-items-center mt-5 form-control div-bg mb-5"
-        style={{ overflow: "auto", maxHeight: "500px" }}
+        className={
+          "container d-flex flex-column align-items-center mt-5 form-control div-bg mb-5"
+        }
+        style={{
+          maxHeight: "500px",
+          position: isMobile ? "relative" : "sticky",
+          top: isMobile ? "auto" : "20px",
+        }}
       >
         <h1>Suchformular</h1>
         <Input name="isbn" placeholder="ISBN" />
@@ -93,19 +112,21 @@ export default function SearchPage() {
           Suchen
         </button>
       </Form>
-      <div className="d-flex flex-column align-items-center">
-        {message && (
-          <Alert
-            //TODO Problem mit isloading ist, dass das div ganz klein wird und das Formular dadurch kurz verschoben wird
-            // isLoading={isLoading}
-            message={message}
-            style={"center-message mt-5"}
-          />
-        )}
-        {buecher?.map((buch: Buch, index: number) => (
-          <BuchItem key={index} {...buch} />
-        ))}
-      </div>
+      {buecher && buecher.length > 0 && (
+        <div
+          className={`d-flex flex-column ${isMobile || "ms-3"}`}
+          style={{
+            flex: "2",
+          }}
+        >
+          {message && (
+            <Alert message={message} style="center-message mt-5"></Alert>
+          )}
+          {buecher?.map((buch: Buch, index: number) => (
+            <BuchItem key={index} {...buch} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { useState, useEffect } from "react";
 import { Link } from "@remix-run/react";
 import Login from "./login";
@@ -12,9 +11,10 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
 
   useEffect(() => {
     const handleResize = () => {
+      //TODO Machen vielleicht Media Queries hier Sinn?
       setIsMobile(window.innerWidth < 950);
     };
-    // handleResize(); Kein Ahnung ob man das braucht
+    handleResize(); // Initiales Setup
 
     window.addEventListener("resize", handleResize);
     return () => {
@@ -25,39 +25,64 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
   useEffect(() => {
     if (isMobile) {
       setIsFixed(true);
-      return;
     }
+  }, [isMobile]);
 
-    if (isFixed) {
-      document.body.classList.add("navbar-fixed-padding", "navbar-hovered-padding");
-    } else {
-      document.body.classList.remove("navbar-fixed-padding");
-    }
-    if (isFixed) return;
-
-    const handleMouseMove = (event: MouseEvent) => {
-      if (event.clientY < 125) {
-        setShowNavbar(true);
-        document.body.classList.add("navbar-hovered-padding");
+  useEffect(() => {
+    if (!isMobile) {
+      if (isFixed) {
+        document.body.classList.add(
+          "navbar-fixed-padding",
+          "navbar-hovered-padding",
+        );
       } else {
-        setShowNavbar(false);
-        document.body.classList.remove("navbar-hovered-padding");
+        document.body.classList.remove("navbar-fixed-padding");
       }
-    };
+      if (isFixed) return;
 
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-    };
+      const handleMouseMove = (event: MouseEvent) => {
+        if (event.clientY < 125) {
+          setShowNavbar(true);
+          document.body.classList.add("navbar-hovered-padding");
+        } else {
+          setShowNavbar(false);
+          document.body.classList.remove("navbar-hovered-padding");
+          document.body.classList.remove("navbar-fixed-padding");
+        }
+      };
+    }
   }, [isFixed, isMobile]);
 
   const toggleFixed = () => {
-    setIsFixed(!isFixed);
+    if (!isMobile) {
+      setIsFixed(!isFixed);
+    }
   };
 
   const toggleMobileMenu = () => {
     setShowMobileMenu(!showMobileMenu);
   };
+
+  const logoStyle = {
+    width: isMobile ? "100px" : "auto",
+  };
+
+  useEffect(() => {
+    if (!isFixed && !isMobile) {
+      const handleMouseMove = (event: MouseEvent) => {
+        if (event.clientY < 60) {
+          setShowNavbar(true);
+        } else {
+          setShowNavbar(false);
+        }
+      };
+
+      window.addEventListener("mousemove", handleMouseMove);
+      return () => {
+        window.removeEventListener("mousemove", handleMouseMove);
+      };
+    }
+  }, [isFixed, isMobile]);
 
   return (
     <nav
@@ -69,6 +94,7 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
             <img
               src="images/hochschule.png"
               alt="Hochschule"
+              style={logoStyle}
               className="navbar-image"
             />
           </Link>
@@ -83,54 +109,53 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
             >
               <span className="navbar-toggler-icon"></span>
             </button>
-            {showMobileMenu && (
-              <div className="hamburger-menu show mb-5">
-                <ul className="navbar-nav">
+            <div
+              style={{
+                display: showMobileMenu ? "block" : "none",
+              }}
+              className="hamburger-menu mb-5"
+            >
+              <ul className="navbar-nav">
+                <li className="nav-item">
+                  <Link to="/" className="nav-link" onClick={toggleMobileMenu}>
+                    Home
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link
+                    to="/search"
+                    className="nav-link"
+                    onClick={toggleMobileMenu}
+                  >
+                    Buch suchen
+                  </Link>
+                </li>
+                {props.isLoggedIn && (
                   <li className="nav-item">
                     <Link
-                      to="/"
+                      to="/new"
                       className="nav-link"
                       onClick={toggleMobileMenu}
                     >
-                      Home
+                      Buch anlegen
                     </Link>
                   </li>
-                  <li className="nav-item">
+                )}
+                <li className="nav-item">
+                  {props.isLoggedIn ? (
+                    <Logout onClick={toggleMobileMenu} />
+                  ) : (
                     <Link
-                      to="/search"
+                      to="/login"
                       className="nav-link"
                       onClick={toggleMobileMenu}
                     >
-                      Buch suchen
+                      Login
                     </Link>
-                  </li>
-                  {props.isLoggedIn && (
-                    <li className="nav-item">
-                      <Link
-                        to="/new"
-                        className="nav-link"
-                        onClick={toggleMobileMenu}
-                      >
-                        Buch anlegen
-                      </Link>
-                    </li>
                   )}
-                  <li className="nav-item">
-                    {props.isLoggedIn ? (
-                      <Logout onClick={toggleMobileMenu} />
-                    ) : (
-                      <Link
-                        to="/login"
-                        className="nav-link"
-                        onClick={toggleMobileMenu}
-                      >
-                        Login
-                      </Link>
-                    )}
-                  </li>
-                </ul>
-              </div>
-            )}
+                </li>
+              </ul>
+            </div>
           </>
         ) : (
           <div className="navbar-buttons">
@@ -173,6 +198,7 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
             <img
               src="images/hkaquer.png"
               alt="Hochschule"
+              style={logoStyle}
               className="navbar-image"
             />
           </Link>
