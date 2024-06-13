@@ -1,15 +1,15 @@
 import { ActionFunctionArgs, json } from "@remix-run/node";
 import { useActionData, useNavigate, Form } from "@remix-run/react";
+import CheckBox from "~/components/checkBoxGivenValue";
 import { BuchInput, transformInput } from "~/util/types";
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const buchDataInput: BuchInput = transformInput(formData);
-  
   return json({ success: true, buchData: buchDataInput });
 }
 
-//Validierung fehlt und die richtige Art von Feld für die Eingaben
+//Validierung fehlt und die richtige Art von Feld für die Eingaben und Änderungen sind nicht persistent
 export default function Update() {
   const actionData = useActionData<typeof action>();
   const navigate = useNavigate();
@@ -61,6 +61,12 @@ export default function Update() {
             <option value="true">Ja</option>
             <option value="false">Nein</option>
           </select>
+
+          {/* Check ob JavaScript oder Typescript als Schlagwort vorkommt und dementsprechend Checkbox setzen */}
+          <label htmlFor="Schlagwörter" className="form-label">Schlagwörter</label>
+          <CheckBox text="JavaScript" name="JavaScript" value={false} />
+          <CheckBox text="TypeScript" name="TypeScript" value={false}/>
+
         </div>
         <button type="submit" className="btn btn-primary btn-lg me-2">Speichern</button>
         <button type="button" className="btn btn-secondary btn-lg" onClick={() => navigate(-1)}>Abbrechen</button>
