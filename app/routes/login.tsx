@@ -1,4 +1,9 @@
-import { ActionFunctionArgs, json, LoaderFunctionArgs } from "@remix-run/node";
+import {
+  ActionFunctionArgs,
+  json,
+  LinksFunction,
+  LoaderFunctionArgs,
+} from "@remix-run/node";
 import { useFetcher } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import Alert from "~/components/alert";
@@ -7,6 +12,11 @@ import InputLogin from "~/components/inputLogin";
 import SubmitButton from "~/components/submitButton";
 import { authenticator } from "~/services/auth.server";
 import { commitSession, sessionStorage } from "~/services/session.server";
+import fontawesome from "@fortawesome/fontawesome-svg-core/styles.css?url";
+
+export const links: LinksFunction = () => {
+  return [{ rel: "stylesheet", href: fontawesome }];
+};
 
 export async function action({ request }: ActionFunctionArgs) {
   const session = await sessionStorage.getSession(

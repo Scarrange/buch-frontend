@@ -9,50 +9,6 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
 
-  useEffect(() => {
-    const handleResize = () => {
-      //TODO Machen vielleicht Media Queries hier Sinn?
-      setIsMobile(window.innerWidth < 950);
-    };
-    handleResize(); // Initiales Setup
-
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (isMobile) {
-      setIsFixed(true);
-    }
-  }, [isMobile]);
-
-  useEffect(() => {
-    if (!isMobile) {
-      if (isFixed) {
-        document.body.classList.add(
-          "navbar-fixed-padding",
-          "navbar-hovered-padding",
-        );
-      } else {
-        document.body.classList.remove("navbar-fixed-padding");
-      }
-      if (isFixed) return;
-
-      const handleMouseMove = (event: MouseEvent) => {
-        if (event.clientY < 125) {
-          setShowNavbar(true);
-          document.body.classList.add("navbar-hovered-padding");
-        } else {
-          setShowNavbar(false);
-          document.body.classList.remove("navbar-hovered-padding");
-          document.body.classList.remove("navbar-fixed-padding");
-        }
-      };
-    }
-  }, [isFixed, isMobile]);
-
   const toggleFixed = () => {
     if (!isMobile) {
       setIsFixed(!isFixed);
@@ -63,26 +19,66 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
     setShowMobileMenu(!showMobileMenu);
   };
 
-  const logoStyle = {
-    width: isMobile ? "100px" : "auto",
-  };
+  useEffect(() => {
+    const handleResize = () => {
+      //TODO Machen vielleicht Media Queries hier Sinn?
+      setIsMobile(window.innerWidth < 950);
+    };
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   useEffect(() => {
-    if (!isFixed && !isMobile) {
-      const handleMouseMove = (event: MouseEvent) => {
-        if (event.clientY < 60) {
-          setShowNavbar(true);
-        } else {
-          setShowNavbar(false);
-        }
-      };
-
-      window.addEventListener("mousemove", handleMouseMove);
-      return () => {
-        window.removeEventListener("mousemove", handleMouseMove);
-      };
+    if (isMobile) {
+      setIsFixed(true);
+      document.body.classList.add("navbar-fixed-padding");
+      return;
     }
+    if (isFixed) {
+      document.body.classList.add(
+        "navbar-fixed-padding",
+        "navbar-hovered-padding",
+      );
+      return;
+    } else {
+      document.body.classList.remove("navbar-fixed-padding");
+    }
+
+    const handleMouseMove = (event: MouseEvent) => {
+      if (event.clientY < 125) {
+        setShowNavbar(true);
+        document.body.classList.add("navbar-hovered-padding");
+      } else {
+        setShowNavbar(false);
+        document.body.classList.remove("navbar-hovered-padding");
+        document.body.classList.remove("navbar-fixed-padding");
+      }
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
   }, [isFixed, isMobile]);
+
+  useEffect(() => {
+    if (showNavbar) {
+      document
+        .getElementById("searchForm")
+        ?.classList.remove("sticky-form-stuck");
+    } else {
+      document.getElementById("searchForm")?.classList.add("sticky-form-stuck");
+    }
+  }, [showNavbar, isFixed]);
+
+  const logoStyle = {
+    width: isMobile ? "100px" : "auto",
+    transition: "width 0.3s, height 0.3s",
+  };
 
   return (
     <nav
@@ -110,10 +106,8 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
               <span className="navbar-toggler-icon"></span>
             </button>
             <div
-              style={{
-                display: showMobileMenu ? "block" : "none",
-              }}
-              className="hamburger-menu mb-5"
+              className="hamburger-menu show mb-5"
+              style={{ display: showMobileMenu ? "block" : "none" }}
             >
               <ul className="navbar-nav">
                 <li className="nav-item">

@@ -1,7 +1,12 @@
-import { json, LoaderFunctionArgs } from "@remix-run/node";
-import { Form, Link, useLoaderData, useNavigate } from "@remix-run/react";
+import { json, LoaderFunctionArgs, LinksFunction } from "@remix-run/node";
+import { Link, useLoaderData, useNavigate } from "@remix-run/react";
 import BuchItem from "~/components/buchItemDetail";
 import { Buch } from "~/util/types";
+import fontawesome from "@fortawesome/fontawesome-svg-core/styles.css?url";
+
+export const links: LinksFunction = () => {
+  return [{ rel: "stylesheet", href: fontawesome }];
+};
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const { id } = params;

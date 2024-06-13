@@ -1,6 +1,3 @@
-import { useState, useEffect } from "react";
-import { Form, useLoaderData } from "@remix-run/react";
-import { json, LoaderFunctionArgs } from "@remix-run/node";
 import Input from "../components/input";
 import CheckBox from "../components/checkBox";
 import DropDown from "~/components/dropDown";
@@ -9,6 +6,7 @@ import { json, LoaderFunctionArgs } from "@remix-run/node";
 import BuchItem from "~/components/buchItem";
 import Alert from "~/components/alert";
 import { Buch } from "~/util/types";
+import { useEffect, useState } from "react";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
@@ -67,6 +65,7 @@ export default function SearchPage() {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 950);
     };
+    handleResize();
 
     window.addEventListener("resize", handleResize);
     return () => {
@@ -77,14 +76,14 @@ export default function SearchPage() {
   return (
     <div className={`container d-flex ${isMobile && "flex-column"}`}>
       <Form
+        id="searchForm"
         method="GET"
-        className={
-          "container d-flex flex-column align-items-center mt-5 form-control div-bg mb-5"
-        }
+        className={`container d-flex flex-column align-items-center mt-5 form-control div-bg mb-5 ${isMobile || "sticky-form"}`}
         style={{
+          overflow: "auto",
           maxHeight: "500px",
+          // flex: "1",
           position: isMobile ? "relative" : "sticky",
-          top: isMobile ? "auto" : "20px",
         }}
       >
         <h1>Suchformular</h1>
@@ -102,7 +101,7 @@ export default function SearchPage() {
           items={["", "0", "1", "2", "3", "4", "5"]}
         />
         <div
-          className="container d-flex justify-content-around mt-3"
+          className={`container d-flex justify-content-around mt-3 ${isMobile && "flex-column"}`}
           style={{ maxWidth: "400px" }}
         >
           <CheckBox text="JavaScript" name="javascript" />
@@ -112,21 +111,29 @@ export default function SearchPage() {
           Suchen
         </button>
       </Form>
-      {buecher && buecher.length > 0 && (
+      <div className="d-flex flex-column align-items-center">
+        {message && (
+          <Alert
+            //TODO Problem mit isloading ist, dass das div ganz klein wird und das Formular dadurch kurz verschoben wird
+            // isLoading={isLoading}
+            message={message}
+            classNames={"center-message mt-5"}
+          />
+        )}
         <div
-          className={`d-flex flex-column ${isMobile || "ms-3"}`}
-          style={{
-            flex: "2",
-          }}
+          className="d-flex flex-column align-items-center"
+          style={
+            {
+              // flex: "2",
+              // marginTop: isMobile ? "20px" : "0",
+            }
+          }
         >
-          {message && (
-            <Alert message={message} style="center-message mt-5"></Alert>
-          )}
           {buecher?.map((buch: Buch, index: number) => (
             <BuchItem key={index} {...buch} />
           ))}
         </div>
-      )}
+      </div>
     </div>
   );
 }
