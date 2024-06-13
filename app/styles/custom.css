@@ -211,7 +211,12 @@ body.navbar-hovered-padding {
   /* Für Safari Mongos */
   position: sticky;
   top: 175px;
-  z-index: 1000; 
+  z-index: 1000;
+  transition: top 0.3s;
+}
+
+.sticky-form-stuck {
+  top: 50px
 }
 
 .alert {

@@ -14,7 +14,7 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
       //TODO Machen vielleicht Media Queries hier Sinn?
       setIsMobile(window.innerWidth < 950);
     };
-    handleResize(); // Initiales Setup
+    handleResize();
 
     window.addEventListener("resize", handleResize);
     return () => {
@@ -28,17 +28,15 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
     }
   }, [isMobile]);
 
-  useEffect(() => {
-    if (!isMobile) {
-      if (isFixed) {
-        document.body.classList.add(
-          "navbar-fixed-padding",
-          "navbar-hovered-padding",
-        );
-      } else {
-        document.body.classList.remove("navbar-fixed-padding");
-      }
-      if (isFixed) return;
+    if (isFixed) {
+      document.body.classList.add(
+        "navbar-fixed-padding",
+        "navbar-hovered-padding",
+      );
+    } else {
+      document.body.classList.remove("navbar-fixed-padding");
+    }
+    if (isFixed) return;
 
       const handleMouseMove = (event: MouseEvent) => {
         if (event.clientY < 125) {
@@ -52,6 +50,16 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
       };
     }
   }, [isFixed, isMobile]);
+
+  useEffect(() => {
+    if (showNavbar) {
+      document
+        .getElementById("searchForm")
+        ?.classList.remove("sticky-form-stuck");
+    } else {
+      document.getElementById("searchForm")?.classList.add("sticky-form-stuck");
+    }
+  }, [showNavbar, isFixed]);
 
   const toggleFixed = () => {
     if (!isMobile) {

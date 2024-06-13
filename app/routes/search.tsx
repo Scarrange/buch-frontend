@@ -77,6 +77,7 @@ export default function SearchPage() {
   return (
     <div className={`container d-flex ${isMobile && "flex-column"}`}>
       <Form
+        id="searchForm"
         method="GET"
         className={
           "container d-flex flex-column align-items-center mt-5 form-control div-bg mb-5"
