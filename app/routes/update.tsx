@@ -42,51 +42,33 @@ export default function Update() {
       <Form method="post" className="w-100">
         <div className="mb-3">
           <label htmlFor="isbn" className="form-label">ISBN</label>
-          <input type="text" className="form-control" id="isbn" name="isbn" defaultValue={buchData.isbn} required />
-        </div>
+          <input type="text" className="form-control mb-3" id="isbn" name="isbn" defaultValue={buchData.isbn} required />
 
-        <div className="mb-3">
           <label htmlFor="titel" className="form-label">Titel</label>
-          <input type="text" className="form-control" id="titel" name="titel" defaultValue={buchData.titel.titel} required />
-        </div>
+          <input type="text" className="form-control mb-3" id="titel" name="titel" defaultValue={buchData.titel.titel} required />
 
-        <div className="mb-3">
           <label htmlFor="untertitel" className="form-label">Untertitel</label>
-          <input type="text" className="form-control" id="untertitel" name="untertitel" defaultValue={buchData.titel.untertitel} />
-        </div>
+          <input type="text" className="form-control mb-3" id="untertitel" name="untertitel" defaultValue={buchData.titel.untertitel} />
 
-        <div className="mb-3">
           <label htmlFor="homepage" className="form-label">Homepage</label>
-          <input type="url" className="form-control" id="homepage" name="homepage" defaultValue={buchData.homepage} />
-        </div>
+          <input type="url" className="form-control mb-3" id="homepage" name="homepage" defaultValue={buchData.homepage} />
 
-        <div className="mb-3">
           <label htmlFor="art" className="form-label">Art</label>
-          <input type="text" className="form-control" id="art" name="art" defaultValue={buchData.art} />
-        </div>
+          <input type="text" className="form-control mb-3" id="art" name="art" defaultValue={buchData.art} />
 
-        <div className="mb-3">
           <label htmlFor="datum" className="form-label">Datum</label>
-          <input type="date" className="form-control" id="datum" name="datum" defaultValue={buchData.datum} />
-        </div>
+          <input type="date" className="form-control mb-3" id="datum" name="datum" defaultValue={buchData.datum} />
 
-        <div className="mb-3">
           <label htmlFor="preis" className="form-label">Preis</label>
-          <input type="number" className="form-control" id="preis" name="preis" defaultValue={buchData.preis} step="0.01" />
-        </div>
+          <input type="number" className="form-control mb-3" id="preis" name="preis" defaultValue={buchData.preis} step="0.01" />
 
-        <div className="mb-3">
           <label htmlFor="rabatt" className="form-label">Rabatt</label>
-          <input type="number" className="form-control" id="rabatt" name="rabatt" defaultValue={buchData.rabatt} step="0.01" />
-        </div>
+          <input type="number" className="form-control mb-3" id="rabatt" name="rabatt" defaultValue={buchData.rabatt} step="0.01" />
 
-        <div className="mb-3">
           <label htmlFor="rating" className="form-label">Rating</label>
-          <input type="number" className="form-control" id="rating" name="rating" defaultValue={buchData.rating} step="0.1" max="5" />
-        </div>
+          <input type="number" className="form-control mb-3" id="rating" name="rating" defaultValue={buchData.rating} step="0.1" max="5" />
 
-        <div className="mb-3">
-          <label htmlFor="lieferbar" className="form-label">Lieferbar</label>
+          <label htmlFor="lieferbar" className="form-label mb-3">Lieferbar</label>
           <select className="form-control" id="lieferbar" name="lieferbar" defaultValue={buchData.lieferbar.toString()}>
             <option value="true">Ja</option>
             <option value="false">Nein</option>
