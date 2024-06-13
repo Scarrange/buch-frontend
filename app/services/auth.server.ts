@@ -14,14 +14,19 @@ authenticator.use(
     const username = form.get("username");
     const password = form.get("password");
 
-    const response = await fetch("https://localhost:3000/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username, password }),
-    });
-
+    let response;
+    try {
+      response = await fetch("https://localhost:3000/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      });
+    } catch (error) {
+      console.log("Login fehlgeschlagen");
+      throw new AuthorizationError("Login fehlgeschlagen");
+    }
     if (response?.status !== 200) {
       console.log("Login fehlgeschlagen");
       throw new AuthorizationError("Login fehlgeschlagen");
@@ -38,7 +43,7 @@ authenticator.use(
       "buch-client"
     ].roles;
     if (!roles.length) {
-      throw new AuthorizationError("Login fehlgeschlagen"); 
+      throw new AuthorizationError("Login fehlgeschlagen");
     }
 
     console.log("Login erfolgreich");
