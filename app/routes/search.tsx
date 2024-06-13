@@ -1,6 +1,3 @@
-import { useState, useEffect } from "react";
-import { Form, useLoaderData } from "@remix-run/react";
-import { json, LoaderFunctionArgs } from "@remix-run/node";
 import Input from "../components/input";
 import CheckBox from "../components/checkBox";
 import DropDown from "~/components/dropDown";
@@ -77,7 +74,6 @@ export default function SearchPage() {
   }, []);
 
   return (
-    <div className={`container d-flex ${isMobile && "flex-column"}`}>
     <div className={`container d-flex ${isMobile && "flex-column"}`}>
       <Form
         id="searchForm"

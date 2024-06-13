@@ -35,9 +35,9 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
   useEffect(() => {
     if (isMobile) {
       setIsFixed(true);
+      document.body.classList.add("navbar-fixed-padding");
+      return;
     }
-  }, [isMobile]);
-
     if (isFixed) {
       document.body.classList.add(
         "navbar-fixed-padding",
@@ -48,17 +48,21 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
       document.body.classList.remove("navbar-fixed-padding");
     }
 
-      const handleMouseMove = (event: MouseEvent) => {
-        if (event.clientY < 125) {
-          setShowNavbar(true);
-          document.body.classList.add("navbar-hovered-padding");
-        } else {
-          setShowNavbar(false);
-          document.body.classList.remove("navbar-hovered-padding");
-          document.body.classList.remove("navbar-fixed-padding");
-        }
-      };
-    }
+    const handleMouseMove = (event: MouseEvent) => {
+      if (event.clientY < 125) {
+        setShowNavbar(true);
+        document.body.classList.add("navbar-hovered-padding");
+      } else {
+        setShowNavbar(false);
+        document.body.classList.remove("navbar-hovered-padding");
+        document.body.classList.remove("navbar-fixed-padding");
+      }
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
   }, [isFixed, isMobile]);
 
   useEffect(() => {
@@ -76,27 +80,6 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
     transition: "width 0.3s, height 0.3s",
   };
 
-  const logoStyle = {
-    width: isMobile ? "100px" : "auto",
-  };
-
-  useEffect(() => {
-    if (!isFixed && !isMobile) {
-      const handleMouseMove = (event: MouseEvent) => {
-        if (event.clientY < 60) {
-          setShowNavbar(true);
-        } else {
-          setShowNavbar(false);
-        }
-      };
-
-      window.addEventListener("mousemove", handleMouseMove);
-      return () => {
-        window.removeEventListener("mousemove", handleMouseMove);
-      };
-    }
-  }, [isFixed, isMobile]);
-
   return (
     <nav
       className={`navbar navbar-expand-lg navbar-light bg-white ${showNavbar || isMobile ? "show" : ""}`}
@@ -109,7 +92,6 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
               alt="Hochschule"
               style={logoStyle}
               className="navbar-image"
-              style={logoStyle}
             />
           </Link>
         </div>
@@ -212,7 +194,6 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
               alt="Hochschule"
               style={logoStyle}
               className="navbar-image"
-              style={logoStyle}
             />
           </Link>
         </div>
