@@ -1,16 +1,20 @@
+import { CSSProperties } from "react";
+
 const Alert = (props: {
   isLoading?: boolean;
   success?: boolean | undefined;
   message: string | undefined;
   children?: React.ReactNode;
   title?: string;
-  style?: string;
+  classNames?: string;
+  style?: CSSProperties;
 }) => {
   return (
     <div
-      className={`container alert alert-${props.isLoading ? "secondary" : props.success ? "success" : "danger"} d-flex flex-column align-items-center ${props.style}`}
+      className={`container alert alert-${props.isLoading ? "secondary" : props.success ? "success" : "danger"} d-flex flex-column align-items-center ${props.classNames}`}
       role="alert"
       style={{ maxWidth: "600px" }}
+      // style={props.style}
     >
       {props.isLoading ? (
         <div className="spinner-border" role="status"></div>
