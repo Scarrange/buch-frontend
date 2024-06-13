@@ -1,26 +1,11 @@
 import { ActionFunctionArgs, json } from "@remix-run/node";
 import { useActionData, useNavigate, Form } from "@remix-run/react";
-import { BuchInput } from "~/util/types";
+import { BuchInput, transformInput } from "~/util/types";
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
-
-  const buchDataInput: BuchInput = {
-    isbn: String(formData.get("isbn")),
-    titel: {
-      titel: String(formData.get("titel")),
-      untertitel: String(formData.get("untertitel")) || undefined,
-    },
-    homepage: String(formData.get("homepage")) || undefined,
-    art: String(formData.get("art")) || undefined,
-    datum: String(formData.get("datum")) || undefined,
-    preis: parseFloat(String(formData.get("preis"))),
-    rabatt: parseFloat(String(formData.get("rabatt"))),
-    lieferbar: formData.get("lieferbar") === "true",
-    rating: parseFloat(String(formData.get("rating"))),
-    schlagwoerter: [String(formData.get("schlagwort1")), String(formData.get("schlagwort2"))].filter(e => e),
-  };
-
+  const buchDataInput: BuchInput = transformInput(formData);
+  
   return json({ success: true, buchData: buchDataInput });
 }
 
@@ -54,7 +39,10 @@ export default function Update() {
           <input type="url" className="form-control mb-3" id="homepage" name="homepage" defaultValue={buchData.homepage} />
 
           <label htmlFor="art" className="form-label">Art</label>
-          <input type="text" className="form-control mb-3" id="art" name="art" defaultValue={buchData.art} />
+          <select className="form-control" id="art" name="art" defaultValue={buchData.art}>
+            <option value="true">DRUCKAUSGABE</option>
+            <option value="false">KINDLE</option>
+          </select>
 
           <label htmlFor="datum" className="form-label">Datum</label>
           <input type="date" className="form-control mb-3" id="datum" name="datum" defaultValue={buchData.datum} />
@@ -66,7 +54,7 @@ export default function Update() {
           <input type="number" className="form-control mb-3" id="rabatt" name="rabatt" defaultValue={buchData.rabatt} step="0.01" />
 
           <label htmlFor="rating" className="form-label">Rating</label>
-          <input type="number" className="form-control mb-3" id="rating" name="rating" defaultValue={buchData.rating} step="0.1" max="5" />
+          <input type="number" className="form-control mb-3" id="rating" name="rating" defaultValue={buchData.rating} step="1" max="5" />
 
           <label htmlFor="lieferbar" className="form-label mb-3">Lieferbar</label>
           <select className="form-control" id="lieferbar" name="lieferbar" defaultValue={buchData.lieferbar.toString()}>
