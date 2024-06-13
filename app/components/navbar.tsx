@@ -9,6 +9,16 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
 
+  const toggleFixed = () => {
+    if (!isMobile) {
+      setIsFixed(!isFixed);
+    }
+  };
+
+  const toggleMobileMenu = () => {
+    setShowMobileMenu(!showMobileMenu);
+  };
+
   useEffect(() => {
     const handleResize = () => {
       //TODO Machen vielleicht Media Queries hier Sinn?
@@ -33,10 +43,10 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
         "navbar-fixed-padding",
         "navbar-hovered-padding",
       );
+      return;
     } else {
       document.body.classList.remove("navbar-fixed-padding");
     }
-    if (isFixed) return;
 
       const handleMouseMove = (event: MouseEvent) => {
         if (event.clientY < 125) {
@@ -61,14 +71,9 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
     }
   }, [showNavbar, isFixed]);
 
-  const toggleFixed = () => {
-    if (!isMobile) {
-      setIsFixed(!isFixed);
-    }
-  };
-
-  const toggleMobileMenu = () => {
-    setShowMobileMenu(!showMobileMenu);
+  const logoStyle = {
+    width: isMobile ? "100px" : "auto",
+    transition: "width 0.3s, height 0.3s",
   };
 
   const logoStyle = {
@@ -104,6 +109,7 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
               alt="Hochschule"
               style={logoStyle}
               className="navbar-image"
+              style={logoStyle}
             />
           </Link>
         </div>
@@ -118,10 +124,8 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
               <span className="navbar-toggler-icon"></span>
             </button>
             <div
-              style={{
-                display: showMobileMenu ? "block" : "none",
-              }}
-              className="hamburger-menu mb-5"
+              className="hamburger-menu show mb-5"
+              style={{ display: showMobileMenu ? "block" : "none" }}
             >
               <ul className="navbar-nav">
                 <li className="nav-item">
@@ -208,6 +212,7 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
               alt="Hochschule"
               style={logoStyle}
               className="navbar-image"
+              style={logoStyle}
             />
           </Link>
         </div>
