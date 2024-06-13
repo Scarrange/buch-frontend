@@ -46,6 +46,9 @@ export type SessionInfo = {
 export type BuchInput = Omit<Buch, "_links">;
 
 export function transformInput(formData: FormData): BuchInput {
+  const js = formData.get("javascript") ? "JAVASCRIPT" : null;
+  const ts = formData.get("typescript") ? "TYPESCRIPT" : null;
+
   return {
     isbn: String(formData.get("isbn")),
     titel: {
@@ -59,9 +62,6 @@ export function transformInput(formData: FormData): BuchInput {
     rabatt: parseFloat(String(formData.get("rabatt"))),
     lieferbar: formData.get("lieferbar") === "true",
     rating: parseFloat(String(formData.get("rating"))),
-    schlagwoerter: [
-      String(formData.get("schlagwort1")),
-      String(formData.get("schlagwort2")),
-    ].filter((e) => e),
+    schlagwoerter: [js, ts].filter((e) => e != null),
   };
 }

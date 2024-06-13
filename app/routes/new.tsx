@@ -15,7 +15,13 @@ import {
 import { commitSession, sessionStorage } from "~/services/session.server";
 import ErrorInfo from "../components/errorInfo";
 import Alert from "~/components/alert";
-import { BuchError, BuchInput, ErrorResponse, SessionInfo } from "~/util/types";
+import {
+  BuchError,
+  BuchInput,
+  ErrorResponse,
+  SessionInfo,
+  transformInput,
+} from "~/util/types";
 import datepickerStyles from "react-datepicker/dist/react-datepicker.css?url";
 
 export const links: LinksFunction = () => {
@@ -120,24 +126,8 @@ function validateBookData(bookData: BuchInput) {
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
-  const js = formData.get("javascript") ? "JAVASCRIPT" : null;
-  const ts = formData.get("typescript") ? "TYPESCRIPT" : null;
 
-  const buchDataInput: BuchInput = {
-    isbn: String(formData.get("isbn")),
-    titel: {
-      titel: String(formData.get("titel")),
-      untertitel: String(formData.get("untertitel")) || undefined,
-    },
-    homepage: String(formData.get("homepage")) || undefined,
-    art: String(formData.get("art")) || undefined,
-    datum: String(formData.get("datum")) || undefined,
-    preis: parseFloat(String(formData.get("preis"))),
-    rabatt: parseFloat(String(formData.get("rabatt"))),
-    lieferbar: formData.get("lieferbar") === "true",
-    rating: parseFloat(String(formData.get("rating"))),
-    schlagwoerter: [js, ts].filter((e) => e != null),
-  };
+  const buchDataInput: BuchInput = transformInput(formData);
 
   console.log(buchDataInput);
   const errors = validateBookData(buchDataInput);
