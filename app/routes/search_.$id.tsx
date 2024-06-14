@@ -46,6 +46,7 @@ export default function BookDetailPage() {
             <input type="hidden" name="rating" value={buch?.rating} />
             <input type="hidden" name="lieferbar" value={buch?.lieferbar.toString()} />
             <input type="hidden" name="homepage" value={buch?.homepage} />
+            <input type="hidden" name="schlagwoerter" value={buch?.schlagwoerter?.join(",")} />
             <input type="hidden" name="link" value={buch?._links.self.href} />
             <button type="submit" className="btn btn-primary btn-lg me-2">Ändern</button>
           </Form>
