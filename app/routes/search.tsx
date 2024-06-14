@@ -78,11 +78,10 @@ export default function SearchPage() {
       <Form
         id="searchForm"
         method="GET"
-        className={`container d-flex flex-column align-items-center mt-5 form-control div-bg mb-5 ${isMobile || "sticky-form"}`}
+        className={`container d-flex flex-column align-items-center mt-5 form-control div-bg ${buecher || "mb-5"} ${isMobile || "sticky-form"}`}
         style={{
           overflow: "auto",
-          maxHeight: "500px",
-          // flex: "1",
+          maxHeight: "520px",
           position: isMobile ? "relative" : "sticky",
         }}
       >
@@ -111,7 +110,10 @@ export default function SearchPage() {
           Suchen
         </button>
       </Form>
-      <div className="d-flex flex-column align-items-center">
+      <div
+        className="d-flex flex-column align-items-center mb-5"
+        style={{ flex: buecher ? "auto" : "0" }}
+      >
         {message && (
           <Alert
             //TODO Problem mit isloading ist, dass das div ganz klein wird und das Formular dadurch kurz verschoben wird
@@ -120,15 +122,7 @@ export default function SearchPage() {
             classNames={"center-message mt-5"}
           />
         )}
-        <div
-          className="d-flex flex-column align-items-center"
-          style={
-            {
-              // flex: "2",
-              // marginTop: isMobile ? "20px" : "0",
-            }
-          }
-        >
+        <div className="d-flex flex-column align-items-center">
           {buecher?.map((buch: Buch, index: number) => (
             <BuchItem key={index} {...buch} />
           ))}
