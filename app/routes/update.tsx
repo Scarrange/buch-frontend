@@ -1,12 +1,11 @@
 import { ActionFunctionArgs, json } from "@remix-run/node";
 import { useActionData, useNavigate, Form } from "@remix-run/react";
 import CheckBox from "~/components/checkBoxGivenValue";
-import { getBuchInput } from "~/util/functions";
-import { BuchInput } from "~/util/types";
+import { BuchInput, transformInput } from "~/util/types";
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
-  const buchDataInput: BuchInput = getBuchInput(formData);
+  const buchDataInput: BuchInput = transformInput(formData);
   return json({ success: true, buchData: buchDataInput });
 }
 
@@ -65,9 +64,6 @@ export default function Update() {
 
           {/* Check ob JavaScript oder Typescript als Schlagwort vorkommt und dementsprechend Checkbox setzen */}
           <label htmlFor="Schlagwörter" className="form-label">Schlagwörter</label>
-          {/* {buchData.schlagwoerter?.map((wort) => (
-            <CheckBox key={wort} text={wort} name={wort} value={true} />
-            ))} */}
           <CheckBox text="JavaScript" name="JavaScript" value={buchData.schlagwoerter?.includes("js") ? true : false} />
           <CheckBox text="TypeScript" name="TypeScript" value={buchData.schlagwoerter?.includes("ts") ? true : false}/>
 
