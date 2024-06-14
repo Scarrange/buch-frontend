@@ -12,7 +12,7 @@ const InputLogin = (props: {
       placeholder={props.placeholder}
       value={props.value}
       onChange={props.onChange}
-      style={{ width: "630px", height: "40px" }}
+      style={{ width: "630px", height: "40px", overflow: "auto"}}
       required
     />
   );

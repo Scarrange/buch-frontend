@@ -86,7 +86,7 @@ export default function Login() {
         method="POST"
         action="/login"
         className="container d-flex flex-column align-items-center form-control mb-5 pb-5 div-bg"
-        style={{ minWidth: "650px", maxWidth: "850px" }}
+        style={{ maxWidth: "850px", overflow: "auto"}}
       >
         <h2 className="text-center mt-5">Login</h2>
         <div className="form-group mt-5">
