@@ -3,8 +3,6 @@ import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as faStarRegular } from "@fortawesome/free-regular-svg-icons";
 import { Buch } from "~/util/types";
 
-//ist provisorisch, da der Code nur eine Copy von buchItem.tsx ist, und vllt Dubletten verhindert werden können.
-// Hauptgrund für die Datei ist das Entfernen des Detials-Buttonss
 const BuchItem = (buch: Buch) => {
   return (
     <div className="container mt-5" style={{ borderRadius: "12%" }}>
@@ -18,9 +16,8 @@ const BuchItem = (buch: Buch) => {
           <FontAwesomeIcon
             key={index}
             icon={index < buch.rating ? faStar : faStarRegular}
-            style={{ 
+            style={{
               color: index < buch.rating ? "gold" : "black",
-              fontSize: "0em", 
             }}
           />
         ))}

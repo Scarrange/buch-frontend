@@ -1,11 +1,12 @@
 import { ActionFunctionArgs, json } from "@remix-run/node";
 import { useActionData, useNavigate, Form } from "@remix-run/react";
 import CheckBox from "~/components/checkBoxGivenValue";
-import { BuchInput, transformInput } from "~/util/types";
+import { getBuchInput } from "~/util/functions";
+import { BuchInput } from "~/util/types";
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
-  const buchDataInput: BuchInput = transformInput(formData);
+  const buchDataInput: BuchInput = getBuchInput(formData);
   return json({ success: true, buchData: buchDataInput });
 }
 

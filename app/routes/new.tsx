@@ -15,20 +15,15 @@ import {
 import { commitSession, sessionStorage } from "~/services/session.server";
 import ErrorInfo from "../components/errorInfo";
 import Alert from "~/components/alert";
-import {
-  BuchError,
-  BuchInput,
-  ErrorResponse,
-  SessionInfo,
-  transformInput,
-} from "~/util/types";
+import { BuchInput, ErrorResponse, SessionInfo } from "~/util/types";
 import datepickerStyles from "react-datepicker/dist/react-datepicker.css?url";
+import { getBuchInput, validateBookData } from "../util/functions";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: datepickerStyles }];
 };
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   await authenticator.isAuthenticated(request, {
     failureRedirect: "/login",
   });
@@ -44,9 +39,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
       },
     },
   );
-}
+};
 
-async function forwardBookData(bookData: BuchInput, token: string) {
+const forwardBookData = async (bookData: BuchInput, token: string) => {
   let response;
   try {
     response = await fetch("https://localhost:3000/rest", {
@@ -73,63 +68,11 @@ async function forwardBookData(bookData: BuchInput, token: string) {
     statusCode: res.statusCode,
     message: res.message,
   };
-}
+};
 
-function validateBookData(bookData: BuchInput) {
-  const errors: BuchError = {};
-  //TODO ISBN
-  if (bookData.isbn.length !== 17) {
-    errors.isbn = "ISBN muss 13 Ziffern beinhalten";
-  }
-
-  if (
-    !bookData.titel.titel?.match("^\\w.*") ||
-    bookData.titel.titel?.length > 40
-  ) {
-    errors.titel = "Der Titel muss zwischen 1 und 40 Zeichen lang sein";
-  }
-
-  if (bookData.titel.untertitel && bookData.titel.untertitel.length > 40) {
-    errors.untertitel = "Der Untertitel darf maximal 40 Zeichen lang sein";
-  }
-
-  if (bookData.rating < 0 || bookData.rating > 5) {
-    errors.rating = "Rating muss zwischen 0 und 5 liegen";
-  }
-
-  if (!["", "KINDLE", "DRUCKAUSGABE"].includes(bookData.art ?? "")) {
-    errors.art = "Buchart ist ungültig";
-  }
-
-  if (bookData.preis <= 0) {
-    errors.preis = "Preis muss größer 0 sein";
-  }
-
-  if (bookData.preis.toString().length > 6) {
-    errors.preis = "Preis darf maximal 7 Stellen haben";
-  }
-
-  if (bookData.rabatt < 0 || bookData.rabatt > 1) {
-    errors.rabatt = "Rabatt muss zwischen 0 und 1 liegen";
-  }
-
-  if (bookData.datum && !bookData.datum.match("^[0-9]{4}-[0-9]{2}-[0-9]{2}$")) {
-    errors.datum = "Datum muss dem Format yyyy/mm/dd entsprechen";
-  }
-
-  if (bookData.homepage && !bookData.homepage.includes(".")) {
-    errors.homepage = "Homepage muss eine URL sein";
-  }
-
-  return errors;
-}
-
-export async function action({ request }: ActionFunctionArgs) {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
-
-  const buchDataInput: BuchInput = transformInput(formData);
-
-  console.log(buchDataInput);
+  const buchDataInput: BuchInput = getBuchInput(formData);
   const errors = validateBookData(buchDataInput);
   if (Object.keys(errors).length > 0) {
     return json({ created: false, id: undefined, message: undefined, errors });
@@ -150,9 +93,9 @@ export async function action({ request }: ActionFunctionArgs) {
     message: result.message,
     errors,
   });
-}
+};
 
-export default function NewBookPage() {
+const NewBookPage = () => {
   const fetcher = useFetcher<typeof action>();
   const actionData = fetcher.data;
   const errors = actionData?.errors;
@@ -235,4 +178,6 @@ export default function NewBookPage() {
       </fetcher.Form>
     </div>
   );
-}
+};
+
+export default NewBookPage;
