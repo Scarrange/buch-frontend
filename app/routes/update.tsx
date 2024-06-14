@@ -64,11 +64,11 @@ export default function Update() {
 
           {/* Check ob JavaScript oder Typescript als Schlagwort vorkommt und dementsprechend Checkbox setzen */}
           <label htmlFor="Schlagwörter" className="form-label">Schlagwörter</label>
-          {buchData.schlagwoerter?.map((wort) => (
+          {/* {buchData.schlagwoerter?.map((wort) => (
             <CheckBox key={wort} text={wort} name={wort} value={true} />
-            ))}
-          {/* <CheckBox text="JavaScript" name="JavaScript" value={buchData.schlagwoerter} />
-          <CheckBox text="TypeScript" name="TypeScript" value={false}/> */}
+            ))} */}
+          <CheckBox text="JavaScript" name="JavaScript" value={buchData.schlagwoerter?.includes("js") ? true : false} />
+          <CheckBox text="TypeScript" name="TypeScript" value={buchData.schlagwoerter?.includes("ts") ? true : false}/>
 
         </div>
         <button type="submit" className="btn btn-primary btn-lg me-2">Speichern</button>
