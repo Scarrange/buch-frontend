@@ -1,5 +1,5 @@
 import { json, LoaderFunctionArgs, LinksFunction } from "@remix-run/node";
-import { Link, useLoaderData, useNavigate } from "@remix-run/react";
+import { Form, Link, useLoaderData, useNavigate } from "@remix-run/react";
 import BuchItem from "~/components/buchItemDetail";
 import { Buch } from "~/util/types";
 import fontawesome from "@fortawesome/fontawesome-svg-core/styles.css?url";
