@@ -7,6 +7,7 @@ import BuchItem from "~/components/buchItem";
 import Alert from "~/components/alert";
 import { Buch } from "~/util/types";
 import { useEffect, useState } from "react";
+import classNames from "classnames";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
@@ -29,7 +30,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     if (!data?._embedded?.buecher || data._embedded.buecher.length === 0) {
       return json({
         buecher: [],
-        message: `Keine Bücher mit den gewünschten Suchkriterien gefunden.`,
+        message: "Keine Bücher mit den gewünschten Suchkriterien gefunden.",
       });
     }
     return json({ buecher: data?._embedded?.buecher, message: null });
@@ -60,6 +61,7 @@ function getQueryUrl(entries: [string, FormDataEntryValue][]) {
 export default function SearchPage() {
   const { buecher, message } = useLoaderData<typeof loader>();
   const [isMobile, setIsMobile] = useState(false);
+  const [hasContent, setHasContent] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -73,12 +75,28 @@ export default function SearchPage() {
     };
   }, []);
 
+  useEffect(() => {
+    setHasContent(buecher || message);
+  }, [buecher, message]);
+
   return (
-    <div className={`container d-flex ${isMobile && "flex-column"}`}>
+    <div
+      className={classNames("container", "d-flex", { "flex-column": isMobile })}
+    >
       <Form
         id="searchForm"
         method="GET"
-        className={`container d-flex flex-column align-items-center mt-5 form-control div-bg ${buecher || "mb-5"} ${isMobile || "sticky-form"}`}
+        className={classNames(
+          "container",
+          "d-flex",
+          "flex-column",
+          "align-items-center",
+          "mt-5",
+          "form-control",
+          "div-bg",
+          { "mb-5": !hasContent },
+          { "sticky-form": !isMobile },
+        )}
         style={{
           overflow: "auto",
           maxHeight: "520px",
@@ -100,7 +118,13 @@ export default function SearchPage() {
           items={["", "0", "1", "2", "3", "4", "5"]}
         />
         <div
-          className={`container d-flex justify-content-around mt-3 ${isMobile && "flex-column"}`}
+          className={classNames(
+            "container",
+            "d-flex",
+            "justify-content-around",
+            "mt-3",
+            { "flex-column": isMobile },
+          )}
           style={{ maxWidth: "400px" }}
         >
           <CheckBox text="JavaScript" name="javascript" />
@@ -112,7 +136,7 @@ export default function SearchPage() {
       </Form>
       <div
         className="d-flex flex-column align-items-center mb-5"
-        style={{ flex: buecher ? "auto" : "0" }}
+        style={{ flex: hasContent ? "auto" : "0" }}
       >
         {message && (
           <Alert

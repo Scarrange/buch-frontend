@@ -82,7 +82,7 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
 
   return (
     <nav
-      className={`navbar navbar-expand-lg navbar-light bg-white ${showNavbar || isMobile ? "show" : ""}`}
+      className={`navbar shadow navbar-expand-lg navbar-light bg-white ${showNavbar || isMobile ? "show" : ""}`}
     >
       <div className="container-fluid navbar-container">
         <div className="navbar-brand">
@@ -107,7 +107,7 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
             </button>
             <div
               className="hamburger-menu show mb-5"
-              style={{ display: showMobileMenu ? "block" : "none" }}
+              style={{ display: showMobileMenu ? "block" : "none", top: 0 }}
             >
               <ul className="navbar-nav">
                 <li className="nav-item">
