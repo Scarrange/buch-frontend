@@ -41,6 +41,12 @@ body {
   margin-top: 150px;
 }
 
+.input-login {
+  width: 100%;
+  max-width: 630px;
+  height: 40px;
+}
+
 .navbar-container {
   display: flex;
   justify-content: space-between;
