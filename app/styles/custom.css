@@ -71,7 +71,7 @@ body {
 
 .div-bg {
   max-width: 600px;
-  border-radius: 10%;
+  border-radius: 4rem;
   box-shadow: lightblue 0px 0px 50px;
   padding: 30px 100px;
 }
