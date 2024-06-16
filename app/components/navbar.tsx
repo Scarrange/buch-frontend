@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "@remix-run/react";
 import Login from "./login";
 import Logout from "./logout";
+import classNames from "classnames";
 
 const Navbar = (props: { isLoggedIn: boolean }) => {
   const [showNavbar, setShowNavbar] = useState(true);
@@ -82,7 +83,14 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
 
   return (
     <nav
-      className={`navbar shadow navbar-expand-lg navbar-light bg-white ${showNavbar || isMobile ? "show" : ""}`}
+      className={classNames(
+        "navbar",
+        "shadow",
+        "navbar-expand-lg",
+        "navbar-light",
+        "bg-white",
+        { show: showNavbar || isMobile },
+      )}
     >
       <div className="container-fluid navbar-container">
         <div className="navbar-brand">

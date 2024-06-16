@@ -1,4 +1,5 @@
 import { CSSProperties } from "react";
+import classNames from "classnames";
 
 const Alert = (props: {
   isLoading?: boolean;
@@ -11,7 +12,19 @@ const Alert = (props: {
 }) => {
   return (
     <div
-      className={`container alert alert-${props.isLoading ? "secondary" : props.success ? "success" : "danger"} d-flex flex-column align-items-center ${props.classNames}`}
+      className={classNames(
+        "container",
+        "alert",
+        {
+          "alert-secondary": props.isLoading,
+          "alert-success": !props.isLoading && props.success,
+          "alert-danger": !props.isLoading && !props.success,
+        },
+        "d-flex",
+        "flex-column",
+        "align-items-center",
+        props.classNames,
+      )}
       role="alert"
       style={{ maxWidth: "600px" }}
       // style={props.style}
