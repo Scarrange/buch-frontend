@@ -213,16 +213,16 @@ body.navbar-hovered-padding {
 
 
 .sticky-form {
-  position: -webkit-sticky;
-  /* Für Safari Mongos */
-  position: sticky;
-  top: 175px;
-  z-index: 1000;
-  transition: top 0.3s;
+  position: relative;
+
 }
 
 .sticky-form-stuck {
   top: 50px
+}
+
+.mobile-container {
+  flex-direction: row;
 }
 
 .alert {
@@ -233,4 +233,32 @@ body.navbar-hovered-padding {
   box-shadow: lightblue 0px 0px 50px;
   /* background-color: #f8d7da; */
   /* color: #721c24; */
+}
+
+.logo-style {
+  transition: width 0.3s, height 0.3s,
+}
+
+/* Media Queries */
+@media (max-width: 950px) {
+  .logo-style {
+    width: 100px;
+  }
+}
+
+@media (min-width: 950px) {
+  .sticky-form {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 175px;
+    z-index: 1000;
+    transition: top 0.3s;
+
+  }
+}
+
+@media (max-width: 950px) {
+  .mobile-container {
+    flex-direction: column;
+  }
 }

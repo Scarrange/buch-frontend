@@ -172,7 +172,7 @@ const NewBookPage = () => {
             "d-flex",
             "justify-content-around",
             "mt-3",
-            { "flex-column": isMobile },
+            "mobile-container",
           )}
           style={{ maxWidth: "400px" }}
         >
@@ -191,13 +191,7 @@ const NewBookPage = () => {
         )}
         <ErrorInfo error={errors?.rating} />
         <div
-          className={classNames(
-            "container",
-            "d-flex",
-            "justify-content-around",
-            "mt-3",
-            { "flex-column": isMobile },
-          )}
+          className="container d-flex justify-content-around mt-3 mobile-container"
           style={{ maxWidth: "400px" }}
         >
           <CheckBox text="JavaScript" name="javascript" />

@@ -60,29 +60,14 @@ function getQueryUrl(entries: [string, FormDataEntryValue][]) {
 
 export default function SearchPage() {
   const { buecher, message } = useLoaderData<typeof loader>();
-  const [isMobile, setIsMobile] = useState(false);
   const [hasContent, setHasContent] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 950);
-    };
-    handleResize();
-
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
 
   useEffect(() => {
     setHasContent(buecher || message);
   }, [buecher, message]);
 
   return (
-    <div
-      className={classNames("container", "d-flex", { "flex-column": isMobile })}
-    >
+    <div className="container d-flex mobile-container">
       <Form
         id="searchForm"
         method="GET"
@@ -95,12 +80,11 @@ export default function SearchPage() {
           "form-control",
           "div-bg",
           { "mb-5": !hasContent },
-          { "sticky-form": !isMobile },
+          "sticky-form",
         )}
         style={{
           overflow: "auto",
           maxHeight: "520px",
-          position: isMobile ? "relative" : "sticky",
         }}
       >
         <h1>Suchformular</h1>
@@ -118,13 +102,7 @@ export default function SearchPage() {
           items={["", "0", "1", "2", "3", "4", "5"]}
         />
         <div
-          className={classNames(
-            "container",
-            "d-flex",
-            "justify-content-around",
-            "mt-3",
-            { "flex-column": isMobile },
-          )}
+          className="container d-flex justify-content-around mt-3 mobile-container"
           style={{ maxWidth: "400px" }}
         >
           <CheckBox text="JavaScript" name="javascript" />

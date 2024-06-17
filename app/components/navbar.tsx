@@ -76,11 +76,6 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
     }
   }, [showNavbar, isFixed]);
 
-  const logoStyle = {
-    width: isMobile ? "100px" : "auto",
-    transition: "width 0.3s, height 0.3s",
-  };
-
   return (
     <nav
       className={classNames(
@@ -98,8 +93,7 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
             <img
               src="images/hochschule.png"
               alt="Hochschule"
-              style={logoStyle}
-              className="navbar-image"
+              className="navbar-image logo-style"
             />
           </Link>
         </div>
@@ -200,8 +194,7 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
             <img
               src="images/hkaquer.png"
               alt="Hochschule"
-              style={logoStyle}
-              className="navbar-image"
+              className="navbar-image logo-style"
             />
           </Link>
         </div>
