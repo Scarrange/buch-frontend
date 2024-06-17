@@ -22,6 +22,7 @@ export default function Update() {
   const { buchData } = actionData;
 
   return (
+    <div className="container">
     <div className="container d-flex flex-column align-items-center mt-5 form-control div-bg mb-5">
       <h1>Buch aktualisieren</h1>
 
@@ -72,9 +73,12 @@ export default function Update() {
           <CheckBox text="TypeScript" name="TypeScript" value={buchData.schlagwoerter?.includes("ts") ? true : false}/>
 
         </div>
-        <button type="submit" className="btn btn-primary btn-lg me-2">Speichern</button>
-        <button type="button" className="btn btn-secondary btn-lg" onClick={() => navigate(-1)}>Abbrechen</button>
+        <div className="mobile-container d-flex justify-content-between">
+        <button type="submit" className="btn btn-success btn-lg mt-4">Speichern</button>
+        <button type="button" className="btn btn-secondary btn-lg mt-4" onClick={() => navigate(-1)}>Abbrechen</button>
+      </div>
       </Form>
+    </div>
     </div>
   );
 }
