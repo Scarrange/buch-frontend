@@ -79,8 +79,8 @@ export default function SearchPage() {
           "mt-5",
           "form-control",
           "div-bg",
-          { "mb-5": !hasContent },
           "sticky-form",
+          { "mb-5": !hasContent },
         )}
         style={{
           overflow: "auto",

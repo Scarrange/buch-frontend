@@ -22,7 +22,6 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
 
   useEffect(() => {
     const handleResize = () => {
-      //TODO Machen vielleicht Media Queries hier Sinn?
       setIsMobile(window.innerWidth < 950);
     };
     handleResize();
@@ -44,6 +43,7 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
         "navbar-fixed-padding",
         "navbar-hovered-padding",
       );
+      setShowNavbar(true);
       return;
     } else {
       document.body.classList.remove("navbar-fixed-padding");
