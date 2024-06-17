@@ -186,7 +186,7 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
         )}
 
         <div className="ms-auto">
-          {!isMobile && (
+          {isMobile || (
             <button
               onClick={toggleFixed}
               className="btn btn-primary btn-lg me-2"
