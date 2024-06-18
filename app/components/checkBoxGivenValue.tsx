@@ -1,4 +1,8 @@
+import { useState } from "react";
+
 const CheckBox = (props: { text: string; name: string; checked: boolean }) => {
+  const [checked, setChecked] = useState(props.checked);
+
   return (
     <div className="form-check">
       <input
@@ -7,7 +11,8 @@ const CheckBox = (props: { text: string; name: string; checked: boolean }) => {
         id={props.name}
         name={props.name}
         style={{ cursor: "pointer" }}
-        checked={props.checked}
+        checked={checked}
+        onChange={() => setChecked(!checked)}
       />
       <label
         className="form-check-label"
