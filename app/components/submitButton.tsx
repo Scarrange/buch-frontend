@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import React from "react";
 
 interface SubmitButtonProps {
@@ -16,10 +17,10 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
   className,
 }) => {
   return (
-    <div className="form-group mt-5 text-center">
+    <div className="form-group mt-5 text-center w-100">
       <button
         type="submit"
-        className={`btn custom-btn ${className}`}
+        className={classNames("btn", "custom-btn", className)}
         style={style}
         onClick={handleButtonClick}
       >

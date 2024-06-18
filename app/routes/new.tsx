@@ -23,6 +23,9 @@ import {
   transformInput,
 } from "~/util/types";
 import datepickerStyles from "react-datepicker/dist/react-datepicker.css?url";
+import { getBuchInput, validateBookData } from "../util/functions";
+import { useEffect, useState } from "react";
+import classNames from "classnames";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: datepickerStyles }];
@@ -160,13 +163,26 @@ export default function NewBookPage() {
   const id = actionData?.id;
   const message = actionData?.message;
   const isLoading = fetcher.state !== "idle";
+  const [isMobile, setIsMobile] = useState(false);
 
   const handleButtonClick = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 950);
+    };
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
-    <div className="d-flex flex-column align-items-center mt-5">
+    <div className="container d-flex flex-column align-items-center mt-5">
       {(actionData || isLoading) && (
         <Alert
           isLoading={isLoading}
@@ -209,17 +225,31 @@ export default function NewBookPage() {
         <Input name="rabatt" placeholder="Rabatt" required />
         <ErrorInfo error={errors?.rabatt} />
         <div
-          className="container d-flex justify-content-around mt-3"
+          className={classNames(
+            "container",
+            "d-flex",
+            "justify-content-around",
+            "mt-3",
+            "mobile-container",
+          )}
           style={{ maxWidth: "400px" }}
         >
           <Radio name="lieferbar" />
           <Radio name="nicht lieferbar" />
         </div>
         <ErrorInfo error={errors?.lieferbar} />
-        <SliderWithValue name="rating" min={0} max={5} text="Rating" />
+        {isMobile ? (
+          <DropDown
+            name="rating"
+            placeholder="Rating"
+            items={["1", "2", "3", "4", "5"]}
+          />
+        ) : (
+          <SliderWithValue name="rating" min={0} max={5} text="Rating" />
+        )}
         <ErrorInfo error={errors?.rating} />
         <div
-          className="container d-flex justify-content-around mt-3"
+          className="container d-flex justify-content-around mt-3 mobile-container"
           style={{ maxWidth: "400px" }}
         >
           <CheckBox text="JavaScript" name="javascript" />

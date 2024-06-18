@@ -80,16 +80,16 @@ export default function Login() {
   }, [username, password]);
 
   return (
-    <div className="d-flex flex-column align-items-center mt-5">
+    <div className="container d-flex flex-column align-items-center mt-5">
       {(error || isLoading) && <Alert message={error} isLoading={isLoading} />}
       <fetcher.Form
         method="POST"
         action="/login"
         className="container d-flex flex-column align-items-center form-control mb-5 pb-5 div-bg"
-        style={{ minWidth: "650px", maxWidth: "850px" }}
+        style={{ maxWidth: "850px", overflow: "auto" }}
       >
         <h2 className="text-center mt-5">Login</h2>
-        <div className="form-group mt-5">
+        <div className="form-group mt-5 w-100">
           <label htmlFor="username" className="form-label">
             Username
           </label>
@@ -100,7 +100,7 @@ export default function Login() {
             onChange={(e) => setUsername(e.target.value)}
           />
         </div>
-        <div className="form-group mt-4">
+        <div className="form-group mt-4 w-100">
           <label htmlFor="password" className="form-label">
             Password
           </label>
@@ -116,7 +116,7 @@ export default function Login() {
         </div>
         <SubmitButton
           text="Anmelden"
-          style={{ width: "360px" }}
+          style={{ maxWidth: "360px", width: "100%" }}
           className="mt-2"
         />
         <GithubLoginButton />

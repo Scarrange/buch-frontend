@@ -8,11 +8,10 @@ const InputLogin = (props: {
     <input
       name={props.name}
       type={props.name === "password" ? "password" : "text"}
-      className="form-control mt-3 "
+      className="form-control mt-3 input-login"
       placeholder={props.placeholder}
       value={props.value}
       onChange={props.onChange}
-      style={{ width: "630px", height: "40px" }}
       required
     />
   );

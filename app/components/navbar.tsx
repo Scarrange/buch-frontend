@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "@remix-run/react";
 import Login from "./login";
 import Logout from "./logout";
+import classNames from "classnames";
 
 const Navbar = (props: { isLoggedIn: boolean }) => {
   const [showNavbar, setShowNavbar] = useState(true);
@@ -21,7 +22,6 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
 
   useEffect(() => {
     const handleResize = () => {
-      //TODO Machen vielleicht Media Queries hier Sinn?
       setIsMobile(window.innerWidth < 950);
     };
     handleResize();
@@ -43,6 +43,7 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
         "navbar-fixed-padding",
         "navbar-hovered-padding",
       );
+      setShowNavbar(true);
       return;
     } else {
       document.body.classList.remove("navbar-fixed-padding");
@@ -75,14 +76,16 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
     }
   }, [showNavbar, isFixed]);
 
-  const logoStyle = {
-    width: isMobile ? "100px" : "auto",
-    transition: "width 0.3s, height 0.3s",
-  };
-
   return (
     <nav
-      className={`navbar navbar-expand-lg navbar-light bg-white ${showNavbar || isMobile ? "show" : ""}`}
+      className={classNames(
+        "navbar",
+        "shadow",
+        "navbar-expand-lg",
+        "navbar-light",
+        "bg-white",
+        { show: showNavbar || isMobile },
+      )}
     >
       <div className="container-fluid navbar-container">
         <div className="navbar-brand">
@@ -90,8 +93,7 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
             <img
               src="images/hochschule.png"
               alt="Hochschule"
-              style={logoStyle}
-              className="navbar-image"
+              className="navbar-image logo-style"
             />
           </Link>
         </div>
@@ -107,7 +109,7 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
             </button>
             <div
               className="hamburger-menu show mb-5"
-              style={{ display: showMobileMenu ? "block" : "none" }}
+              style={{ display: showMobileMenu ? "block" : "none", top: 0 }}
             >
               <ul className="navbar-nav">
                 <li className="nav-item">
@@ -178,7 +180,7 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
         )}
 
         <div className="ms-auto">
-          {!isMobile && (
+          {isMobile || (
             <button
               onClick={toggleFixed}
               className="btn btn-primary btn-lg me-2"
@@ -192,8 +194,7 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
             <img
               src="images/hkaquer.png"
               alt="Hochschule"
-              style={logoStyle}
-              className="navbar-image"
+              className="navbar-image logo-style"
             />
           </Link>
         </div>
