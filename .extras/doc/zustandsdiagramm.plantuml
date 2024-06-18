@@ -3,53 +3,68 @@
 
 hide empty description
 state BuchFrontend {
-BuchFrontend : name = "buch-frontend"
-BuchFrontend : version = "1.0.0"
+    BuchFrontend : name = "buch-frontend"
+    BuchFrontend : version = "1.0.1"
 
-state App {
-    [*] --> [*]: Logout
+    state App {
+        [*] --> Logout
 
-    state BuchSuche {
-        [*] --> Suchformular: Suchkriterien eingeben
-        Suchformular --> Warten: Button "Suche"
-        Suchformular --> BuchSuche: Button "Zurücksetzen"
-        state SuchAuswahl <<choice>>
-        Warten --> SuchAuswahl: Suchergebnis eingetroffen
+        state BuchSuche {
+            [*] --> Suchformular: Suchkriterien eingeben
+            Suchformular --> Warten: Button "Suche"
+            Suchformular --> BuchSuche: Button "Zurücksetzen"
+            state SuchAuswahl <<choice>>
+            Warten --> SuchAuswahl: Suchergebnis eingetroffen
 
-        state SuchergebnisTabelle {
-            SuchAuswahl --> GefundeneBuecher: mind. 1 passendes Buch gefunden
-            SuchAuswahl --> Fehlermeldung: keine passenden Bücher gefunden
-            Fehlermeldung --> [*]
+            state SuchergebnisTabelle {
+                SuchAuswahl --> GefundeneBuecher: mind. 1 passendes Buch gefunden
+                SuchAuswahl --> Fehlermeldung: keine passenden Bücher gefunden
+                Fehlermeldung --> [*]
+            }
+        }
+        Details --> Bearbeiten: Button "Bearbeiten"
+        Details --> Löschen: Button "Löschen"
+        Löschen --> BuchSuche: Buch löschen
+
+        state Bearbeiten {
+            [*] --> Datenfelder: Änderungen eintragen
+            state UpdateAuswahl <<choice>> 
+            Datenfelder --> UpdateAuswahl: Button "Änderungen speichern"
+            UpdateAuswahl --> UpdateFehlermeldung: Fehlerhafte Daten
+            UpdateAuswahl --> UpdateBuch: Gültige Daten
+            UpdateBuch --> Bearbeiten: Daten hochladen
+            UpdateFehlermeldung --> Bearbeiten: Daten korrigieren
+        }
+
+        [*] --> BuchSuche: Navigationsleiste "Erweiterte Suche"
+        GefundeneBuecher --> Details: Buch in der Tabelle auswählen
+
+        [*] --> NeuesBuchHinzufuegen: Navigationsleiste "Neues Buch"
+        
+        state NeuesBuchHinzufuegen {
+            [*] --> Eingabefelder: Daten eines Buches eintragen
+            state HinzufuegenAuswahl <<choice>>
+            Eingabefelder --> HinzufuegenAuswahl: Button "Buch anlegen"
+            HinzufuegenAuswahl --> BuchErstellen: Gültige Daten
+            HinzufuegenAuswahl --> FehlerMeldung: Ungültige Daten
+            BuchErstellen --> NeuesBuchHinzufuegen: Buch wird hochgeladen
+            FehlerMeldung --> NeuesBuchHinzufuegen: Daten korrigieren
+        }
+
+        BuchSuche --> BuchDetails: Buch aus der Suche auswählen
+        BuchDetails --> BuchBearbeiten: Button "Bearbeiten"
+        BuchDetails --> BuchLöschen: Button "Löschen"
+        BuchLöschen --> BuchSuche: Buch löschen
+        BuchBearbeiten --> BuchSuche: Änderungen speichern
+
+        [*] --> BuchFavoriten: Navigationsleiste "Favoriten"
+        
+        state BuchFavoriten {
+            [*] --> FavoritenListe: Favoriten anzeigen
+            FavoritenListe --> BuchDetails: Favorit auswählen
+            FavoritenListe --> BuchEntfernen: Button "Entfernen"
+            BuchEntfernen --> FavoritenListe: Favorit entfernt
         }
     }
-    Details --> Bearbeiten: Button "Bearbeiten"
-    Details --> Löschen: Button "Löschen"
-    Löschen --> BuchSuche: Buch löschen
-
-    state Bearbeiten {
-        [*] --> Datenfelder: Änderungen eintragen
-        state UpdateAuswahl <<choice>> 
-        Datenfelder --> UpdateAuswahl: Button "Änderungen speichern"
-        UpdateBuch --> Bearbeiten: Daten hochladen
-        UpdateAuswahl --> UpdateFehlermeldung: Fehlerhafte Daten
-        UpdateAuswahl --> UpdateBuch: Gültige Daten
-        UpdateFehlermeldung --> Bearbeiten: Daten korrigieren
-    }
-
-    [*] --> BuchSuche: Navigationsleiste "Erweiterte Suche"
-    GefundeneBuecher --> Details: Buch in der Tabelle auswählen
-
-    [*] --> NeuesBuchHinzufuegen: Navigationsleiste "Neues Buch"
-    
-    state NeuesBuchHinzufuegen {
-        [*] --> Eingabefelder: Daten eines Buches eintragen
-        state HinzufuegenAuswahl <<choice>>
-        Eingabefelder --> HinzufuegenAuswahl: Button "Buch anlegen"
-        HinzufuegenAuswahl --> BuchErstellen: Gültige Daten
-        HinzufuegenAuswahl --> FehlerMeldung: Ungültige Daten
-        BuchErstellen --> NeuesBuchHinzufuegen: Buch wird hochgeladen
-        FehlerMeldung --> NeuesBuchHinzufuegen: Daten korrigieren
-    }
-}
 }
 @enduml
