@@ -1,25 +1,28 @@
-import { ActionFunctionArgs, json } from "@remix-run/node";
-import { useActionData, useNavigate, Form } from "@remix-run/react";
+import { LoaderFunctionArgs } from "@remix-run/node";
+import { useNavigate, Form, useLocation, useLoaderData } from "@remix-run/react";
 import CheckBox from "~/components/checkBoxGivenValue";
-import { getBuchInput } from "~/util/functions";
-import { BuchInput } from "~/util/types";
+import { Buch } from "~/util/types";
 
-export async function action({ request }: ActionFunctionArgs) {
-  const formData = await request.formData();
-  const buchDataInput: BuchInput = getBuchInput(formData);
-  return json({ success: true, buchData: buchDataInput });
+export const action = () => {
+  //TODO Buch validieren und absenden + Request behandeln
+  return null;
+};
+
+export const loader = ({ params }: LoaderFunctionArgs) => 
+{
+  const { id } = params;
+  return id;
 }
 
-//Validierung fehlt und die richtige Art von Feld für die Eingaben und Änderungen sind nicht persistent
-export default function Update() {
-  const actionData = useActionData<typeof action>();
+const Update = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const buchData : Buch = location.state;
+  const id = useLoaderData<typeof loader>();
 
-  if (!actionData) {
-    return <p>Keine Buchdaten empfangen</p>;
+  if(!buchData){
+    return <p>Buch wurde nicht gefunden</p>;
   }
-
-  const { buchData } = actionData;
 
   return (
     <div className="container">
@@ -64,21 +67,25 @@ export default function Update() {
             <option value="false">Nein</option>
           </select>
 
-          {/* Check ob JavaScript oder Typescript als Schlagwort vorkommt und dementsprechend Checkbox setzen */}
           <label htmlFor="Schlagwörter" className="form-label">Schlagwörter</label>
-          {/* {buchData.schlagwoerter?.map((wort) => (
-            <CheckBox key={wort} text={wort} name={wort} value={true} />
-            ))} */}
-          <CheckBox text="JavaScript" name="JavaScript" value={buchData.schlagwoerter?.includes("js") ? true : false} />
-          <CheckBox text="TypeScript" name="TypeScript" value={buchData.schlagwoerter?.includes("ts") ? true : false}/>
+          {buchData.schlagwoerter?.
+            filter(wort => wort !== "JAVASCRIPT" && wort !== "TYPESCRIPT").
+            map((wort) => (
+            <CheckBox key={wort} text={wort} name={wort} checked={true} />
+            ))}
+          {/* //TODO Util function für includes(Javascript) */}
+          <CheckBox text="JavaScript" name="JavaScript" checked={buchData.schlagwoerter?.includes("JAVASCRIPT") ? true : false} />
+          <CheckBox text="TypeScript" name="TypeScript" checked={buchData.schlagwoerter?.includes("TYPESCRIPT") ? true : false}/>
 
         </div>
         <div className="mobile-container d-flex justify-content-between">
-        <button type="submit" className="btn btn-success btn-lg mt-4">Speichern</button>
-        <button type="button" className="btn btn-secondary btn-lg mt-4" onClick={() => navigate(-1)}>Abbrechen</button>
+        <button type="submit" className="btn btn-success btn-lg mt-3">Speichern</button>
+        <button type="button" className="btn btn-secondary btn-lg mt-3" onClick={() => navigate(-1)}>Abbrechen</button>
       </div>
       </Form>
     </div>
     </div>
   );
 }
+
+export default Update;
