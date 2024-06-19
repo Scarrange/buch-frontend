@@ -111,7 +111,7 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
             </button>
             <div
               className="hamburger-menu show mb-5"
-              style={{ display: showMobileMenu ? "block" : "none", top: 0 }}
+              style={{ display: showMobileMenu ? "block" : "none" }}
             >
               <ul className="navbar-nav">
                 <li className="nav-item">

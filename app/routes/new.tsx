@@ -134,7 +134,7 @@ const NewBookPage = () => {
         >
           {
             <Link to={`/search/${id}`}>
-              <button type="button" className="btn btn-success   mt-4">
+              <button type="button" className="btn btn-success mt-4">
                 Zum Buch
               </button>
             </Link>

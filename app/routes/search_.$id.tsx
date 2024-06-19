@@ -3,6 +3,7 @@ import BuchItem from "~/components/buchItemDetail";
 import { Buch } from "~/util/types";
 import fontawesome from "@fortawesome/fontawesome-svg-core/styles.css?url";
 import { Link, useLoaderData, useNavigate } from "@remix-run/react";
+import { BookNotFound } from "~/components/bookNotFound";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: fontawesome }];
@@ -35,7 +36,6 @@ export default function BookDetailPage() {
   const { buch, id } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
 
-
   return (
     <div className="container">
       {buch ? (
@@ -62,7 +62,7 @@ export default function BookDetailPage() {
           </div>
         </div>
       ) : (
-        <p>Buch nicht gefunden</p>
+        <BookNotFound id={id ?? "No ID"} />
       )}
     </div>
   );

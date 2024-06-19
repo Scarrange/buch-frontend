@@ -72,6 +72,7 @@ body {
 .div-bg {
   max-width: 600px;
   border-radius: 4rem;
+  background-color: white;
   box-shadow: lightblue 0px 0px 50px;
   padding: 30px 100px;
 }
@@ -240,12 +241,6 @@ body.navbar-hovered-padding {
 }
 
 /* Media Queries */
-@media (max-width: 950px) {
-  .logo-style {
-    width: 100px;
-  }
-}
-
 @media (min-width: 950px) {
   .sticky-form {
     position: -webkit-sticky;
@@ -258,5 +253,13 @@ body.navbar-hovered-padding {
 @media (max-width: 950px) {
   .mobile-container {
     flex-direction: column;
+  }
+
+  .logo-style {
+    width: 100px;
+  }
+
+  .mobile-container .btn-stretch {
+    width: 100%;
   }
 }
