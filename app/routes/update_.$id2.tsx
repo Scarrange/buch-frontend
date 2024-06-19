@@ -8,14 +8,15 @@ import ErrorInfo from "../components/errorInfo";
 import { authenticator } from "~/services/auth.server";
 import { getBuchInput, validateBookData } from "~/util/functions";
 
-let id;
+let id: string | undefined;
+
 export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
   const buchDataInput: BuchInput = getBuchInput(formData);
   //TODO Buch validieren und absenden + Request behandeln
   const errors = validateBookData(buchDataInput);
   if (Object.keys(errors).length > 0) {
-    return json({ created: false, id: undefined, message: undefined, errors });
+    return json({ updated: false, id: undefined, message: undefined, errors });
   }
 
   const sessionInfo: SessionInfo = (
@@ -28,7 +29,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 
   return json({
-    updated: result.statusCode === 201,
+    updated: result.statusCode === 204,
     message: result.message,
     errors,
   });
@@ -39,7 +40,7 @@ export async function idx({ params }: LoaderFunctionArgs) {
   return id;
 }
 
-export async function loader(buchDataInput: BuchInput, accessToken: string) {
+export async function loader(bookData: BuchInput, token: string) {
 
   let response;
   try{
@@ -47,7 +48,9 @@ export async function loader(buchDataInput: BuchInput, accessToken: string) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-    },
+      Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(bookData),
   });
 } catch (e) {
   return { statusCode: 500, message: "Keine Verbindung zum Backend möglich" };
@@ -69,8 +72,8 @@ return {
 
 const Update = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const buchData : Buch = location.state;
+   const location = useLocation();
+   const buchData : Buch = location.state;
   const id = useLoaderData<typeof idx>();
   const fetcher = useFetcher<typeof action>();
   const actionData = fetcher.data;
