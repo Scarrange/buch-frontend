@@ -4,12 +4,15 @@ import BuchItem from "~/components/buchItemDetail";
 import { Buch } from "~/util/types";
 import fontawesome from "@fortawesome/fontawesome-svg-core/styles.css?url";
 
+let id: string | undefined
+
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: fontawesome }];
 };
 
 export async function loader({ params }: LoaderFunctionArgs) {
-  const { id } = params;
+
+  id = params.id;
 
   const response = await fetch(`https://localhost:3000/rest/${id}`, {
     method: "GET",
@@ -19,16 +22,17 @@ export async function loader({ params }: LoaderFunctionArgs) {
   });
 
   if (!response.ok) {
-    return json({ buch: null });
+    return json({ buch: null, id });
   }
 
   const buch: Buch = await response.json();
-  return json({ buch });
+  return json({ buch, id });
 }
 
 export default function BookDetailPage() {
-  const { buch } = useLoaderData<typeof loader>();
+  const { buch, id } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
+
 
   return (
     <div className="container">
@@ -38,7 +42,7 @@ export default function BookDetailPage() {
         <div className="container-fluid d-flex mt-3 mb-3">
           <div>
             {/* Form, das die Buchdaten an die Update-Route sendet */}
-            <Form method="post" action="/update">
+            <Form method="post" action={`/update/${id}`}>
               <input type="hidden" name="titel" value={buch?.titel.titel} />
               <input
                 type="hidden"

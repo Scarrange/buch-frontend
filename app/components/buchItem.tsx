@@ -6,6 +6,7 @@ const getId = (link: string) => {
 };
 
 const BuchItem = (buch: Buch) => {
+  console.log("ad: "+ buch)
   return (
     <div
       className="container d-flex flex-column align-items-start mt-5 form-control div-bg"

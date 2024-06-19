@@ -6,12 +6,14 @@ import { BuchInput } from "~/util/types";
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
+  const id = String(formData.get("id"));
   const buchDataInput: BuchInput = getBuchInput(formData);
-  return json({ success: true, buchData: buchDataInput });
+  return json({ success: true, buchData: buchDataInput, id });
 }
 
 //Validierung fehlt und die richtige Art von Feld für die Eingaben und Änderungen sind nicht persistent
 export default function Update() {
+  
   const actionData = useActionData<typeof action>();
   const navigate = useNavigate();
 
@@ -19,7 +21,8 @@ export default function Update() {
     return <p>Keine Buchdaten empfangen</p>;
   }
 
-  const { buchData } = actionData;
+  const { buchData, id } = actionData;
+  console.log(id);
 
   return (
     <div className="container">
