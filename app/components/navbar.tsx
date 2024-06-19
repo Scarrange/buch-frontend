@@ -3,6 +3,8 @@ import { Link } from "@remix-run/react";
 import Login from "./login";
 import Logout from "./logout";
 import classNames from "classnames";
+import hkaQuer from "images/HKAQuer.png";
+import hochschule from "images/Hochschule.png";
 
 const Navbar = (props: { isLoggedIn: boolean }) => {
   const [showNavbar, setShowNavbar] = useState(true);
@@ -91,7 +93,7 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
         <div className="navbar-brand">
           <Link to="/" className="navbar-brand">
             <img
-              src="images/hochschule.png"
+              src={hochschule}
               alt="Hochschule"
               className="navbar-image logo-style"
             />
@@ -192,8 +194,8 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
         <div className="navbar-brand">
           <Link to="/" className="navbar-brand">
             <img
-              src="images/hkaquer.png"
-              alt="Hochschule"
+              src={hkaQuer}
+              alt="HKA Logo"
               className="navbar-image logo-style"
             />
           </Link>

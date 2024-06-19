@@ -1,13 +1,18 @@
-const CheckBox = (props: { text: string; name: string; value: boolean; }) => {
+import { useState } from "react";
+
+const CheckBox = (props: { text: string; name: string; checked: boolean }) => {
+  const [checked, setChecked] = useState(props.checked);
+
   return (
     <div className="form-check">
       <input
         className="form-check-input"
         type="checkbox"
-        value={props.value.toString()}
         id={props.name}
         name={props.name}
         style={{ cursor: "pointer" }}
+        checked={checked}
+        onChange={() => setChecked(!checked)}
       />
       <label
         className="form-check-label"
