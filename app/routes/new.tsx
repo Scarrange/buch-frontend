@@ -15,11 +15,18 @@ import {
 import { commitSession, sessionStorage } from "~/services/session.server";
 import ErrorInfo from "../components/errorInfo";
 import Alert from "~/components/alert";
-import { BuchInput, ErrorResponse, SessionInfo } from "~/util/types";
+import {
+  BuchInput,
+  buchUrl,
+  ErrorResponse,
+  SessionInfo,
+  certificateAgent as agent,
+} from "~/util/types";
 import datepickerStyles from "react-datepicker/dist/react-datepicker.css?url";
 import { getBuchInput, validateBookData } from "../util/functions";
 import { useEffect, useState } from "react";
 import classNames from "classnames";
+import fetch from "node-fetch";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: datepickerStyles }];
@@ -46,12 +53,13 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 const forwardBookData = async (bookData: BuchInput, token: string) => {
   let response;
   try {
-    response = await fetch("https://localhost:3000/rest", {
+    response = await fetch(`${buchUrl}/rest`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
+      agent,
       body: JSON.stringify(bookData),
     });
   } catch (e) {
@@ -65,7 +73,7 @@ const forwardBookData = async (bookData: BuchInput, token: string) => {
     };
   }
 
-  const res: ErrorResponse = await response.json();
+  const res = (await response.json()) as ErrorResponse;
   return {
     statusCode: res.statusCode,
     message: res.message,

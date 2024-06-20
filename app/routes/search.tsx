@@ -5,9 +5,15 @@ import { Form, useLoaderData } from "@remix-run/react";
 import { json, LoaderFunctionArgs } from "@remix-run/node";
 import BuchItem from "~/components/buchItem";
 import Alert from "~/components/alert";
-import { Buch } from "~/util/types";
+import {
+  ApiResponse,
+  Buch,
+  buchUrl,
+  certificateAgent as agent,
+} from "~/util/types";
 import { useEffect, useState } from "react";
 import classNames from "classnames";
+import fetch from "node-fetch";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
@@ -19,21 +25,23 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   const paramString = getQueryUrl(Array.from(queryParams.entries()));
   try {
-    const response = await fetch(`https://localhost:3000/rest?${paramString}`, {
+    const response = await fetch(`${buchUrl}/rest?${paramString}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
+      agent,
     });
 
-    const data = await response.json();
-    if (!data?._embedded?.buecher || data._embedded.buecher.length === 0) {
+    const data = (await response.json()) as ApiResponse;
+    const buecher = data._embedded?.buecher;
+    if (!buecher || buecher.length === 0) {
       return json({
         buecher: [],
         message: "Keine Bücher mit den gewünschten Suchkriterien gefunden.",
       });
     }
-    return json({ buecher: data?._embedded?.buecher, message: null });
+    return json({ buecher: buecher, message: null });
   } catch (error) {
     return json({
       buecher: null,
@@ -59,11 +67,14 @@ function getQueryUrl(entries: [string, FormDataEntryValue][]) {
 }
 
 export default function SearchPage() {
-  const { buecher, message } = useLoaderData<typeof loader>();
+  const { buecher, message } = useLoaderData<{
+    buecher: Buch[] | null;
+    message: string | null;
+  }>();
   const [hasContent, setHasContent] = useState(false);
 
   useEffect(() => {
-    setHasContent(buecher || message);
+    setHasContent(buecher != null || message != null);
   }, [buecher, message]);
 
   return (

@@ -2,7 +2,14 @@ import { Authenticator, AuthorizationError } from "remix-auth";
 import { sessionStorage } from "~/services/session.server";
 import { FormStrategy } from "remix-auth-form";
 import jwt from "jsonwebtoken";
-import { DecodedJwtToken, SessionInfo } from "~/util/types";
+import {
+  ApiResponse,
+  DecodedJwtToken,
+  SessionInfo,
+  certificateAgent as agent,
+  buchUrl,
+} from "~/util/types";
+import fetch from "node-fetch";
 
 export const authenticator = new Authenticator<SessionInfo>(sessionStorage, {
   sessionErrorKey: "authError",
@@ -16,11 +23,12 @@ authenticator.use(
 
     let response;
     try {
-      response = await fetch("https://localhost:3000/auth/login", {
+      response = await fetch(`${buchUrl}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        agent,
         body: JSON.stringify({ username, password }),
       });
     } catch (error) {
@@ -32,8 +40,8 @@ authenticator.use(
       throw new AuthorizationError("Login fehlgeschlagen");
     }
 
-    const data = await response.json();
-    const accessToken: string = data?.access_token.toString();
+    const data = (await response.json()) as ApiResponse;
+    const accessToken = data.access_token?.toString();
     if (!accessToken) {
       throw new AuthorizationError("Login fehlgeschlagen");
     }

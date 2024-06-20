@@ -1,4 +1,14 @@
 import { JwtPayload } from "jsonwebtoken";
+import https from "https";
+
+export const buchUrl = "https://localhost:3000";
+
+export const certificateAgent = new https.Agent({ rejectUnauthorized: false });
+
+export interface ApiResponse {
+  _embedded?: { buecher: Buch[] };
+  access_token?: string;
+}
 
 export interface ErrorResponse {
   statusCode: number;

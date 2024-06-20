@@ -1,9 +1,10 @@
 import { json, LoaderFunctionArgs, LinksFunction } from "@remix-run/node";
 import BuchItem from "~/components/buchItemDetail";
-import { Buch } from "~/util/types";
+import { Buch, buchUrl, certificateAgent as agent } from "~/util/types";
 import fontawesome from "@fortawesome/fontawesome-svg-core/styles.css?url";
 import { Link, useLoaderData, useNavigate } from "@remix-run/react";
 import { BookNotFound } from "~/components/bookNotFound";
+import fetch from "node-fetch";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: fontawesome }];
@@ -14,11 +15,12 @@ export async function loader({ params }: LoaderFunctionArgs) {
   let response;
 
   try {
-    response = await fetch(`https://localhost:3000/rest/${id}`, {
+    response = await fetch(`${buchUrl}/rest/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
+      agent,
     });
   } catch (e) {
     return json({ buch: null, id });
@@ -28,7 +30,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
     return json({ buch: null, id });
   }
 
-  const buch: Buch = await response.json();
+  const buch = (await response.json()) as Buch;
   return json({ buch, id });
 }
 
