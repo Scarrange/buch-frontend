@@ -37,7 +37,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 export default function BookDetailPage() {
   const { buch, id } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
-
+  
   return (
     <div className="container">
       {buch ? (
@@ -45,15 +45,19 @@ export default function BookDetailPage() {
           <h1>Buchdetails</h1>
           <BuchItem {...buch} />
           <div className="container-fluid d-flex mt-3 mb-3">
-            <div>
-              <Link to={`/update/${id}`} state={buch}>
-                <button className="btn btn-primary btn-lg me-2 mt-2">
+            <div className="me-2 w-100">
+              <div className="d-flex mobile-container">
+                <Link
+                  to={`/update/${id}`}
+                  state={buch}
+                  className="btn btn-primary btn-lg btn-stretch me-2 mt-2"
+                >
                   Ändern
-                </button>
-              </Link>
-              <Link to="/test">
-                <button className="btn btn-primary btn-lg mt-2">Löschen</button>
-              </Link>
+                </Link>
+                <Link to="/test" className="btn btn-primary btn-lg mt-2">
+                  Löschen
+                </Link>
+              </div>
             </div>
             <button
               className="btn btn-secondary btn-lg ms-auto mt-2"
