@@ -2,19 +2,22 @@ import { json, LoaderFunctionArgs, LinksFunction } from "@remix-run/node";
 import BuchItem from "~/components/buchItemDetail";
 import { Buch, buchUrl, certificateAgent as agent } from "~/util/types";
 import fontawesome from "@fortawesome/fontawesome-svg-core/styles.css?url";
-import { Link, useLoaderData, useNavigate } from "@remix-run/react";
+import {
+  Link,
+  useLoaderData,
+  useNavigate,
+  useRouteLoaderData,
+} from "@remix-run/react";
 import { BookNotFound } from "~/components/bookNotFound";
 import fetch from "node-fetch";
-import { authenticator } from "~/services/auth.server";
+import { loader as rootLoader } from "~/root";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: fontawesome }];
 };
 
-export async function loader({ params, request }: LoaderFunctionArgs) {
+export async function loader({ params }: LoaderFunctionArgs) {
   const { id } = params;
-  const sessionInfo = await authenticator.isAuthenticated(request);
-  const roles = sessionInfo?.roles || [];
   let response;
 
   try {
@@ -26,22 +29,23 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
       agent,
     });
   } catch (e) {
-    return json({ buch: null, id, roles });
+    return json({ buch: null, id });
   }
 
   if (response.status !== 200) {
-    return json({ buch: null, id, roles });
+    return json({ buch: null, id });
   }
 
   const buch = (await response.json()) as Buch;
-  return json({ buch, id, roles });
+  return json({ buch, id });
 }
 
 export default function BookDetailPage() {
-  const { buch, id, roles } = useLoaderData<typeof loader>();
+  const { buch, id } = useLoaderData<typeof loader>();
+  const sessionData = useRouteLoaderData<typeof rootLoader>("root");
   const navigate = useNavigate();
-  const isUser = roles.includes("user") || false;
-  const isAdmin = roles.includes("admin") || false;
+  const isUser = sessionData?.roles.includes("user");
+  const isAdmin = sessionData?.roles.includes("admin");
 
   return (
     <div className="container">
