@@ -8,7 +8,7 @@ import ErrorInfo from "../components/errorInfo";
 import { authenticator } from "~/services/auth.server";
 import { getBuchInput, validateBookData } from "~/util/functions";
 
-let id;
+let id: string | undefined;
 export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
   const buchDataInput: BuchInput = getBuchInput(formData);
@@ -44,7 +44,7 @@ export async function loader(buchDataInput: BuchInput, accessToken: string) {
   let response;
   try{
   response = await fetch(`https://localhost:3000/rest/${id}`, {
-    method: "POST",
+    method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
@@ -108,7 +108,7 @@ const Update = () => {
           }
         </Alert>
       )}
-      <Form method="post" className="w-100">
+      <Form method="put" className="w-100">
         <div className="mb-3">
           <label htmlFor="isbn" className="form-label">ISBN</label>
           <input type="text" className="form-control mb-3" id="isbn" name="isbn" defaultValue={buchData.isbn} required />
