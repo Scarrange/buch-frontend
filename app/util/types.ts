@@ -11,6 +11,7 @@ export interface ApiResponse {
 }
 
 export interface ErrorResponse {
+  errors: unknown;
   statusCode: number;
   message: string;
 }
