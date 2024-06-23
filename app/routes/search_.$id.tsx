@@ -1,9 +1,21 @@
-import { json, LoaderFunctionArgs, LinksFunction } from "@remix-run/node";
+import {
+  json,
+  LoaderFunctionArgs,
+  LinksFunction,
+  ActionFunctionArgs,
+  redirect,
+} from "@remix-run/node";
 import BuchItem from "~/components/buchItemDetail";
-import { Buch, buchUrl, certificateAgent as agent } from "~/util/types";
+import {
+  Buch,
+  buchUrl,
+  certificateAgent as agent,
+  SessionInfo,
+} from "~/util/types";
 import fontawesome from "@fortawesome/fontawesome-svg-core/styles.css?url";
 import {
   Link,
+  useFetcher,
   useLoaderData,
   useNavigate,
   useRouteLoaderData,
@@ -11,10 +23,40 @@ import {
 import { BookNotFound } from "~/components/bookNotFound";
 import fetch from "node-fetch";
 import { loader as rootLoader } from "~/root";
+import { authenticator } from "~/services/auth.server";
+import { sessionStorage } from "~/services/session.server";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: fontawesome }];
 };
+
+export async function action({ params, request }: ActionFunctionArgs) {
+  const { id } = params;
+  const sessionInfo: SessionInfo = (
+    await sessionStorage.getSession(request.headers.get("cookie"))
+  ).get(authenticator.sessionKey);
+  const accessToken = sessionInfo?.accessToken;
+
+  let response;
+  try {
+    response = await fetch(`${buchUrl}/rest/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      agent,
+    });
+    console.log(response);
+  } catch (e) {
+    return json({ error: "Fehler beim löschen des Buchs" });
+  }
+  if (response.status !== 204) {
+    return json({ error: "Fehler beim löschen des Buchs" });
+  }
+
+  redirect("/");
+}
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const { id } = params;
@@ -43,9 +85,19 @@ export async function loader({ params }: LoaderFunctionArgs) {
 export default function BookDetailPage() {
   const { buch, id } = useLoaderData<typeof loader>();
   const sessionData = useRouteLoaderData<typeof rootLoader>("root");
+  const fetcher = useFetcher();
   const navigate = useNavigate();
   const isUser = sessionData?.roles.includes("user");
   const isAdmin = sessionData?.roles.includes("admin");
+
+  const handleDelete = async () => {
+    const confirmDelete = window.confirm(
+      `Willst du das Buch: "${buch?.titel.titel}" wirklich löschen?`,
+    );
+    if (confirmDelete) {
+      fetcher.submit(null, { method: "DELETE", action: `/search/${id}` });
+    }
+  };
 
   return (
     <div className="container">
@@ -65,9 +117,12 @@ export default function BookDetailPage() {
                     Ändern
                   </Link>
                   {isAdmin && (
-                    <Link to="/test" className="btn btn-primary btn-lg mt-2">
+                    <button
+                      className="btn btn-primary btn-lg mt-2"
+                      onClick={handleDelete}
+                    >
                       Löschen
-                    </Link>
+                    </button>
                   )}
                 </div>
               )}
