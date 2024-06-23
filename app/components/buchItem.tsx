@@ -6,12 +6,8 @@ const getId = (link: string) => {
 };
 
 const BuchItem = (buch: Buch) => {
-  console.log("ad: "+ buch)
   return (
-    <div
-      className="container d-flex flex-column align-items-start mt-5 form-control div-bg"
-      style={{ borderRadius: "12%" }}
-    >
+    <div className="container d-flex flex-column align-items-start mt-5 form-control div-bg">
       <h1>{buch.titel.titel}</h1>
       <p>{buch.titel.untertitel}</p>
       <p>ISBN: {buch.isbn}</p>
@@ -25,7 +21,6 @@ const BuchItem = (buch: Buch) => {
       </p>
       <Link
         to={`/search/${getId(buch._links.self.href)}`}
-        state={buch}
         className="btn btn-primary"
       >
         Details
