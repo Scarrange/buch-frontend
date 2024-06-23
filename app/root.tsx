@@ -5,43 +5,55 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
-  useRouteError,
 } from "@remix-run/react";
 import Navbar from "./components/navbar";
 import bootstrap from "bootstrap/dist/css/bootstrap.min.css?url";
 import customStyles from "./styles/custom.css?url";
 import { config } from "@fortawesome/fontawesome-svg-core";
-import { json, LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
+import {
+  json,
+  LinksFunction,
+  LoaderFunctionArgs,
+  MetaFunction,
+} from "@remix-run/node";
 import { authenticator } from "./services/auth.server";
+import { ApplicationError } from "./components/applicationError";
+import fontawesome from "@fortawesome/fontawesome-svg-core/styles.css?url";
 
 // Icons werden nicht mehr gerendered bevor css geladen wird//
 config.autoAddCss = false;
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const sessionInfo = await authenticator.isAuthenticated(request);
-  return json(sessionInfo);
+  const roles = sessionInfo?.roles ?? [];
+  return json({ roles });
 }
 
 export const links: LinksFunction = () => {
   return [
     { rel: "stylesheet", href: bootstrap },
     { rel: "stylesheet", href: customStyles },
+    { rel: "stylesheet", href: fontawesome },
+  ];
+};
+
+export const meta: MetaFunction = ({ error }) => {
+  return [
+    { name: "viewport", content: "width=device-width, initial-scale=1" },
+    { name: "description", content: "Buch" },
+    { charSet: "utf-8" },
+    { title: error ? "Oh no!" : "Buch" },
   ];
 };
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const sessionInfo = useLoaderData<typeof loader>();
+  const loaderData = useLoaderData<typeof loader>();
   const isLoggedIn =
-    sessionInfo?.roles.includes("admin") ||
-    sessionInfo?.roles.includes("user") ||
-    false;
+    loaderData?.roles.includes("user") || loaderData?.roles.includes("admin");
 
   return (
     <html lang="en">
       <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Buch</title>
         <Meta />
         <Links />
       </head>
@@ -60,21 +72,5 @@ export default function App() {
 }
 
 export function ErrorBoundary() {
-  const error = useRouteError();
-  console.error(error);
-  return (
-    <Layout>
-      <html lang="en">
-        <head>
-          <title>Oh no!</title>
-          <Meta />
-          <Links />
-        </head>
-        <body>
-          <h1>Application Error du bist dumm</h1>
-          <Scripts />
-        </body>
-      </html>
-    </Layout>
-  );
+  return <ApplicationError />;
 }
