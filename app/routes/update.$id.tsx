@@ -1,6 +1,6 @@
 import { ActionFunctionArgs, json, LoaderFunctionArgs } from "@remix-run/node";
-import { useNavigate, Form, useLocation, useLoaderData, Link, useFetcher } from "@remix-run/react";
-import { useState } from "react";
+import { useNavigate, Form, useLoaderData, Link, useFetcher } from "@remix-run/react";
+import { useEffect } from "react";
 import Alert from "~/components/alert";
 import CheckBox from "~/components/checkBoxGivenValue";
 import { Buch, BuchInput, ErrorResponse, SessionInfo } from "~/util/types";
@@ -9,81 +9,93 @@ import { authenticator } from "~/services/auth.server";
 import { getBuchInput, validateBookData } from "~/util/functions";
 
 let id: string | undefined;
+
+export async function idx({ params }: LoaderFunctionArgs) {
+  id = params.id;
+  return id;
+}
+
+export async function loader({ params }: LoaderFunctionArgs) {
+  const id = params.id;
+
+  try {
+    const response = await fetch(`https://localhost:3000/rest/${id}`);
+    if (!response.ok) {
+      throw new Error("Fehler beim Abrufen der Buchdaten");
+    }
+    const buchData: Buch = await response.json();
+    return json(buchData);
+  } catch (error) {
+    return json({ error: "Fehler beim Abrufen der Buchdaten" }, { status: 500 });
+  }
+}
+
 export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
   const buchDataInput: BuchInput = getBuchInput(formData);
-  //TODO Buch validieren und absenden + Request behandeln
+
   const errors = validateBookData(buchDataInput);
   if (Object.keys(errors).length > 0) {
-    return json({ created: false, id: undefined, message: undefined, errors });
+    return json({ updated: false, message: "Validierungsfehler", errors });
   }
 
   const sessionInfo: SessionInfo = (
     await sessionStorage.getSession(request.headers.get("cookie"))
   ).get(authenticator.sessionKey);
 
-  const result = await loader(buchDataInput, sessionInfo.accessToken);
-  if (result.statusCode === 401) {
+  let response;
+  try {
+    response = await fetch(`https://localhost:3000/rest/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${sessionInfo.accessToken}`,
+      },
+      body: JSON.stringify(buchDataInput),
+    });
+  } catch (e) {
+    return json({ updated: false, message: "Keine Verbindung zum Backend möglich", errors: {} });
+  }
+
+  // Antwort der API behandeln
+  if (response.status === 201) {
+    return json({ updated: true, message: "Buch erfolgreich aktualisiert", errors: {} });
+  }
+
+  const res: ErrorResponse = await response.json();
+  if (response.status === 401) {
     return await authenticator.logout(request, { redirectTo: "/login" });
   }
 
   return json({
-    updated: result.statusCode === 201,
-    message: result.message,
-    errors,
+    updated: false,
+    message: res.message,
+    errors: res.errors,
   });
 };
-
-export async function idx({ params }: LoaderFunctionArgs) {
-  id  = params.id;
-  return id;
-}
-
-export async function loader(buchDataInput: BuchInput, accessToken: string) {
-
-  let response;
-  try{
-  response = await fetch(`https://localhost:3000/rest/${id}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-} catch (e) {
-  return { statusCode: 500, message: "Keine Verbindung zum Backend möglich" };
-}
-
-if (response.status === 201) {
-  return {
-    statusCode: 201,
-    location: response.headers.get("Location"),
-  };
-}
-
-const res: ErrorResponse = await response.json();
-return {
-  statusCode: res.statusCode,
-  message: res.message,
-};
-}
 
 const Update = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const buchData : Buch = location.state;
-  const id = useLoaderData<typeof idx>();
-  const fetcher = useFetcher<typeof action>();
+  const fetcher = useFetcher();
+  const buchData: Buch = useLoaderData<Buch>();
   const actionData = fetcher.data;
   const errors = actionData?.errors;
   const updated = actionData?.updated;
   const message = actionData?.message;
   const isLoading = fetcher.state !== "idle";
-  const [isMobile, setIsMobile] = useState(false);
-  
+  // const [isMobile, setIsMobile] = useState(false);
+
   const handleButtonClick = () => {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    };
-  if(!buchData){
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    if (actionData) {
+      console.log("Action Data:", actionData);
+    }
+  }, [actionData]);
+
+  if (!buchData) {
     return <p>Buch wurde nicht gefunden</p>;
   }
 
@@ -92,100 +104,97 @@ const Update = () => {
       <h1>Buch aktualisieren</h1>
 
       <div className="container d-flex flex-column align-items-center mt-5">
-      {(actionData || isLoading) && (
-        <Alert
-          isLoading={isLoading}
-          success={updated}
-          title="Fehler beim Aktualisieren des Buches"
-          message={message}
-        >
-          {
-            <Link to={`/update/${id}`}>
-              <button type="button" className="btn btn-success   mt-4">
-                Zum Buch
-              </button>
-            </Link>
-          }
-        </Alert>
-      )}
-      <Form method="put" className="w-100">
-        <div className="mb-3">
-          <label htmlFor="isbn" className="form-label">ISBN</label>
-          <input type="text" className="form-control mb-3" id="isbn" name="isbn" defaultValue={buchData.isbn} required />
-          <ErrorInfo error={errors?.isbn} />
+        {(actionData || isLoading) && (
+          <Alert
+            isLoading={isLoading}
+            success={updated}
+            title={updated ? "Buch erfolgreich aktualisiert" : "Fehler beim Aktualisieren des Buches"}
+            message={message}
+          >
+            {updated && (
+              <Link to={`/update/${id}`}>
+                <button type="button" className="btn btn-success mt-4">
+                  Zum Buch
+                </button>
+              </Link>
+            )}
+          </Alert>
+        )}
+        <Form method="post" action={`/update/${id}`} className="w-100">
+          <input type="hidden" name="_method" value="put" />
+          <div className="mb-3">
+            <label htmlFor="isbn" className="form-label">ISBN</label>
+            <input type="text" className="form-control mb-3" id="isbn" name="isbn" defaultValue={buchData.isbn} required />
+            <ErrorInfo error={errors?.isbn} />
 
-          <label htmlFor="titel" className="form-label">Titel</label>
-          <input type="text" className="form-control mb-3" id="titel" name="titel" defaultValue={buchData.titel.titel} required />
-          <ErrorInfo error={errors?.titel} />
+            <label htmlFor="titel" className="form-label">Titel</label>
+            <input type="text" className="form-control mb-3" id="titel" name="titel" defaultValue={buchData.titel.titel} required />
+            <ErrorInfo error={errors?.titel} />
 
-          <label htmlFor="untertitel" className="form-label">Untertitel</label>
-          <input type="text" className="form-control mb-3" id="untertitel" name="untertitel" defaultValue={buchData.titel.untertitel} />
-          <ErrorInfo error={errors?.untertitel} />
+            <label htmlFor="untertitel" className="form-label">Untertitel</label>
+            <input type="text" className="form-control mb-3" id="untertitel" name="untertitel" defaultValue={buchData.titel.untertitel} />
+            <ErrorInfo error={errors?.untertitel} />
 
-          <label htmlFor="homepage" className="form-label">Homepage</label>
-          <input type="url" className="form-control mb-3" id="homepage" name="homepage" defaultValue={buchData.homepage} />
-          <ErrorInfo error={errors?.homepage} />
+            <label htmlFor="homepage" className="form-label">Homepage</label>
+            <input type="url" className="form-control mb-3" id="homepage" name="homepage" defaultValue={buchData.homepage} />
+            <ErrorInfo error={errors?.homepage} />
 
-          <label htmlFor="art" className="form-label">Art</label>
-          <select className="form-control" id="art" name="art" defaultValue={buchData.art}>
-            <option value="true">DRUCKAUSGABE</option>
-            <option value="false">KINDLE</option>
-          </select>
-          <ErrorInfo error={errors?.art} />
+            <label htmlFor="art" className="form-label">Art</label>
+            <select className="form-control" id="art" name="art" defaultValue={buchData.art}>
+              <option value="DRUCKAUSGABE">DRUCKAUSGABE</option>
+              <option value="KINDLE">KINDLE</option>
+            </select>
+            <ErrorInfo error={errors?.art} />
 
-          <label htmlFor="datum" className="form-label">Datum</label>
-          <input type="date" className="form-control mb-3" id="datum" name="datum" defaultValue={buchData.datum} />
-          <ErrorInfo error={errors?.datum} />
+            <label htmlFor="datum" className="form-label">Datum</label>
+            <input type="date" className="form-control mb-3" id="datum" name="datum" defaultValue={buchData.datum} />
+            <ErrorInfo error={errors?.datum} />
 
-          <label htmlFor="preis" className="form-label">Preis</label>
-          <input type="number" className="form-control mb-3" id="preis" name="preis" defaultValue={buchData.preis} step="0.01" />
-          <ErrorInfo error={errors?.preis} />
+            <label htmlFor="preis" className="form-label">Preis</label>
+            <input type="number" className="form-control mb-3" id="preis" name="preis" defaultValue={buchData.preis} step="0.01" />
+            <ErrorInfo error={errors?.preis} />
 
-          <label htmlFor="rabatt" className="form-label">Rabatt</label>
-          <input type="number" className="form-control mb-3" id="rabatt" name="rabatt" defaultValue={buchData.rabatt} step="0.01" />
-          <ErrorInfo error={errors?.rabatt} />
+            <label htmlFor="rabatt" className="form-label">Rabatt</label>
+            <input type="number" className="form-control mb-3" id="rabatt" name="rabatt" defaultValue={buchData.rabatt} step="0.01" />
+            <ErrorInfo error={errors?.rabatt} />
 
-          <label htmlFor="rating" className="form-label">Rating</label>
-          <input type="number" className="form-control mb-3" id="rating" name="rating" defaultValue={buchData.rating} step="1" max="5" />
-          <ErrorInfo error={errors?.rating} />
+            <label htmlFor="rating" className="form-label">Rating</label>
+            <input type="number" className="form-control mb-3" id="rating" name="rating" defaultValue={buchData.rating} step="1" max="5" />
+            <ErrorInfo error={errors?.rating} />
 
-          <label htmlFor="lieferbar" className="form-label mb-3">Lieferbar</label>
-          <select className="form-control" id="lieferbar" name="lieferbar" defaultValue={buchData.lieferbar.toString()}>
-            <option value="true">Ja</option>
-            <option value="false">Nein</option>
-          </select>
-          <ErrorInfo error={errors?.lieferbar} />
+            <label htmlFor="lieferbar" className="form-label mb-3">Lieferbar</label>
+            <select className="form-control" id="lieferbar" name="lieferbar" defaultValue={buchData.lieferbar.toString()}>
+              <option value="true">Ja</option>
+              <option value="false">Nein</option>
+            </select>
+            <ErrorInfo error={errors?.lieferbar} />
 
-          <label htmlFor="Schlagwörter" className="form-label">Schlagwörter</label>
-          {buchData.schlagwoerter?.
-            filter(wort => wort !== "JAVASCRIPT" && wort !== "TYPESCRIPT").
-            map((wort) => (
-            <CheckBox key={wort} text={wort} name={wort} checked={true} />
+            <label htmlFor="Schlagwörter" className="form-label">Schlagwörter</label>
+            {buchData.schlagwoerter?.filter(wort => wort !== "JAVASCRIPT" && wort !== "TYPESCRIPT").map((wort) => (
+              <CheckBox key={wort} text={wort} name={wort} checked={true} />
             ))}
-          {/* //TODO Util function für includes(Javascript) */}
-          <CheckBox text="JavaScript" name="JavaScript" checked={buchData.schlagwoerter?.includes("JAVASCRIPT") ? true : false} />
-          <CheckBox text="TypeScript" name="TypeScript" checked={buchData.schlagwoerter?.includes("TYPESCRIPT") ? true : false}/>
-
-        </div>
-        <button 
-          type="submit" 
-          className="btn btn-success btn-lg mt-4"
-          onClick={handleButtonClick}
+            <CheckBox text="JavaScript" name="JavaScript" checked={buchData.schlagwoerter?.includes("JAVASCRIPT") ? true : false} />
+            <CheckBox text="TypeScript" name="TypeScript" checked={buchData.schlagwoerter?.includes("TYPESCRIPT") ? true : false}/>
+          </div>
+          <button 
+            type="submit" 
+            className="btn btn-success btn-lg mt-4"
+            onClick={handleButtonClick}
           >
             Speichern
           </button>
 
-        <div className="mobile-container d-flex justify-content-between">
-        <button 
-          type="button" 
-          className="btn btn-secondary btn-lg mt-3" 
-          onClick={() => navigate(-1)}
-          >
-            Abbrechen
-          </button>
+          <div className="mobile-container d-flex justify-content-between">
+            <button 
+              type="button" 
+              className="btn btn-secondary btn-lg mt-3" 
+              onClick={() => navigate(-1)}
+            >
+              Abbrechen
+            </button>
+          </div>
+        </Form>
       </div>
-      </Form>
-    </div>
     </div>
   );
 }
