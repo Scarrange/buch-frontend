@@ -111,7 +111,7 @@ export default function BookDetailPage() {
                 <div className="d-flex mobile-container">
                   <Link
                     to={`/update/${id}`}
-                    state={buch}
+                    state={{buch,id}}
                     className="btn btn-primary btn-lg btn-stretch me-2 mt-2"
                   >
                     Ändern
