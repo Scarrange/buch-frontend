@@ -51,13 +51,7 @@ state BuchFrontend {
             FehlerMeldung --> NeuesBuchHinzufuegen: Daten korrigieren
         }
 
-        BuchSuche --> BuchDetails: Buch aus der Suche auswählen
-        BuchDetails --> BuchBearbeiten: Button "Bearbeiten"
-        BuchDetails --> BuchLöschen: Button "Löschen"
-        BuchLöschen --> BuchSuche: Buch löschen
-        BuchBearbeiten --> BuchSuche: Änderungen speichern
-
-        [*] --> BuchFavoriten: Navigationsleiste "Favoriten"
+        
     }
 }
 @enduml
