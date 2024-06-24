@@ -58,13 +58,6 @@ state BuchFrontend {
         BuchBearbeiten --> BuchSuche: Änderungen speichern
 
         [*] --> BuchFavoriten: Navigationsleiste "Favoriten"
-        
-        state BuchFavoriten {
-            [*] --> FavoritenListe: Favoriten anzeigen
-            FavoritenListe --> BuchDetails: Favorit auswählen
-            FavoritenListe --> BuchEntfernen: Button "Entfernen"
-            BuchEntfernen --> FavoritenListe: Favorit entfernt
-        }
     }
 }
 @enduml
