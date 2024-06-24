@@ -89,7 +89,7 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
         { show: showNavbar || isMobile },
       )}
     >
-      <div className="container-fluid navbar-container">
+      <div className="navbar-buttons container-fluid navbar-container">
         <div className="navbar-brand">
           <Link to="/" className="navbar-brand">
             <img
