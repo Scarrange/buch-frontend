@@ -15,6 +15,7 @@ import {
 import fontawesome from "@fortawesome/fontawesome-svg-core/styles.css?url";
 import {
   Link,
+  useActionData,
   useFetcher,
   useLoaderData,
   useNavigate,
@@ -25,6 +26,9 @@ import fetch from "node-fetch";
 import { loader as rootLoader } from "~/root";
 import { authenticator } from "~/services/auth.server";
 import { sessionStorage } from "~/services/session.server";
+import CustomConfirmModal from "~/components/modal";
+import { useState } from "react";
+import Alert from "~/components/alert";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: fontawesome }];
@@ -47,15 +51,19 @@ export async function action({ params, request }: ActionFunctionArgs) {
       },
       agent,
     });
-    console.log(response);
   } catch (e) {
-    return json({ error: "Fehler beim löschen des Buchs" });
-  }
-  if (response.status !== 204) {
-    return json({ error: "Fehler beim löschen des Buchs" });
+    return json({ error: "Keine Verbindung zum Backend möglich" });
   }
 
-  redirect("/");
+  if (response.status === 401) {
+    return await authenticator.logout(request, { redirectTo: "/login" });
+  }
+
+  if (response.status === 204) {
+    return redirect("/search");
+  }
+
+  return json({ error: "Fehler beim löschen des Buchs" });
 }
 
 export async function loader({ params }: LoaderFunctionArgs) {
@@ -84,25 +92,27 @@ export async function loader({ params }: LoaderFunctionArgs) {
 
 export default function BookDetailPage() {
   const { buch, id } = useLoaderData<typeof loader>();
+  const actionData = useActionData<typeof action>();
   const sessionData = useRouteLoaderData<typeof rootLoader>("root");
   const fetcher = useFetcher();
   const navigate = useNavigate();
   const isUser = sessionData?.roles.includes("user");
   const isAdmin = sessionData?.roles.includes("admin");
+  const isLoading = fetcher.state !== "idle";
+  const [showModal, setShowModal] = useState(false);
 
-  const handleDelete = async () => {
-    const confirmDelete = window.confirm(
-      `Willst du das Buch: "${buch?.titel.titel}" wirklich löschen?`,
-    );
-    if (confirmDelete) {
-      fetcher.submit(null, { method: "DELETE", action: `/search/${id}` });
-    }
+  const confirmDelete = () => {
+    fetcher.submit(null, { method: "DELETE", action: `/search/${id}` });
+    setShowModal(false);
   };
 
   return (
-    <div className="container">
+    <div className="container mt-5">
+      {(actionData || isLoading) && (
+        <Alert message={actionData?.error || ""} isLoading={isLoading} />
+      )}
       {buch ? (
-        <div className="container d-flex flex-column align-items-center mt-5 form-control div-bg mb-5">
+        <div className="container d-flex flex-column align-items-center mts-5 form-control div-bg mb-5">
           <h1>Buchdetails</h1>
           <BuchItem {...buch} />
           <div className="container-fluid d-flex mt-3 mb-3">
@@ -111,7 +121,7 @@ export default function BookDetailPage() {
                 <div className="d-flex mobile-container">
                   <Link
                     to={`/update/${id}`}
-                    state={{buch,id}}
+                    state={{ buch, id }}
                     className="btn btn-primary btn-lg btn-stretch me-2 mt-2"
                   >
                     Ändern
@@ -119,7 +129,7 @@ export default function BookDetailPage() {
                   {isAdmin && (
                     <button
                       className="btn btn-primary btn-lg mt-2"
-                      onClick={handleDelete}
+                      onClick={() => setShowModal(true)}
                     >
                       Löschen
                     </button>
@@ -134,6 +144,13 @@ export default function BookDetailPage() {
               Zurück
             </button>
           </div>
+          {showModal && (
+            <CustomConfirmModal
+              message={`Möchtest du das Buch: "${buch?.titel.titel}" wirklich löschen?`}
+              onConfirm={confirmDelete}
+              onCancel={() => setShowModal(false)}
+            />
+          )}
         </div>
       ) : (
         <BookNotFound id={id ?? "No ID"} />
