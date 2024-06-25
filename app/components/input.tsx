@@ -2,6 +2,7 @@ const Input = (props: {
   placeholder: string | undefined;
   name: string | undefined;
   required?: boolean;
+  defaultValue?: string;
 }) => {
   return (
     <input
@@ -11,6 +12,7 @@ const Input = (props: {
       style={{ maxWidth: "400px" }}
       name={props.name}
       required={props.required}
+      defaultValue={props.defaultValue}
     />
   );
 };
