@@ -7,7 +7,15 @@ state BuchFrontend {
     BuchFrontend : version = "1.0.1"
 
     state App {
-        [*] --> Logout
+        state Login {
+           [*] --> Anmeldefeld: Benutzername und Passwort eingeben
+           Anmeldefeld --> Anmelden: Button "Anmelden"
+              state Anmeldung <<choice>>
+              Anmelden --> Anmeldung
+              Anmeldung --> Anmeldung_fehlgeschlagen: Falsche Daten
+              Anmeldung_fehlgeschlagen --> Anmeldefeld: Daten korrigieren
+              Anmeldung --> Login: Richtige Daten
+        }
 
         state BuchSuche {
             [*] --> Suchformular: Suchkriterien eingeben
@@ -22,13 +30,13 @@ state BuchFrontend {
                 Fehlermeldung --> [*]
             }
         }
-        Details --> Bearbeiten: Button "Bearbeiten"
+        Details --> Bearbeiten: Button "Ändern"
         Details --> Löschen: Button "Löschen"
         Löschen --> BuchSuche: Buch löschen
 
         state Bearbeiten {
             [*] --> Datenfelder: Änderungen eintragen
-            state UpdateAuswahl <<choice>> 
+            state UpdateAuswahl <<choice>>
             Datenfelder --> UpdateAuswahl: Button "Änderungen speichern"
             UpdateAuswahl --> UpdateFehlermeldung: Fehlerhafte Daten
             UpdateAuswahl --> UpdateBuch: Gültige Daten
@@ -36,11 +44,13 @@ state BuchFrontend {
             UpdateFehlermeldung --> Bearbeiten: Daten korrigieren
         }
 
-        [*] --> BuchSuche: Navigationsleiste "Erweiterte Suche"
+        [*] --> Login: Navigationsleiste "Login"
+
+        [*] --> BuchSuche: Navigationsleiste "Buch suchen"
         GefundeneBuecher --> Details: Buch in der Tabelle auswählen
 
         [*] --> NeuesBuchHinzufuegen: Navigationsleiste "Neues Buch"
-        
+
         state NeuesBuchHinzufuegen {
             [*] --> Eingabefelder: Daten eines Buches eintragen
             state HinzufuegenAuswahl <<choice>>
@@ -48,10 +58,10 @@ state BuchFrontend {
             HinzufuegenAuswahl --> BuchErstellen: Gültige Daten
             HinzufuegenAuswahl --> FehlerMeldung: Ungültige Daten
             BuchErstellen --> NeuesBuchHinzufuegen: Buch wird hochgeladen
-            FehlerMeldung --> NeuesBuchHinzufuegen: Daten korrigieren
+            FehlerMeldung --> Eingabefelder: Daten korrigieren
         }
 
-        
+
     }
 }
 @enduml
