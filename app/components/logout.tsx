@@ -3,7 +3,7 @@ import { Link } from "@remix-run/react";
 const Logout = (props: { onClick?: () => void }) => {
   return (
     <Link to="/logout" onClick={props.onClick}>
-      <button type="button" className="btn btn-primary btn-lg">
+      <button type="button" className="btn btn-primary btn-lg h-100">
         Logout
       </button>
     </Link>
