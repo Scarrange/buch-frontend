@@ -102,6 +102,7 @@ export default function BookDetailPage() {
   const [showModal, setShowModal] = useState(false);
 
   const confirmDelete = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
     fetcher.submit(null, { method: "DELETE", action: `/search/${id}` });
     setShowModal(false);
   };
