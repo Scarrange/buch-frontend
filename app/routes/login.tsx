@@ -11,7 +11,6 @@ import GithubLoginButton from "~/components/gitHubButton";
 import InputLogin from "~/components/inputLogin";
 import SubmitButton from "~/components/submitButton";
 import { authenticator } from "~/services/auth.server";
-import { commitSession, sessionStorage } from "~/services/session.server";
 import fontawesome from "@fortawesome/fontawesome-svg-core/styles.css?url";
 
 export const links: LinksFunction = () => {
@@ -19,9 +18,6 @@ export const links: LinksFunction = () => {
 };
 
 export async function action({ request }: ActionFunctionArgs) {
-  const session = await sessionStorage.getSession(
-    request.headers.get("cookie"),
-  );
   try {
     await authenticator.authenticate("user-pass", request, {
       successRedirect: "/",
@@ -29,32 +25,16 @@ export async function action({ request }: ActionFunctionArgs) {
     });
   } catch (error) {
     if (error instanceof Error) {
-      session.flash(authenticator.sessionErrorKey, error.message);
-      return json(
-        { error: error.message },
-        { headers: { "Set-Cookie": await commitSession(session) } },
-      );
+      return json({ error: error.message });
     }
     throw error;
   }
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  await authenticator.isAuthenticated(request, {
+  return await authenticator.isAuthenticated(request, {
     successRedirect: "/",
   });
-  const session = await sessionStorage.getSession(
-    request.headers.get("cookie"),
-  );
-  const error = session.get(authenticator.sessionErrorKey);
-  return json(
-    { error },
-    {
-      headers: {
-        "Set-Cookie": await commitSession(session),
-      },
-    },
-  );
 }
 
 export default function Login() {

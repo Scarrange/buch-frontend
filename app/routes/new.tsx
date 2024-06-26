@@ -12,7 +12,7 @@ import {
   ActionFunctionArgs,
   LinksFunction,
 } from "@remix-run/node";
-import { commitSession, sessionStorage } from "~/services/session.server";
+import { sessionStorage } from "~/services/session.server";
 import ErrorInfo from "../components/errorInfo";
 import Alert from "~/components/alert";
 import {
@@ -33,21 +33,9 @@ export const links: LinksFunction = () => {
 };
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  await authenticator.isAuthenticated(request, {
+  return await authenticator.isAuthenticated(request, {
     failureRedirect: "/login",
   });
-  const session = await sessionStorage.getSession(
-    request.headers.get("cookie"),
-  );
-  const error = session.get(authenticator.sessionErrorKey);
-  return json(
-    { error },
-    {
-      headers: {
-        "Set-Cookie": await commitSession(session),
-      },
-    },
-  );
 };
 
 const forwardBookData = async (bookData: BuchInput, token: string) => {
