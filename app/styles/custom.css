@@ -77,8 +77,8 @@ body {
   padding: 30px 100px;
 }
 
-.smaller-text {
-  font-size: 14px;
+#passwordHelp{
+  font-style: italic;
 }
 
 .errorInfo {
