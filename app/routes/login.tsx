@@ -68,7 +68,7 @@ const Login = () => {
         className="container d-flex flex-column align-items-center form-control mb-5 pb-5 div-bg"
         style={{ maxWidth: "850px", overflow: "auto" }}
       >
-        <h2 className="text-center mt-5">Login</h2>
+        <h2 className="text-center mt-5">Einloggen</h2>
         <div className="form-group mt-5 w-100">
           <label htmlFor="username" className="form-label">
             Benutzername

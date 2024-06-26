@@ -148,7 +148,7 @@ export const Navbar = (props: { isLoggedIn: boolean }) => {
                       className="nav-link"
                       onClick={toggleMobileMenu}
                     >
-                      Login
+                      Einloggen
                     </Link>
                   )}
                 </li>
