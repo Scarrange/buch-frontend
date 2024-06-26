@@ -181,7 +181,7 @@ export const Navbar = (props: { isLoggedIn: boolean }) => {
           </div>
         )}
 
-        <div className="ms-auto">
+        <div className="ms-auto h-100">
           {isMobile || (
             <button
               onClick={toggleFixed}
