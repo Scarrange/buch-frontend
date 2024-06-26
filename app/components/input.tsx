@@ -4,6 +4,7 @@ const Input = (props: {
   required?: boolean;
   defaultValue?: string | number;
   disabled?: boolean;
+  maxLength?: number;
 }) => {
   return (
     <input
@@ -15,6 +16,7 @@ const Input = (props: {
       required={props.required}
       defaultValue={props.defaultValue}
       disabled={props.disabled}
+      maxLength={props.maxLength}
     />
   );
 };

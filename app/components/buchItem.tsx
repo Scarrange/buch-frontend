@@ -9,15 +9,17 @@ const BuchItem = (buch: Buch) => {
   return (
     <div className="container d-flex flex-column align-items-start mt-5 form-control div-bg">
       <h1>{buch.titel.titel}</h1>
-      <p>{buch.titel.untertitel}</p>
+      <p>Untertitel: {buch.titel.untertitel}</p>
       <p>ISBN: {buch.isbn}</p>
-      <p>Art: {buch.art}</p>
+      {buch.art && <p>Art: {buch.art}</p>}
       <p>Rating: {buch.rating}</p>
-      <p>Lieferbar: {buch.lieferbar}</p>
-      <p>Homepage: {buch.homepage}</p>
+      <p>Lieferbar: {buch.lieferbar ? "Ja" : "Nein"}</p>
+      {buch.homepage && <p>Homepage: {buch.homepage}</p>}
       <p>
         Schlagwörter:{" "}
-        {buch.schlagwoerter?.map((wort) => wort.toLowerCase()).join(", ")}
+        {buch.schlagwoerter?.length === 0
+          ? "-Keine-"
+          : buch.schlagwoerter?.map((wort) => wort.toLowerCase()).join(", ")}
       </p>
       <Link
         to={`/search/${getId(buch._links.self.href)}`}

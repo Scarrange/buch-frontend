@@ -158,9 +158,9 @@ const NewBookPage = () => {
         <ErrorInfo error={errors?.art} />
         <CustomDatePicker />
         <ErrorInfo error={errors?.datum} />
-        <Input name="preis" placeholder="Preis" required />
+        <Input name="preis" placeholder="Preis" maxLength={9} required />
         <ErrorInfo error={errors?.preis} />
-        <Input name="rabatt" placeholder="Rabatt" required />
+        <Input name="rabatt" placeholder="Rabatt" maxLength={5} required />
         <ErrorInfo error={errors?.rabatt} />
         <div
           className={classNames(

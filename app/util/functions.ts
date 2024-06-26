@@ -32,8 +32,8 @@ export const validateBookData = (bookData: BuchInput) => {
     errors.preis = "Preis muss größer 0 sein";
   }
 
-  if (bookData.preis.toString().length > 6) {
-    errors.preis = "Preis darf maximal 7 Stellen haben";
+  if (bookData.preis > 999_999.99) {
+    errors.preis = "Preis muss kleiner 1.000.000,00 sein";
   }
 
   if (isNaN(bookData.rabatt) || bookData.rabatt < 0 || bookData.rabatt > 1) {
@@ -64,7 +64,7 @@ export const getBuchInput = (formData: FormData): BuchInput => {
     homepage: String(formData.get("homepage")) || null,
     art: String(formData.get("art")) || null,
     datum: String(formData.get("datum")) || null,
-    preis: Number(String(formData.get("preis"))),
+    preis: Number(String(formData.get("preis")).replace(",", ".")),
     rabatt: Number(String(formData.get("rabatt"))),
     lieferbar: Boolean(formData.get("lieferbar")),
     rating: Number(String(formData.get("rating"))),
