@@ -27,7 +27,6 @@ const Alert = (props: {
       )}
       role="alert"
       style={{ maxWidth: "600px" }}
-      // style={props.style}
     >
       {props.isLoading ? (
         <div className="spinner-border" role="status"></div>

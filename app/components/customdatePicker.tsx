@@ -1,9 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import { ClientOnly } from "remix-utils/client-only";
 
-const CustomDatePicker = () => {
+const CustomDatePicker = (props: { defaultValue?: string }) => {
   const [startDate, setStartDate] = useState<Date | null>(null);
+
+  useEffect(() => {
+    if (props.defaultValue) {
+      setStartDate(new Date(props.defaultValue));
+    }
+  }, [props.defaultValue]);
+
   return (
     <ClientOnly>
       {() => (

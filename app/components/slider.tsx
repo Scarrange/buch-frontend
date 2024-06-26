@@ -5,9 +5,10 @@ const SliderWithValue = (props: {
   min: number;
   max: number;
   text: string;
+  defaultValue?: number;
 }) => {
   const [value, setValue] = useState(
-    Math.floor((props.max - props.min) / 2 + 1),
+    props.defaultValue || Math.floor((props.max - props.min) / 2 + 1),
   );
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

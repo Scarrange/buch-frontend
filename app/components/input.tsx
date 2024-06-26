@@ -2,7 +2,8 @@ const Input = (props: {
   placeholder: string | undefined;
   name: string | undefined;
   required?: boolean;
-  defaultValue?: string;
+  defaultValue?: string | number;
+  disabled?: boolean;
 }) => {
   return (
     <input
@@ -13,6 +14,7 @@ const Input = (props: {
       name={props.name}
       required={props.required}
       defaultValue={props.defaultValue}
+      disabled={props.disabled}
     />
   );
 };

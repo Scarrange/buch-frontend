@@ -1,4 +1,4 @@
-const CheckBox = (props: { text: string; name: string }) => {
+const CheckBox = (props: { text: string; name: string; checked?: boolean }) => {
   return (
     <div className="form-check">
       <input
@@ -8,6 +8,7 @@ const CheckBox = (props: { text: string; name: string }) => {
         id={props.name}
         name={props.name}
         style={{ cursor: "pointer" }}
+        defaultChecked={props.checked}
       />
       <label
         className="form-check-label"

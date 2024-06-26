@@ -184,7 +184,7 @@ const NewBookPage = () => {
           )}
           style={{ maxWidth: "400px" }}
         >
-          <Radio name="lieferbar" />
+          <Radio name="lieferbar" checked={true} />
           <Radio name="nicht lieferbar" />
         </div>
         <ErrorInfo error={errors?.lieferbar} />

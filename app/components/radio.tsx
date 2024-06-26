@@ -1,4 +1,4 @@
-const Radio = (props: { name: string }) => {
+const Radio = (props: { name: string; checked?: boolean }) => {
   return (
     <div className="form-check">
       <input
@@ -7,7 +7,7 @@ const Radio = (props: { name: string }) => {
         name="flexRadioDefault"
         id={props.name}
         style={{ cursor: "pointer" }}
-        defaultChecked
+        defaultChecked={props.checked}
       />
       <label
         className="form-check-label"
