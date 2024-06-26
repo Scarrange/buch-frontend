@@ -7,10 +7,10 @@ import {
 } from "@remix-run/node";
 import BuchItem from "~/components/buchItemDetail";
 import {
-  Buch,
   buchUrl,
   certificateAgent as agent,
   SessionInfo,
+  BuchMitVersion,
 } from "~/util/types";
 import fontawesome from "@fortawesome/fontawesome-svg-core/styles.css?url";
 import {
@@ -86,7 +86,11 @@ export async function loader({ params }: LoaderFunctionArgs) {
     return json({ buch: null, id });
   }
 
-  const buch = (await response.json()) as Buch;
+  const versionStr = response.headers.get("etag") ?? "0";
+  const version = Number.parseInt(versionStr.slice(1, -1), 10);
+  const buch = (await response.json()) as BuchMitVersion;
+  buch.version = version;
+
   return json({ buch, id });
 }
 

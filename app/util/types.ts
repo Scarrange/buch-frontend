@@ -19,12 +19,12 @@ export interface ErrorResponse {
 export interface Buch {
   isbn: string;
   rating: number;
-  art?: string;
+  art?: string | null;
   preis: number;
   rabatt: number;
   lieferbar: boolean;
-  datum?: string;
-  homepage?: string;
+  datum?: string | null;
+  homepage?: string | null;
   schlagwoerter?: string[];
   titel: { titel: string; untertitel?: string };
   _links: { self: { href: string } };
@@ -55,3 +55,4 @@ export type SessionInfo = {
 };
 
 export type BuchInput = Omit<Buch, "_links">;
+export type BuchMitVersion = Buch & { version?: number };
