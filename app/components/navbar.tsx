@@ -69,7 +69,7 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
   }, [isFixed, isMobile]);
 
   useEffect(() => {
-    if (showNavbar) {
+    if (showNavbar || isFixed) {
       document
         .getElementById("searchForm")
         ?.classList.remove("sticky-form-stuck");

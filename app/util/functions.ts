@@ -68,6 +68,6 @@ export const getBuchInput = (formData: FormData): BuchInput => {
     rabatt: Number(String(formData.get("rabatt"))),
     lieferbar: Boolean(formData.get("lieferbar")),
     rating: Number(String(formData.get("rating"))),
-    schlagwoerter: [js, ts].filter((e) => e != null),
+    schlagwoerter: [js, ts].filter((e): e is string => e !== null),
   };
 };
