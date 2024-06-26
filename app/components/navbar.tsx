@@ -187,7 +187,7 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
               onClick={toggleFixed}
               className="btn btn-primary btn-lg me-2"
             >
-              {isFixed ? "Unfix Navbar" : "Fix Navbar"}
+              {isFixed ? "Lösen" : "Fixieren"}
             </button>
           )}
         </div>
