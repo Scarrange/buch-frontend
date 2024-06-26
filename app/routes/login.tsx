@@ -71,27 +71,27 @@ export default function Login() {
         <h2 className="text-center mt-5">Login</h2>
         <div className="form-group mt-5 w-100">
           <label htmlFor="username" className="form-label">
-            Username
+            Benutzername
           </label>
           <InputLogin
             name="username"
-            placeholder="Enter your Username here"
+            placeholder="Benutzernamen eingeben"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
         </div>
         <div className="form-group mt-4 w-100">
           <label htmlFor="password" className="form-label">
-            Password
+            Passwort
           </label>
           <InputLogin
             name="password"
-            placeholder="Enter your Password here"
+            placeholder="Passwort eingeben"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
           <small id="passwordHelp" className="form-text text-muted">
-            Please do not share your Password with anyone else.
+            Teilen sie ihre Daten niemals mit Fremden.
           </small>
         </div>
         <SubmitButton

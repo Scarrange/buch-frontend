@@ -10,7 +10,7 @@ const GithubLoginButton: React.FC = () => {
         type="button"
       >
         <FontAwesomeIcon icon={faGithub} className="me-2" size="2x" />
-        <span className="smaller-text">Sign up with Github</span>
+        <span className="smaller-text">Mit Github anmelden</span>
       </button>
     </div>
   );

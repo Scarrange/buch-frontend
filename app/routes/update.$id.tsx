@@ -190,7 +190,7 @@ const Update = () => {
         <DropDown
           name="art"
           items={["", "Druckausgabe", "Kindle"]}
-          placeholder="Select Buchart"
+          placeholder="Buchart"
           selected={buch.art ?? undefined}
         />
         <ErrorInfo error={errors?.art} />

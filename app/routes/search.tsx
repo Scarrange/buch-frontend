@@ -128,12 +128,7 @@ export default function SearchPage() {
         style={{ flex: hasContent ? "auto" : "0" }}
       >
         {message && (
-          <Alert
-            //TODO Problem mit isloading ist, dass das div ganz klein wird und das Formular dadurch kurz verschoben wird
-            // isLoading={isLoading}
-            message={message}
-            classNames={"center-message mt-5"}
-          />
+          <Alert message={message} classNames={"center-message mt-5"} />
         )}
         <div className="d-flex flex-column align-items-center">
           {buecher?.map((buch: Buch, index: number) => (

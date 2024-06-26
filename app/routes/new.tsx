@@ -153,7 +153,7 @@ const NewBookPage = () => {
         <DropDown
           name="art"
           items={["", "Druckausgabe", "Kindle"]}
-          placeholder="Select Buchart"
+          placeholder="Buchart"
         />
         <ErrorInfo error={errors?.art} />
         <CustomDatePicker />
