@@ -11,7 +11,7 @@ const handleButtonClick = () => {
   window.scrollTo({ top: 0, behavior: "smooth" });
 };
 
-const SubmitButton: React.FC<SubmitButtonProps> = ({
+export const SubmitButton: React.FC<SubmitButtonProps> = ({
   text,
   style,
   className,
@@ -29,5 +29,3 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
     </div>
   );
 };
-
-export default SubmitButton;

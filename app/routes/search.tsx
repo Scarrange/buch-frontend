@@ -1,10 +1,10 @@
-import Input from "../components/input";
-import CheckBox from "../components/checkBox";
-import DropDown from "~/components/dropDown";
+import { Input } from "../components/input";
+import { CheckBox } from "../components/checkBox";
+import { Dropdown } from "~/components/dropDown";
 import { Form, useLoaderData } from "@remix-run/react";
 import { json, LoaderFunctionArgs } from "@remix-run/node";
-import BuchItem from "~/components/buchItem";
-import Alert from "~/components/alert";
+import { BuchItem } from "~/components/buchItem";
+import { Alert } from "~/components/alert";
 import {
   ApiResponse,
   Buch,
@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import classNames from "classnames";
 import fetch from "node-fetch";
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
   const queryParams = url.searchParams;
 
@@ -49,9 +49,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
         "Es besteht keine Verbindung zum Server. Bitte versuchen Sie es später nochmal.",
     });
   }
-}
+};
 
-function getQueryUrl(entries: [string, FormDataEntryValue][]) {
+const getQueryUrl = (entries: [string, FormDataEntryValue][]) => {
   let paramStr = "";
   const queryParams = entries.filter(([, value]) => value !== "");
   if (queryParams.length === 0) {
@@ -64,9 +64,9 @@ function getQueryUrl(entries: [string, FormDataEntryValue][]) {
     ([key, value]) => (paramStr = paramStr.concat(`&${key}=${value}`)),
   );
   return paramStr;
-}
+};
 
-export default function SearchPage() {
+const SearchPage = () => {
   const { buecher, message } = useLoaderData<{
     buecher: Buch[] | null;
     message: string | null;
@@ -102,12 +102,12 @@ export default function SearchPage() {
         <Input name="isbn" placeholder="ISBN" />
         <Input name="titel" placeholder="Titel" />
         <Input name="homepage" placeholder="Homepage" />
-        <DropDown
+        <Dropdown
           name="art"
           placeholder="Buchart"
           items={["", "Druckausgabe", "Kindle"]}
         />
-        <DropDown
+        <Dropdown
           name="rating"
           placeholder="Rating"
           items={["", "0", "1", "2", "3", "4", "5"]}
@@ -138,4 +138,6 @@ export default function SearchPage() {
       </div>
     </div>
   );
-}
+};
+
+export default SearchPage;

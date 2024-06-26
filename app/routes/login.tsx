@@ -6,10 +6,10 @@ import {
 } from "@remix-run/node";
 import { useFetcher } from "@remix-run/react";
 import { useEffect, useState } from "react";
-import Alert from "~/components/alert";
-import GithubLoginButton from "~/components/gitHubButton";
-import InputLogin from "~/components/inputLogin";
-import SubmitButton from "~/components/submitButton";
+import { Alert } from "~/components/alert";
+import { GithubLoginButton } from "~/components/gitHubButton";
+import { InputLogin } from "~/components/inputLogin";
+import { SubmitButton } from "~/components/submitButton";
 import { authenticator } from "~/services/auth.server";
 import fontawesome from "@fortawesome/fontawesome-svg-core/styles.css?url";
 
@@ -17,7 +17,7 @@ export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: fontawesome }];
 };
 
-export async function action({ request }: ActionFunctionArgs) {
+export const action = async ({ request }: ActionFunctionArgs) => {
   try {
     await authenticator.authenticate("user-pass", request, {
       successRedirect: "/",
@@ -29,15 +29,15 @@ export async function action({ request }: ActionFunctionArgs) {
     }
     throw error;
   }
-}
+};
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   return await authenticator.isAuthenticated(request, {
     successRedirect: "/",
   });
-}
+};
 
-export default function Login() {
+const Login = () => {
   const fetcher = useFetcher<typeof action>();
   const actionData = fetcher.data;
   const [username, setUsername] = useState("");
@@ -103,4 +103,6 @@ export default function Login() {
       </fetcher.Form>
     </div>
   );
-}
+};
+
+export default Login;

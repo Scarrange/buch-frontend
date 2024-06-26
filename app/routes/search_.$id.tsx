@@ -5,7 +5,7 @@ import {
   ActionFunctionArgs,
   redirect,
 } from "@remix-run/node";
-import BuchItem from "~/components/buchItemDetail";
+import { BuchItem } from "~/components/buchItemDetail";
 import {
   buchUrl,
   certificateAgent as agent,
@@ -26,15 +26,15 @@ import fetch from "node-fetch";
 import { loader as rootLoader } from "~/root";
 import { authenticator } from "~/services/auth.server";
 import { sessionStorage } from "~/services/session.server";
-import CustomConfirmModal from "~/components/modal";
+import { CustomConfirmModal } from "~/components/modal";
 import { useState } from "react";
-import Alert from "~/components/alert";
+import { Alert } from "~/components/alert";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: fontawesome }];
 };
 
-export async function action({ params, request }: ActionFunctionArgs) {
+export const action = async ({ params, request }: ActionFunctionArgs) => {
   const { id } = params;
   const sessionInfo: SessionInfo = (
     await sessionStorage.getSession(request.headers.get("cookie"))
@@ -64,9 +64,9 @@ export async function action({ params, request }: ActionFunctionArgs) {
   }
 
   return json({ error: "Fehler beim löschen des Buchs" });
-}
+};
 
-export async function loader({ params }: LoaderFunctionArgs) {
+export const loader = async ({ params }: LoaderFunctionArgs) => {
   const { id } = params;
   let response;
 
@@ -92,9 +92,9 @@ export async function loader({ params }: LoaderFunctionArgs) {
   buch.version = version;
 
   return json({ buch, id });
-}
+};
 
-export default function BookDetailPage() {
+const BookDetailPage = () => {
   const { buch, id } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
   const sessionData = useRouteLoaderData<typeof rootLoader>("root");
@@ -162,4 +162,6 @@ export default function BookDetailPage() {
       )}
     </div>
   );
-}
+};
+
+export default BookDetailPage;

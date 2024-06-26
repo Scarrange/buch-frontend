@@ -6,8 +6,8 @@ import {
   redirect,
 } from "@remix-run/node";
 import { useNavigate, useLocation, useFetcher } from "@remix-run/react";
-import Alert from "~/components/alert";
-import CheckBox from "../components/checkBox";
+import { Alert } from "~/components/alert";
+import { CheckBox } from "../components/checkBox";
 import {
   BuchInput,
   SessionInfo,
@@ -16,36 +16,36 @@ import {
   BuchMitVersion,
   ErrorResponse,
 } from "~/util/types";
-import ErrorInfo from "../components/errorInfo";
+import { ErrorInfo } from "../components/errorInfo";
 import { authenticator } from "~/services/auth.server";
 import { getBuchInput, validateBookData } from "~/util/functions";
 import { sessionStorage } from "~/services/session.server";
-import DropDown from "~/components/dropDown";
-import Input from "../components/input";
+import { Dropdown } from "~/components/dropDown";
+import { Input } from "../components/input";
 import datepickerStyles from "react-datepicker/dist/react-datepicker.css?url";
 import fetch from "node-fetch";
-import CustomDatePicker from "~/components/customdatePicker";
+import { CustomDatePicker } from "~/components/customdatePicker";
 import classNames from "classnames";
-import Radio from "~/components/radio";
-import SliderWithValue from "~/components/slider";
+import { Radio } from "~/components/radio";
+import { SliderWithValue } from "~/components/slider";
 import { useEffect, useState } from "react";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: datepickerStyles }];
 };
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   return await authenticator.isAuthenticated(request, {
     failureRedirect: "/login",
   });
-}
+};
 
-async function updateBook(
+const updateBook = async (
   buch: BuchInput,
   id: string,
   version: string,
   token: string,
-) {
+) => {
   let response;
   try {
     response = await fetch(`${buchUrl}/rest/${id}`, {
@@ -71,7 +71,7 @@ async function updateBook(
     statusCode: res.statusCode,
     message: res.message,
   };
-}
+};
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   const { id } = params;
@@ -86,7 +86,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   if (Object.keys(errors).length > 0) {
     return json({ updated: false, message: undefined, errors });
   }
-  console.log(buchDataInput);
+
   const sessionInfo: SessionInfo = (
     await sessionStorage.getSession(request.headers.get("cookie"))
   ).get(authenticator.sessionKey);
@@ -187,7 +187,7 @@ const Update = () => {
           defaultValue={buch.homepage ?? undefined}
         />
         <ErrorInfo error={errors?.homepage} />
-        <DropDown
+        <Dropdown
           name="art"
           items={["", "Druckausgabe", "Kindle"]}
           placeholder="Buchart"
@@ -225,7 +225,7 @@ const Update = () => {
         </div>
         <ErrorInfo error={errors?.lieferbar} />
         {isMobile ? (
-          <DropDown
+          <Dropdown
             name="rating"
             placeholder="Rating"
             items={["1", "2", "3", "4", "5"]}

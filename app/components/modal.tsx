@@ -1,4 +1,4 @@
-const CustomConfirmModal = (props: {
+export const CustomConfirmModal = (props: {
   message: string;
   onConfirm: () => void;
   onCancel: () => void;
@@ -28,5 +28,3 @@ const CustomConfirmModal = (props: {
     </div>
   );
 };
-
-export default CustomConfirmModal;

@@ -1,10 +1,12 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { authenticator } from "~/services/auth.server";
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   await authenticator.logout(request, { redirectTo: "/" });
-}
+};
 
-export default function Logout() {
+const Logout = () => {
   return null;
-}
+};
+
+export default Logout;

@@ -1,7 +1,7 @@
 import { CSSProperties } from "react";
 import classNames from "classnames";
 
-const Alert = (props: {
+export const Alert = (props: {
   isLoading?: boolean;
   success?: boolean | undefined;
   message: string | undefined;
@@ -42,5 +42,3 @@ const Alert = (props: {
     </div>
   );
 };
-//TODO default exports in named ändern
-export default Alert;

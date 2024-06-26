@@ -1,6 +1,6 @@
 import book from "images/book.png";
 
-export default function Index() {
+const Index = () => {
   return (
     <div className="container">
       <div className="container d-flex flex-column align-items-center mt-5 mb-3 form-control div-bg">
@@ -9,4 +9,6 @@ export default function Index() {
       </div>
     </div>
   );
-}
+};
+
+export default Index;

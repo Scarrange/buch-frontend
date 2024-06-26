@@ -1,4 +1,4 @@
-const Dropdown = (props: {
+export const Dropdown = (props: {
   name: string;
   items: string[];
   placeholder: string;
@@ -23,4 +23,3 @@ const Dropdown = (props: {
     </div>
   );
 };
-export default Dropdown;

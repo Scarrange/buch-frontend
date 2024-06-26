@@ -1,4 +1,4 @@
-const InputLogin = (props: {
+export const InputLogin = (props: {
   name: string | undefined;
   placeholder: string | undefined;
   value: string | undefined;
@@ -16,5 +16,3 @@ const InputLogin = (props: {
     />
   );
 };
-
-export default InputLogin;

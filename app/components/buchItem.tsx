@@ -5,7 +5,7 @@ const getId = (link: string) => {
   return link.substring(link.lastIndexOf("/") + 1);
 };
 
-const BuchItem = (buch: Buch) => {
+export const BuchItem = (buch: Buch) => {
   return (
     <div className="container d-flex flex-column align-items-start mt-5 form-control div-bg">
       <h1>{buch.titel.titel}</h1>
@@ -30,5 +30,3 @@ const BuchItem = (buch: Buch) => {
     </div>
   );
 };
-
-export default BuchItem;

@@ -1,4 +1,8 @@
-const CheckBox = (props: { text: string; name: string; checked?: boolean }) => {
+export const CheckBox = (props: {
+  text: string;
+  name: string;
+  checked?: boolean;
+}) => {
   return (
     <div className="form-check">
       <input
@@ -20,5 +24,3 @@ const CheckBox = (props: { text: string; name: string; checked?: boolean }) => {
     </div>
   );
 };
-
-export default CheckBox;

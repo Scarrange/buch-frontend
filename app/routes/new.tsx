@@ -1,9 +1,9 @@
-import Input from "../components/input";
-import SliderWithValue from "../components/slider";
-import CheckBox from "../components/checkBox";
-import Radio from "~/components/radio";
-import CustomDatePicker from "~/components/customdatePicker";
-import DropDown from "~/components/dropDown";
+import { Input } from "../components/input";
+import { SliderWithValue } from "../components/slider";
+import { CheckBox } from "../components/checkBox";
+import { Radio } from "~/components/radio";
+import { CustomDatePicker } from "~/components/customdatePicker";
+import { Dropdown } from "~/components/dropDown";
 import { Link, useFetcher } from "@remix-run/react";
 import { authenticator } from "~/services/auth.server";
 import {
@@ -13,8 +13,8 @@ import {
   LinksFunction,
 } from "@remix-run/node";
 import { sessionStorage } from "~/services/session.server";
-import ErrorInfo from "../components/errorInfo";
-import Alert from "~/components/alert";
+import { ErrorInfo } from "../components/errorInfo";
+import { Alert } from "~/components/alert";
 import {
   BuchInput,
   buchUrl,
@@ -150,7 +150,7 @@ const NewBookPage = () => {
         <ErrorInfo error={errors?.untertitel} />
         <Input name="homepage" placeholder="Homepage" />
         <ErrorInfo error={errors?.homepage} />
-        <DropDown
+        <Dropdown
           name="art"
           items={["", "Druckausgabe", "Kindle"]}
           placeholder="Buchart"
@@ -177,7 +177,7 @@ const NewBookPage = () => {
         </div>
         <ErrorInfo error={errors?.lieferbar} />
         {isMobile ? (
-          <DropDown
+          <Dropdown
             name="rating"
             placeholder="Rating"
             items={["1", "2", "3", "4", "5"]}

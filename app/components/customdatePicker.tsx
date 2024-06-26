@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import { ClientOnly } from "remix-utils/client-only";
 
-const CustomDatePicker = (props: { defaultValue?: string }) => {
+export const CustomDatePicker = (props: { defaultValue?: string }) => {
   const [startDate, setStartDate] = useState<Date | null>(null);
 
   useEffect(() => {
@@ -29,5 +29,3 @@ const CustomDatePicker = (props: { defaultValue?: string }) => {
     </ClientOnly>
   );
 };
-
-export default CustomDatePicker;

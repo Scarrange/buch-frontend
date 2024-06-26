@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const SliderWithValue = (props: {
+export const SliderWithValue = (props: {
   name: string;
   min: number;
   max: number;
@@ -39,5 +39,3 @@ const SliderWithValue = (props: {
     </div>
   );
 };
-
-export default SliderWithValue;

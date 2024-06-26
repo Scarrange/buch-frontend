@@ -3,7 +3,7 @@ import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as faStarRegular } from "@fortawesome/free-regular-svg-icons";
 import { Buch } from "~/util/types";
 
-const BuchItem = (buch: Buch) => {
+export const BuchItem = (buch: Buch) => {
   return (
     <div className="container mt-3">
       <h1>{buch.titel.titel}</h1>
@@ -43,5 +43,3 @@ const BuchItem = (buch: Buch) => {
     </div>
   );
 };
-
-export default BuchItem;

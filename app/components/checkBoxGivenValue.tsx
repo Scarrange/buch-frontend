@@ -1,6 +1,10 @@
 import { useState } from "react";
 
-const CheckBox = (props: { text: string; name: string; checked: boolean }) => {
+export const CheckBox = (props: {
+  text: string;
+  name: string;
+  checked: boolean;
+}) => {
   const [checked, setChecked] = useState(props.checked);
 
   return (
@@ -24,5 +28,3 @@ const CheckBox = (props: { text: string; name: string; checked: boolean }) => {
     </div>
   );
 };
-
-export default CheckBox;

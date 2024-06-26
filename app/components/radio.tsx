@@ -1,4 +1,4 @@
-const Radio = (props: { name: string; checked?: boolean }) => {
+export const Radio = (props: { name: string; checked?: boolean }) => {
   return (
     <div className="form-check">
       <input
@@ -19,5 +19,3 @@ const Radio = (props: { name: string; checked?: boolean }) => {
     </div>
   );
 };
-
-export default Radio;

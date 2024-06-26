@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { Link } from "@remix-run/react";
-import Login from "./login";
-import Logout from "./logout";
+import { Login } from "./login";
+import { Logout } from "./logout";
 import classNames from "classnames";
 import hkaQuer from "images/HKAQuer.png";
 import hochschule from "images/Hochschule.png";
 
-const Navbar = (props: { isLoggedIn: boolean }) => {
+export const Navbar = (props: { isLoggedIn: boolean }) => {
   const [showNavbar, setShowNavbar] = useState(true);
   const [isFixed, setIsFixed] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
@@ -204,5 +204,3 @@ const Navbar = (props: { isLoggedIn: boolean }) => {
     </nav>
   );
 };
-
-export default Navbar;

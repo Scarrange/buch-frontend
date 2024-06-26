@@ -1,4 +1,4 @@
-const Input = (props: {
+export const Input = (props: {
   placeholder: string | undefined;
   name: string | undefined;
   required?: boolean;
@@ -20,5 +20,3 @@ const Input = (props: {
     />
   );
 };
-
-export default Input;

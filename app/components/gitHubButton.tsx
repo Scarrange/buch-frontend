@@ -2,7 +2,7 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 
-const GithubLoginButton: React.FC = () => {
+export const GithubLoginButton: React.FC = () => {
   return (
     <div className="d-flex justify-content-center  mt-5 mb-3">
       <button
@@ -15,5 +15,3 @@ const GithubLoginButton: React.FC = () => {
     </div>
   );
 };
-
-export default GithubLoginButton;

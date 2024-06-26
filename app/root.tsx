@@ -6,7 +6,7 @@ import {
   ScrollRestoration,
   useLoaderData,
 } from "@remix-run/react";
-import Navbar from "./components/navbar";
+import { Navbar } from "./components/navbar";
 import bootstrap from "bootstrap/dist/css/bootstrap.min.css?url";
 import customStyles from "./styles/custom.css?url";
 import { config } from "@fortawesome/fontawesome-svg-core";
